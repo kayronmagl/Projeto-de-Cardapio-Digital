@@ -1,0 +1,358 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&display=swap');
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--preto);
+  color: var(--cinza);
+  min-height: 100vh;
+}
+
+:root {
+  --amarelo: #f5a623;
+  --preto: #0d0d0d;
+  --cinza: #f2f2f2;
+  --cinza-escuro: #181818;
+  --borda-suave: rgba(255, 255, 255, 0.07);
+}
+
+/* Fundo */
+.fundo-animado {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 10% 20%, var(--amarelo) 0%, transparent 25%),
+    radial-gradient(circle at 80% 70%, #ffc54d 0%, transparent 25%),
+    var(--preto);
+  opacity: 0.12;
+  z-index: -1;
+}
+
+/* ==========================
+   CABEÇALHO
+========================== */
+.topo {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(20, 20, 20, 0.55);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--amarelo);
+  padding: 1rem 2rem;
+  height: 120px;
+  transition: all 0.35s ease;
+}
+
+/* Cabeçalho reduzido */
+.topo.shrink {
+  height: 80px;
+  padding: 0.3rem 1rem;
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.caixa-logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.35s ease;
+}
+
+.logo-site {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  transition: all 0.35s ease;
+}
+
+.titulo-site {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.2rem;
+  transition: all 0.35s ease;
+}
+
+#botaoCarrinho {
+  background: rgba(255, 179, 0, 0.15);
+  border: 1px solid rgba(255, 179, 0, 0.5);
+  color: var(--amarelo);
+  padding: 0.6rem 1.4rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  transition: all 0.35s ease;
+}
+
+#botaoCarrinho:hover {
+  background: var(--amarelo);
+  color: #000;
+  box-shadow: 0 0 12px rgba(255, 179, 0, 0.3);
+}
+
+.topo.shrink .logo-site {
+  width: 65px;
+  height: 65px;
+}
+
+.topo.shrink .titulo-site {
+  font-size: 1.6rem;
+}
+
+.topo.shrink #botaoCarrinho {
+  font-size: 0.95rem;
+  padding: 0.4rem 1rem;
+}
+
+/* ==========================
+   CATEGORIAS
+========================== */
+.menu-categorias {
+  background: var(--cinza-escuro);
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0.8rem;
+  border-bottom: 1px solid var(--borda-suave);
+}
+
+.categoria {
+  background: transparent;
+  border: 2px solid var(--amarelo);
+  color: var(--amarelo);
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.categoria.ativa,
+.categoria:hover {
+  background: var(--amarelo);
+  color: #000;
+}
+
+/* ==========================
+   PRODUTOS
+========================== */
+.grade-produtos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.produto-card {
+  background: var(--cinza-escuro);
+  border: 1px solid var(--borda-suave);
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+}
+
+.produto-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 15px rgba(245, 166, 35, 0.15);
+}
+
+.produto-card h3 {
+  color: var(--amarelo);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.3rem;
+}
+
+.produto-card p {
+  color: var(--cinza);
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.produto-card span {
+  font-weight: 600;
+  color: var(--cinza);
+  margin: 0.6rem 0 1rem;
+}
+
+/* ==========================
+   BOTÕES
+========================== */
+.botao {
+  padding: 0.8rem;
+  border-radius: 6px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.botao-principal {
+  background: var(--amarelo);
+  color: #000;
+}
+
+.botao-secundario {
+  background: transparent;
+  color: var(--amarelo);
+  border: 1px solid var(--amarelo);
+}
+
+.botao:hover {
+  transform: scale(1.05);
+}
+
+/* ==========================
+   MODAL
+========================== */
+.fundo-escuro {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 2000;
+}
+
+.fundo-escuro.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.caixa-centro {
+  background: var(--cinza-escuro);
+  border: 1px solid var(--amarelo);
+  border-radius: 10px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+  color: var(--cinza);
+  transform: translateY(-15px);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.fundo-escuro.show .caixa-centro {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+#listaCarrinho {
+  list-style: none;
+  margin-bottom: 1rem;
+}
+
+#listaCarrinho li {
+  display: flex;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  padding: 0.6rem 0.8rem;
+  margin-bottom: 0.5rem;
+}
+
+#valorTotal {
+  text-align: right;
+  font-weight: bold;
+  color: var(--amarelo);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 0.6rem;
+}
+
+/* ==========================
+   FORMULÁRIO
+========================== */
+#formCliente {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+#formCliente input,
+#formCliente select,
+#formCliente textarea {
+  background: #0e0e0e;
+  border: 1px solid var(--borda-suave);
+  border-radius: 6px;
+  color: var(--cinza);
+  padding: 0.8rem;
+  font-size: 0.95rem;
+}
+
+#formCliente textarea {
+  resize: none;
+  min-height: 70px;
+}
+
+/* ==========================
+   RESPONSIVO
+========================== */
+@media (max-width: 700px) {
+  .topo {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    height: auto;
+    padding: 1rem;
+    gap: 0.4rem;
+  }
+
+  .logo-site {
+    width: 100px;
+    height: 100px;
+  }
+
+  .titulo-site {
+    font-size: 2rem;
+  }
+
+  #botaoCarrinho {
+    width: 90%;
+    max-width: 320px;
+    font-size: 1.1rem;
+  }
+
+  #botoescarinho {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .topo.shrink {
+    height: auto;
+    padding: 0.6rem 1rem;
+  }
+
+  .topo.shrink .logo-site {
+    width: 75px;
+    height: 75px;
+  }
+
+  .topo.shrink .titulo-site {
+    font-size: 1.6rem;
+  }
+}

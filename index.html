@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="Img/H._Do_Tobias.png">
+  <title>Tobia's Burguer</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div class="fundo-animado"></div>
+
+  <header class="topo" id="topo">
+    <div class="caixa-logo">
+      <img src="Img/H._Do_Tobias.png" alt="Logo do Tobia's Burguer" class="logo-site" />
+      <h1 class="titulo-site">Tobia's Burguer</h1>
+    </div>
+    <button id="botaoCarrinho">Carrinho (<span id="quantidadeCarrinho">0</span>)</button>
+  </header>
+
+  <nav class="menu-categorias">
+    <button class="categoria ativa" data-categoria="pastel">Pastéis</button>
+    <button class="categoria" data-categoria="hamburguer">Hambúrgueres</button>
+  </nav>
+
+  <main id="areaProdutos" class="grade-produtos"></main>
+
+  <section id="caixaCarrinho" class="fundo-escuro" tabindex="-1">
+    <div class="caixa-centro">
+      <h2 class="titulo-caixa">Carrinho</h2>
+
+      <ul id="listaCarrinho"></ul>
+      <p id="valorTotal"></p>
+
+      <form id="formCliente">
+        <h3>Dados do Cliente</h3>
+        <input type="text" id="nome" placeholder="Seu nome completo" required>
+        <input type="text" id="telefone" placeholder="Telefone ou WhatsApp" required>
+        <input type="text" id="endereco" placeholder="Endereço (Rua, Nº, Bairro)" required>
+        <input type="text" id="referencia" placeholder="Ponto de referência">
+        <select id="pagamento" required>
+          <option value="">Forma de pagamento</option>
+          <option value="Pix">Pix</option>
+          <option value="Dinheiro">Dinheiro</option>
+          <option value="Cartão">Cartão</option>
+        </select>
+        <textarea id="observacoes" placeholder="Observações (troco, sem cebola, etc.)"></textarea>
+      </form>
+
+      <div class="botoes-carrinho">
+        <button id="botaoFinalizar" class="botao botao-principal">Finalizar Pedido</button>
+        <button id="botaoFechar" class="botao botao-secundario">Fechar</button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const produtos = [
+      { id: 1, nome: 'Pizza', descricao: 'Misto ralado com orégano, milho, tomate, cebola e cheddar.', preco: 10, categoria: 'pastel' },
+      { id: 2, nome: 'Frango Catupiry', descricao: 'Frango, queijo fatiado, milho e catupiry.', preco: 10, categoria: 'pastel' },
+      { id: 3, nome: '3 Queijos', descricao: 'Queijo coalho, cheddar e catupiry.', preco: 10, categoria: 'pastel' },
+      { id: 4, nome: 'Moda da Casa', descricao: 'Frango, calabresa, queijo fatiado e catupiry.', preco: 12, categoria: 'pastel' },
+      { id: 5, nome: 'Bolonhesa', descricao: 'Carne moída, frango, queijo coalho, milho, tomate, cheddar e catupiry.', preco: 12, categoria: 'pastel' },
+      { id: 6, nome: 'Pastel Árabe', descricao: 'Carne moída, queijo coalho, cebola, tomate e limão.', preco: 12, categoria: 'pastel' },
+      { id: 7, nome: 'Ponta Negra Misto', descricao: 'Pão brioche, ovo, presunto, queijo, salada e molhos.', preco: 10, categoria: 'hamburguer' },
+      { id: 8, nome: 'Smach Encanto', descricao: 'Carne artesanal, cheddar, salada e molhos.', preco: 12, categoria: 'hamburguer' },
+      { id: 9, nome: 'Majorlandia Frango', descricao: 'Frango, queijo, presunto, milho, catupiry, salada e molhos.', preco: 14, categoria: 'hamburguer' },
+      { id: 10, nome: 'Canoa Quebrada Burguer', descricao: 'Carne artesanal, calabresa, queijo, presunto, catupiry e molhos.', preco: 16, categoria: 'hamburguer' },
+      { id: 11, nome: 'Mão Branca Burguer', descricao: 'Carne artesanal, frango, ovo, cheddar, salada e molhos.', preco: 18, categoria: 'hamburguer' },
+      { id: 12, nome: 'Iracema Burguer', descricao: 'Carne artesanal, frango, queijo, presunto, calabresa, cheddar e molhos.', preco: 20, categoria: 'hamburguer' }
+    ];
+
+    let categoriaAtual = 'pastel';
+    let carrinho = [];
+
+    const areaProdutos = document.getElementById('areaProdutos');
+    const caixaCarrinho = document.getElementById('caixaCarrinho');
+    const listaCarrinho = document.getElementById('listaCarrinho');
+    const valorTotal = document.getElementById('valorTotal');
+    const contadorCarrinho = document.getElementById('quantidadeCarrinho');
+    const botaoCarrinho = document.getElementById('botaoCarrinho');
+    const botaoFechar = document.getElementById('botaoFechar');
+    const botaoFinalizar = document.getElementById('botaoFinalizar');
+
+    function mostrarProdutos() {
+      areaProdutos.innerHTML = '';
+      produtos.filter(p => p.categoria === categoriaAtual).forEach(prod => {
+        const div = document.createElement('div');
+        div.className = 'produto-card';
+        div.innerHTML = `
+          <h3>${prod.nome}</h3>
+          <p>${prod.descricao}</p>
+          <span>R$ ${prod.preco.toFixed(2)}</span>
+          <button class="botao botao-principal" data-id="${prod.id}">Adicionar</button>
+        `;
+        areaProdutos.appendChild(div);
+      });
+    }
+
+    document.addEventListener('click', e => {
+      if (e.target.classList.contains('categoria')) {
+        document.querySelectorAll('.categoria').forEach(c => c.classList.remove('ativa'));
+        e.target.classList.add('ativa');
+        categoriaAtual = e.target.dataset.categoria;
+        mostrarProdutos();
+      }
+
+      if (e.target.matches('.produto-card button')) {
+        const id = parseInt(e.target.dataset.id);
+        const item = produtos.find(p => p.id === id);
+        const existe = carrinho.find(c => c.id === id);
+        if (existe) existe.quantidade++;
+        else carrinho.push({ ...item, quantidade: 1 });
+        atualizarCarrinho();
+      }
+    });
+
+    function atualizarCarrinho() {
+      listaCarrinho.innerHTML = '';
+      let total = 0;
+      carrinho.forEach(item => {
+        total += item.preco * item.quantidade;
+        const li = document.createElement('li');
+        li.innerHTML = `<span>${item.quantidade}x ${item.nome}</span><span>R$ ${(item.preco * item.quantidade).toFixed(2)}</span>`;
+        listaCarrinho.appendChild(li);
+      });
+      valorTotal.textContent = `Total: R$ ${total.toFixed(2)}`;
+      contadorCarrinho.textContent = carrinho.reduce((s, i) => s + i.quantidade, 0);
+    }
+
+    botaoCarrinho.onclick = () => {
+      caixaCarrinho.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    };
+
+    botaoFechar.onclick = () => {
+      caixaCarrinho.classList.remove('show');
+      document.body.style.overflow = 'auto';
+    };
+
+    botaoFinalizar.onclick = () => {
+      const nome = document.getElementById('nome').value.trim();
+      const telefone = document.getElementById('telefone').value.trim();
+      const endereco = document.getElementById('endereco').value.trim();
+      const referencia = document.getElementById('referencia').value.trim();
+      const pagamento = document.getElementById('pagamento').value.trim();
+      const observacoes = document.getElementById('observacoes').value.trim();
+
+      if (!nome || !telefone || !endereco || !pagamento) return alert('Preencha todos os campos obrigatórios.');
+
+      const pedido = carrinho.map(i => `${i.quantidade}x ${i.nome} - R$ ${(i.preco * i.quantidade).toFixed(2)}`).join('%0A');
+      const total = carrinho.reduce((s, i) => s + i.preco * i.quantidade, 0);
+
+      const mensagem = `
+NOVO PEDIDO - Tobia's Burguer
+
+Cliente: ${nome}
+Telefone: ${telefone}
+Endereço: ${endereco}
+Referência: ${referencia || 'Não informada'}
+Pagamento: ${pagamento}
+Observações: ${observacoes || 'Nenhuma'}
+-------------------------
+${pedido}
+-------------------------
+Total: R$ ${total.toFixed(2)}
+      `.trim();
+
+      const numero = '5588982140888';
+      const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    };
+
+    const header = document.getElementById('topo');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) header.classList.add('shrink');
+      else header.classList.remove('shrink');
+    });
+
+    mostrarProdutos();
+  </script>
+</body>
+
+</html>
