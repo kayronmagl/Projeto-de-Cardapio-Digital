@@ -23,18 +23,7 @@
 
   <section class="faixa-operacao" aria-live="polite">
     <p id="statusLoja" class="status-loja"></p>
-  </section>
-
-  <section class="hero" aria-label="Destaques do atendimento">
-    <p class="hero-kicker">Cardapio digital do Tobia's Lanches</p>
-    <h2 class="hero-title">Peça rápido, com fluxo claro e sem complicação.</h2>
-    <p class="hero-subtitle">Delivery, retirada e pedido no local com confirmacao no WhatsApp.</p>
-    <div class="hero-chips" role="list" aria-label="Destaques">
-      <span class="chip" role="listitem">Delivery</span>
-      <span class="chip" role="listitem">Retirada</span>
-      <span class="chip" role="listitem">20 a 40 min</span>
-      <span class="chip" role="listitem">PIX, Cartao e Dinheiro</span>
-    </div>
+    <p class="status-extra">Pedido mínimo para entrega: <strong id="pedidoMinimoLabel"></strong></p>
   </section>
 
   <nav class="menu-categorias" aria-label="Categorias do cardápio">
@@ -47,15 +36,10 @@
   <section id="caixaCarrinho" class="fundo-escuro" tabindex="-1" aria-hidden="true">
     <div class="caixa-centro" role="dialog" aria-modal="true" aria-labelledby="tituloCarrinho">
       <h2 class="titulo-caixa" id="tituloCarrinho">Carrinho e Checkout</h2>
-      <p id="carrinhoSubtitulo" class="carrinho-subtitulo">Seu carrinho esta vazio.</p>
 
-      <section class="painel-carrinho" aria-label="Itens do carrinho">
-        <ul id="listaCarrinho"></ul>
-      </section>
-      <section class="totais-carrinho" aria-label="Resumo financeiro do pedido">
-        <p id="resumoPedido" class="resumo-pedido"></p>
-        <p id="valorTotal"></p>
-      </section>
+      <ul id="listaCarrinho"></ul>
+      <p id="resumoPedido" class="resumo-pedido"></p>
+      <p id="valorTotal"></p>
 
       <form id="formCliente" novalidate>
         <fieldset class="bloco-form">
@@ -82,6 +66,8 @@
           </select>
 
           <p class="aviso tempo-espera">Tempo aproximado: 20 a 40 minutos.</p>
+          <p class="ajuda-texto">Pedido mínimo para entrega: <strong id="pedidoMinimoAjuda"></strong>.</p>
+
           <div id="camposEntrega" class="painel-condicional oculto">
             <label for="bairroEntrega">Localidade de entrega (Iracema - CE):</label>
             <select id="bairroEntrega">
@@ -175,7 +161,7 @@
         <p id="mensagemErro" class="erro oculto" role="alert"></p>
       </form>
 
-      <div class="botoes-carrinho acoes-checkout">
+      <div class="botoes-carrinho">
         <button id="botaoFinalizar" class="botao botao-principal" type="button">Finalizar Pedido</button>
         <button id="botaoFechar" class="botao botao-secundario" type="button">Fechar</button>
       </div>
@@ -194,19 +180,12 @@
     </div>
   </section>
 
-  <div class="barra-mobile" id="barraMobile" aria-label="Resumo rapido do carrinho">
-    <div class="barra-mobile-info">
-      <span class="barra-mobile-label">Total</span>
-      <strong id="totalBarraMobile">R$ 0,00</strong>
-    </div>
-    <button type="button" id="botaoAbrirCarrinhoMobile" class="botao botao-principal">Ver Carrinho</button>
-  </div>
-
   <script>
     const configuracaoLoja = {
       numeroWhatsApp: "5588988173336",
       chavePix: "SEU-PIX-AQUI",
       taxaEntrega: 2,
+      pedidoMinimoEntrega: 15,
       enderecoRetirada: "RUA: Josias Costa Morais, Bairro: Carrapicho, Quiosque 03",
       bairrosComEntrega: ["Centro", "Caixa D'água", "Holandino", "Campo", "Jatobá"],
       bairrosSemEntrega: ["Ema", "Bom Sucesso"],
@@ -214,10 +193,13 @@
     };
 
     const horarioFuncionamento = {
-      0: { abre: "18:00", fecha: "23:00" },
-      4: { abre: "18:00", fecha: "23:00" },
-      5: { abre: "18:00", fecha: "23:00" },
-      6: { abre: "18:00", fecha: "23:00" }
+      0: { abre: "17:30", fecha: "23:00" },
+      1: { abre: "17:30", fecha: "23:30" },
+      2: { abre: "17:30", fecha: "23:30" },
+      3: { abre: "17:30", fecha: "23:30" },
+      4: { abre: "17:30", fecha: "23:30" },
+      5: { abre: "17:30", fecha: "23:59" },
+      6: { abre: "17:30", fecha: "23:59" }
     };
 
     const adicionaisCatalogo = {
@@ -264,7 +246,6 @@
     const listaCarrinho = document.getElementById("listaCarrinho");
     const valorTotal = document.getElementById("valorTotal");
     const resumoPedido = document.getElementById("resumoPedido");
-    const carrinhoSubtitulo = document.getElementById("carrinhoSubtitulo");
     const contadorCarrinho = document.getElementById("quantidadeCarrinho");
     const botaoCarrinho = document.getElementById("botaoCarrinho");
     const botaoFechar = document.getElementById("botaoFechar");
@@ -272,6 +253,8 @@
     const mensagemErro = document.getElementById("mensagemErro");
 
     const statusLoja = document.getElementById("statusLoja");
+    const pedidoMinimoLabel = document.getElementById("pedidoMinimoLabel");
+    const pedidoMinimoAjuda = document.getElementById("pedidoMinimoAjuda");
 
     const formCliente = document.getElementById("formCliente");
     const radiosAtendimento = document.querySelectorAll('input[name="tipoAtendimento"]');
@@ -307,8 +290,6 @@
     const resumoConfirmacao = document.getElementById("resumoConfirmacao");
     const botaoConfirmarEnvio = document.getElementById("botaoConfirmarEnvio");
     const botaoCancelarConfirmacao = document.getElementById("botaoCancelarConfirmacao");
-    const totalBarraMobile = document.getElementById("totalBarraMobile");
-    const botaoAbrirCarrinhoMobile = document.getElementById("botaoAbrirCarrinhoMobile");
 
     function formatarMoeda(valor) {
       return formatadorMoeda.format(valor);
@@ -332,7 +313,7 @@
         return {
           aberta: false,
           mensagem: "Loja fechada hoje",
-          detalhe: "Funcionamento: quinta a domingo, 18:00 as 23:00."
+          detalhe: "Sem horário de atendimento cadastrado para hoje."
         };
       }
 
@@ -424,14 +405,9 @@
 
     function atualizarResumoValores() {
       const { subtotal, taxa, total } = calcularTotaisPedido();
-      const quantidadeTotal = carrinho.reduce((acumulador, item) => acumulador + item.quantidade, 0);
       resumoPedido.textContent = `Subtotal: ${formatarMoeda(subtotal)} | Taxa de entrega: ${formatarMoeda(taxa)}`;
       valorTotal.textContent = `Total: ${formatarMoeda(total)}`;
-      totalBarraMobile.textContent = formatarMoeda(total);
-      contadorCarrinho.textContent = quantidadeTotal;
-      carrinhoSubtitulo.textContent = quantidadeTotal === 0
-        ? "Seu carrinho esta vazio."
-        : `${quantidadeTotal} item${quantidadeTotal > 1 ? "s" : ""} no carrinho.`;
+      contadorCarrinho.textContent = carrinho.reduce((acumulador, item) => acumulador + item.quantidade, 0);
       return { subtotal, taxa, total };
     }
 
@@ -832,7 +808,7 @@
       const statusAtual = obterStatusLoja();
       const tipoAtendimento = atendimentoAtual();
       const tipoPedido = tipoEntrega.value;
-      const { total } = calcularTotaisPedido();
+      const { subtotal, total } = calcularTotaisPedido();
 
       if (!statusAtual.aberta) {
         return `Não é possível finalizar agora. ${statusAtual.detalhe}.`;
@@ -883,6 +859,9 @@
         }
         if (!enderecoEntrega.value.trim()) {
           return "Informe o endereço de entrega.";
+        }
+        if (subtotal < configuracaoLoja.pedidoMinimoEntrega) {
+          return `Pedido mínimo para entrega: ${formatarMoeda(configuracaoLoja.pedidoMinimoEntrega)}.`;
         }
       }
 
@@ -1068,7 +1047,6 @@
     });
 
     botaoCarrinho.addEventListener("click", abrirCarrinho);
-    botaoAbrirCarrinhoMobile.addEventListener("click", abrirCarrinho);
     botaoFechar.addEventListener("click", fecharCarrinho);
 
     caixaCarrinho.addEventListener("click", (evento) => {
@@ -1150,6 +1128,8 @@
       }
     });
 
+    pedidoMinimoLabel.textContent = formatarMoeda(configuracaoLoja.pedidoMinimoEntrega);
+    pedidoMinimoAjuda.textContent = formatarMoeda(configuracaoLoja.pedidoMinimoEntrega);
     chavePixTexto.textContent = configuracaoLoja.chavePix;
 
     restaurarCarrinhoLocal();
