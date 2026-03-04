@@ -14,7 +14,10 @@
   <header class="topo" id="topo">
     <div class="caixa-logo">
       <img src="Img/H._Do_Tobias.png" alt="Logo do Tobia's Lanches" class="logo-site" />
-      <h1 class="titulo-site">Tobia's Lanches</h1>
+      <div class="marca-topo">
+        <h1 class="titulo-site">Tobia's Lanches</h1>
+        <p class="subtitulo-topo">Quiosque 03 | Iracema-CE</p>
+      </div>
     </div>
     <button id="botaoCarrinho" type="button" aria-controls="caixaCarrinho" aria-expanded="false">
       Carrinho (<span id="quantidadeCarrinho">0</span>)
@@ -22,18 +25,23 @@
   </header>
 
   <section class="faixa-operacao" aria-live="polite">
-    <p id="statusLoja" class="status-loja"></p>
+    <div class="painel-horario">
+      <p class="titulo-horario">Horario da lanchonete</p>
+      <p id="statusLoja" class="status-loja"></p>
+      <p id="detalheHorario" class="detalhe-horario"></p>
+      <p class="agenda-horario">Funcionamento: quinta a domingo, 18:00 as 23:00.</p>
+    </div>
   </section>
 
   <section class="hero" aria-label="Destaques do atendimento">
     <p class="hero-kicker">Cardapio digital do Tobia's Lanches</p>
-    <h2 class="hero-title">Peça rápido, com fluxo claro e sem complicação.</h2>
-    <p class="hero-subtitle">Delivery, retirada e pedido no local com confirmacao no WhatsApp.</p>
+    <h2 class="hero-title">Peça rápido e sem complicação.</h2>
+    <p class="hero-subtitle">Delivery, retirada e pedido no local com confirmação no WhatsApp.</p>
     <div class="hero-chips" role="list" aria-label="Destaques">
       <span class="chip" role="listitem">Delivery</span>
       <span class="chip" role="listitem">Retirada</span>
       <span class="chip" role="listitem">20 a 40 min</span>
-      <span class="chip" role="listitem">PIX, Cartao e Dinheiro</span>
+      <span class="chip" role="listitem">PIX, Cartão e Dinheiro</span>
     </div>
   </section>
 
@@ -272,6 +280,7 @@
     const mensagemErro = document.getElementById("mensagemErro");
 
     const statusLoja = document.getElementById("statusLoja");
+    const detalheHorario = document.getElementById("detalheHorario");
 
     const formCliente = document.getElementById("formCliente");
     const radiosAtendimento = document.querySelectorAll('input[name="tipoAtendimento"]');
@@ -332,7 +341,7 @@
         return {
           aberta: false,
           mensagem: "Loja fechada hoje",
-          detalhe: "Funcionamento: quinta a domingo, 18:00 as 23:00."
+          detalhe: "Sem atendimento hoje"
         };
       }
 
@@ -375,7 +384,8 @@
     function atualizarStatusLoja() {
       const status = obterStatusLoja();
       statusLoja.className = `status-loja ${status.aberta ? "status-aberta" : "status-fechada"}`;
-      statusLoja.textContent = `${status.mensagem} - ${status.detalhe}`;
+      statusLoja.textContent = status.mensagem;
+      detalheHorario.textContent = status.detalhe;
     }
 
     function atendimentoAtual() {

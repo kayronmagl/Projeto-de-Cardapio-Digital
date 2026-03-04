@@ -928,13 +928,6 @@ summary:focus-visible {
     font-size: 1.45rem;
   }
 
-  #botaoCarrinho {
-    width: 100%;
-    max-width: none;
-    font-size: 1rem;
-    padding: 0.62rem 0.85rem;
-  }
-
   .faixa-operacao {
     padding: 0.65rem 0.85rem;
   }
@@ -1218,5 +1211,503 @@ summary:focus-visible {
 
   .acoes-checkout {
     padding-top: 0.52rem;
+  }
+}
+
+/* Header Refinement */
+.topo {
+  padding: 0.92rem clamp(0.9rem, 2.6vw, 2rem);
+  height: 126px;
+  border-bottom-color: rgba(255, 255, 255, 0.14);
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0)),
+    rgba(20, 20, 20, 0.64);
+}
+
+.topo.shrink {
+  height: 86px;
+}
+
+.caixa-logo {
+  min-width: 0;
+}
+
+.marca-topo {
+  display: grid;
+  gap: 0.06rem;
+  min-width: 0;
+}
+
+.subtitulo-topo {
+  font-size: 0.72rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #ffdf9f;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 28ch;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.topo.shrink .subtitulo-topo {
+  opacity: 0;
+  transform: translateY(-3px);
+}
+
+#botaoCarrinho {
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+}
+
+#botaoCarrinho:focus-visible {
+  outline: 3px solid #ffd77b;
+  outline-offset: 2px;
+}
+
+@media (max-width: 900px) {
+  .topo,
+  .topo.shrink {
+    height: auto;
+    padding: 0.7rem 0.9rem;
+  }
+
+  .caixa-logo {
+    width: 100%;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .marca-topo {
+    text-align: center;
+  }
+
+  .subtitulo-topo {
+    font-size: 0.67rem;
+    max-width: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .caixa-logo {
+    gap: 0.62rem;
+  }
+
+  .subtitulo-topo {
+    display: none;
+  }
+}
+
+/* Responsive Variants */
+@media (min-width: 1440px) {
+  .topo,
+  .faixa-operacao {
+    padding-inline: 3.2rem;
+  }
+
+  .hero {
+    max-width: 1320px;
+    margin: 1rem auto 0.45rem;
+  }
+
+  .grade-produtos {
+    max-width: 1320px;
+    margin-inline: auto;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .caixa-centro {
+    width: min(100%, 860px);
+  }
+}
+
+@media (min-width: 1100px) and (max-width: 1439px) {
+  .hero {
+    max-width: 1200px;
+    margin-inline: auto;
+  }
+
+  .grade-produtos {
+    max-width: 1200px;
+    margin-inline: auto;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 901px) and (max-width: 1099px) {
+  .topo {
+    height: 112px;
+    padding: 0.82rem 1.2rem;
+  }
+
+  .logo-site {
+    width: 78px;
+    height: 78px;
+  }
+
+  .titulo-site {
+    font-size: 1.9rem;
+  }
+
+  .hero {
+    margin: 0.85rem 1rem 0.25rem;
+    padding: 1rem;
+  }
+
+  .grade-produtos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 1rem 1rem 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .chip {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .caixa-centro {
+    max-height: calc(100dvh - 0.5rem);
+  }
+
+  .painel-carrinho {
+    max-height: 30dvh;
+  }
+}
+
+@media (max-width: 520px) {
+  .faixa-operacao {
+    padding: 0.55rem 0.65rem;
+  }
+
+  .status-loja {
+    font-size: 0.8rem;
+    padding: 0.24rem 0.55rem;
+  }
+
+  .categoria {
+    font-size: 0.84rem;
+  }
+
+  .painel-carrinho {
+    max-height: 28dvh;
+  }
+
+  .totais-carrinho {
+    padding: 0.5rem;
+  }
+
+  .controles-item {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .btn-mini {
+    width: 100%;
+  }
+
+  .btn-remover {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 360px) {
+  .titulo-site {
+    font-size: 1.45rem;
+  }
+
+  .hero-title {
+    font-size: clamp(1.18rem, 8.6vw, 1.45rem);
+  }
+
+  .caixa-centro {
+    padding: 0.72rem;
+  }
+
+  .bloco-form legend {
+    font-size: 1rem;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 0.88rem;
+  }
+
+  #botaoAbrirCarrinhoMobile {
+    min-width: 96px;
+  }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+  .topo {
+    position: static;
+  }
+
+  .faixa-operacao {
+    padding: 0.45rem 0.75rem;
+  }
+
+  .hero {
+    margin: 0.6rem 0.75rem 0.2rem;
+    padding: 0.75rem;
+  }
+
+  .caixa-centro {
+    max-height: 96dvh;
+  }
+
+  .painel-carrinho {
+    max-height: 24dvh;
+  }
+
+  .barra-mobile {
+    padding: 0.45rem 0.6rem;
+  }
+}
+
+/* Hero Chips Horizontal + Topo Premium */
+.hero-chips {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.55rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 0.18rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(245, 166, 35, 0.7) transparent;
+}
+
+.hero-chips::-webkit-scrollbar {
+  height: 6px;
+}
+
+.hero-chips::-webkit-scrollbar-thumb {
+  background: rgba(245, 166, 35, 0.68);
+  border-radius: 999px;
+}
+
+.hero-chips::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.hero-chips .chip {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.topo {
+  position: sticky;
+  isolation: isolate;
+  background:
+    linear-gradient(118deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 42%),
+    radial-gradient(circle at 84% -38%, rgba(245, 166, 35, 0.34), transparent 52%),
+    rgba(9, 9, 9, 0.74);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 14px 30px rgba(0, 0, 0, 0.36),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px) saturate(125%);
+}
+
+.topo::before,
+.topo::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.topo::before {
+  inset: 0;
+  background: linear-gradient(90deg, rgba(255, 207, 115, 0.14), rgba(255, 207, 115, 0));
+  opacity: 0.7;
+  z-index: -1;
+}
+
+.topo::after {
+  left: 1.1rem;
+  right: 1.1rem;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 214, 126, 0), rgba(255, 214, 126, 0.9), rgba(255, 214, 126, 0));
+}
+
+.topo.shrink {
+  background:
+    linear-gradient(118deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0) 46%),
+    radial-gradient(circle at 82% -42%, rgba(245, 166, 35, 0.27), transparent 55%),
+    rgba(6, 6, 6, 0.86);
+  box-shadow:
+    0 10px 20px rgba(0, 0, 0, 0.4),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.logo-site {
+  border: 2px solid rgba(255, 255, 255, 0.22);
+  box-shadow:
+    0 0 0 2px rgba(245, 166, 35, 0.34),
+    0 12px 22px rgba(0, 0, 0, 0.35);
+}
+
+.topo.shrink .logo-site {
+  box-shadow:
+    0 0 0 2px rgba(245, 166, 35, 0.26),
+    0 8px 16px rgba(0, 0, 0, 0.34);
+}
+
+.titulo-site {
+  color: #ffcf73;
+  letter-spacing: 0.04em;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+}
+
+#botaoCarrinho {
+  border: 1px solid rgba(255, 218, 133, 0.82);
+  background: linear-gradient(135deg, rgba(245, 166, 35, 0.92), rgba(255, 199, 84, 0.9));
+  color: #231300;
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.3),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.18);
+}
+
+#botaoCarrinho:hover {
+  background: linear-gradient(135deg, #ffc456, #ffd37b);
+  color: #120a00;
+}
+
+@media (max-width: 900px) {
+  .topo::after {
+    left: 0.75rem;
+    right: 0.75rem;
+  }
+
+  .hero-chips {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    grid-template-columns: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-chips {
+    display: flex;
+    flex-wrap: nowrap;
+    grid-template-columns: none;
+    gap: 0.45rem;
+  }
+
+  .chip {
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+@media (max-width: 520px) {
+  .hero-chips {
+    display: flex;
+    flex-wrap: nowrap;
+    grid-template-columns: none;
+    padding-bottom: 0.14rem;
+  }
+}
+
+/* Horario Refinement */
+.faixa-operacao {
+  padding: 0.72rem clamp(0.75rem, 2vw, 2rem);
+}
+
+.painel-horario {
+  width: min(980px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  grid-template-areas:
+    "titulo status detalhe"
+    "agenda agenda agenda";
+  align-items: center;
+  gap: 0.42rem 0.65rem;
+  padding: 0.72rem 0.92rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0)),
+    rgba(17, 17, 17, 0.62);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24);
+}
+
+.titulo-horario {
+  grid-area: titulo;
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ffe3a8;
+  font-weight: 700;
+}
+
+.painel-horario .status-loja {
+  grid-area: status;
+  margin: 0;
+  width: auto;
+  justify-self: start;
+  font-size: 0.8rem;
+  padding: 0.24rem 0.62rem;
+}
+
+.painel-horario .status-loja.status-aberta {
+  color: #97efbc;
+  border-color: rgba(68, 211, 156, 0.52);
+  background: rgba(68, 211, 156, 0.12);
+}
+
+.painel-horario .status-loja.status-fechada {
+  color: #ffacac;
+  border-color: rgba(255, 106, 106, 0.52);
+  background: rgba(255, 106, 106, 0.12);
+}
+
+.detalhe-horario {
+  grid-area: detalhe;
+  margin: 0;
+  font-size: 0.9rem;
+  color: #ececec;
+}
+
+.agenda-horario {
+  grid-area: agenda;
+  margin: 0;
+  font-size: 0.8rem;
+  color: #d4d4d4;
+}
+
+@media (max-width: 900px) {
+  .painel-horario {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "titulo"
+      "status"
+      "detalhe"
+      "agenda";
+    justify-items: flex-start;
+    gap: 0.28rem;
+    padding: 0.62rem 0.74rem;
+  }
+
+  .painel-horario .status-loja {
+    width: auto;
+  }
+
+  .detalhe-horario,
+  .agenda-horario {
+    font-size: 0.84rem;
+  }
+}
+
+/* Mantem o topo estatico em telas baixas no modo paisagem */
+@media (max-height: 520px) and (orientation: landscape) {
+  .topo {
+    position: static;
   }
 }
