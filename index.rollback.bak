@@ -1,56 +1,90 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/png" href="Img/H._Do_Tobias.png" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="Img/H._Do_Tobias.png">
   <title>Tobia's Lanches</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <a class="skip-link" href="#areaProdutos">Pular para o cardápio</a>
   <div class="fundo-animado" aria-hidden="true"></div>
 
-  <header class="topo" id="topo">
+  <header class="topo layout-shell" id="topo">
     <div class="caixa-logo">
-      <img src="Img/H._Do_Tobias.png" alt="Logo do Tobia's Lanches" class="logo-site" />
-      <h1 class="titulo-site">Tobia's Lanches</h1>
+      <img src="Img/H._Do_Tobias.png" alt="Logo do Tobia's Lanches" class="logo-site">
+      <div class="marca-topo">
+        <h1 class="titulo-site">Tobia's Lanches</h1>
+        <p class="subtitulo-topo">Quiosque 03 | Iracema-CE</p>
+      </div>
     </div>
     <button id="botaoCarrinho" type="button" aria-controls="caixaCarrinho" aria-expanded="false">
       Carrinho (<span id="quantidadeCarrinho">0</span>)
     </button>
   </header>
 
-  <section class="faixa-operacao" aria-live="polite">
-    <p id="statusLoja" class="status-loja"></p>
-    <p class="status-extra">Pedido mínimo para entrega: <strong id="pedidoMinimoLabel"></strong></p>
+  <section class="hero layout-shell" aria-label="Destaques do atendimento">
+    <p class="hero-kicker">Cardápio digital do Tobia's Lanches</p>
+    <h2 class="hero-title">Peça rápido e sem complicação.</h2>
+    <p class="hero-subtitle">Delivery, retirada e pedido no local com confirmação no WhatsApp.</p>
+    <ul class="hero-chips">
+      <li class="chip">Delivery</li>
+      <li class="chip">Retirada</li>
+      <li class="chip">20 a 40 min</li>
+      <li class="chip">PIX, Cartão e Dinheiro</li>
+    </ul>
   </section>
 
-  <nav class="menu-categorias" aria-label="Categorias do cardápio">
-    <button class="categoria ativa" data-categoria="pastel" type="button">Pastéis</button>
-    <button class="categoria" data-categoria="hamburguer" type="button">Hambúrgueres</button>
-  </nav>
+  <section class="faixa-operacao layout-shell" aria-live="polite">
+    <div class="painel-horario">
+      <div class="painel-horario-topo">
+        <p class="titulo-horario">Horário da lanchonete</p>
+        <p id="statusLoja" class="status-loja"></p>
+      </div>
+      <p id="detalheHorario" class="detalhe-horario"></p>
+      <p class="agenda-horario">Funcionamento: quinta a domingo, 18:00 às 23:00.</p>
+    </div>
+  </section>
 
-  <main id="areaProdutos" class="grade-produtos" aria-live="polite"></main>
+  <nav id="menuCategorias" class="menu-categorias layout-shell" aria-label="Categorias do cardápio"></nav>
+  <p id="statusCategoria" class="sr-only" aria-live="polite"></p>
 
-  <section id="caixaCarrinho" class="fundo-escuro" tabindex="-1" aria-hidden="true">
-    <div class="caixa-centro" role="dialog" aria-modal="true" aria-labelledby="tituloCarrinho">
+  <main id="areaProdutos" class="grade-produtos layout-shell" aria-live="polite"></main>
+
+  <footer class="rodape-utilitarios layout-shell" aria-label="Acessos internos">
+    <p class="rodape-nota">Acesso interno da equipe</p>
+    <button id="botaoAbrirAdmin" type="button" class="link-admin" aria-controls="painelAdmin" aria-expanded="false">Abrir área administrativa</button>
+  </footer>
+
+  <section id="caixaCarrinho" class="fundo-escuro" tabindex="-1" hidden inert>
+    <div class="caixa-centro caixa-carrinho" role="dialog" aria-modal="true" aria-labelledby="tituloCarrinho">
+      <button id="botaoFecharCarrinhoTopo" class="botao-fechar-modal" type="button" aria-label="Fechar carrinho">&times;</button>
       <h2 class="titulo-caixa" id="tituloCarrinho">Carrinho e Checkout</h2>
+      <p id="carrinhoSubtitulo" class="carrinho-subtitulo">Seu carrinho está vazio.</p>
+      <div id="resumoTopoCarrinho" class="resumo-topo-carrinho" aria-live="polite">
+        <span id="resumoTopoItens">0 item</span>
+        <strong id="resumoTopoSubtotal">Subtotal: R$ 0,00</strong>
+      </div>
 
-      <ul id="listaCarrinho"></ul>
-      <p id="resumoPedido" class="resumo-pedido"></p>
-      <p id="valorTotal"></p>
+      <section class="painel-carrinho" aria-label="Itens do carrinho">
+        <ul id="listaCarrinho"></ul>
+      </section>
+      <section class="totais-carrinho" aria-label="Resumo financeiro do pedido">
+        <p id="resumoPedido" class="resumo-pedido"></p>
+        <p id="valorTotal"></p>
+      </section>
 
       <form id="formCliente" novalidate>
         <fieldset class="bloco-form">
           <legend>1. Tipo de atendimento</legend>
           <div class="segmented" role="radiogroup" aria-label="Tipo de atendimento">
             <label class="segmented-item">
-              <input type="radio" name="tipoAtendimento" value="delivery" checked />
+              <input type="radio" name="tipoAtendimento" value="delivery" checked>
               <span>Delivery</span>
             </label>
             <label class="segmented-item">
-              <input type="radio" name="tipoAtendimento" value="no_local" />
+              <input type="radio" name="tipoAtendimento" value="no_local">
               <span>No Local</span>
             </label>
           </div>
@@ -59,18 +93,18 @@
         <fieldset class="bloco-form" id="blocoDelivery">
           <legend>2. Pedido via site</legend>
           <label for="tipoEntrega">Pedido para:</label>
-          <select id="tipoEntrega" required>
+          <select id="tipoEntrega" data-erro-id="erroTipoEntrega" aria-describedby="ajudaTipoEntrega erroTipoEntrega" required>
             <option value="">Selecione</option>
             <option value="entrega">Entrega</option>
             <option value="retirada">Retirada no local</option>
           </select>
+          <p id="ajudaTipoEntrega" class="ajuda-texto">Escolha entrega para receber no endereço ou retirada para buscar no quiosque.</p>
+          <p id="erroTipoEntrega" class="erro erro-campo oculto"></p>
 
           <p class="aviso tempo-espera">Tempo aproximado: 20 a 40 minutos.</p>
-          <p class="ajuda-texto">Pedido mínimo para entrega: <strong id="pedidoMinimoAjuda"></strong>.</p>
-
           <div id="camposEntrega" class="painel-condicional oculto">
             <label for="bairroEntrega">Localidade de entrega (Iracema - CE):</label>
-            <select id="bairroEntrega">
+            <select id="bairroEntrega" data-erro-id="erroBairroEntrega" aria-describedby="erroBairroEntrega">
               <option value="">Selecione a localidade</option>
               <option value="Centro">Centro</option>
               <option value="Caixa D'água">Caixa D'água</option>
@@ -80,20 +114,23 @@
               <option value="Ema">Ema (sem entrega)</option>
               <option value="Bom Sucesso">Bom Sucesso (sem entrega)</option>
             </select>
+            <p id="erroBairroEntrega" class="erro erro-campo oculto"></p>
 
             <label for="enderecoEntrega">Endereço para entrega:</label>
-            <input type="text" id="enderecoEntrega" placeholder="Rua, número e complemento" />
+            <input type="text" id="enderecoEntrega" data-erro-id="erroEnderecoEntrega" aria-describedby="erroEnderecoEntrega" placeholder="Rua, número e complemento">
+            <p id="erroEnderecoEntrega" class="erro erro-campo oculto"></p>
 
             <label for="referencia">Ponto de referência:</label>
-            <input type="text" id="referencia" placeholder="Ex.: perto da praça" />
+            <input type="text" id="referencia" placeholder="Ex.: perto da praça">
 
             <p id="taxaEntregaInfo" class="aviso taxa"></p>
             <p id="bloqueioEntregaInfo" class="erro oculto" role="alert"></p>
           </div>
 
           <div id="enderecoRetirada" class="painel-condicional oculto">
-            <p class="aviso">
-              Endereço para retirada: RUA: Josias Costa Morais, Bairro: Carrapicho, Quiosque 03.
+            <p class="aviso aviso-retirada">
+              <strong>Retirada no local:</strong><br>
+              Rua Josias Costa Morais, Bairro Carrapicho, Quiosque 03 (Iracema-CE).
             </p>
           </div>
         </fieldset>
@@ -102,44 +139,56 @@
           <legend>2. Pedido no local</legend>
           <p class="aviso tempo-espera">Tempo aproximado: 20 a 40 minutos.</p>
           <label for="numeroMesa">Número da mesa:</label>
-          <input type="number" id="numeroMesa" min="1" step="1" placeholder="Ex.: 3" />
+          <input type="number" id="numeroMesa" min="1" step="1" data-erro-id="erroNumeroMesa" aria-describedby="erroNumeroMesa" placeholder="Ex.: 3">
+          <p id="erroNumeroMesa" class="erro erro-campo oculto"></p>
         </fieldset>
 
         <fieldset class="bloco-form">
           <legend>3. Dados do cliente</legend>
           <label for="nome">Nome completo:</label>
-          <input type="text" id="nome" required />
+          <input type="text" id="nome" autocomplete="name" data-erro-id="erroNome" aria-describedby="ajudaNome erroNome" required>
+          <p id="ajudaNome" class="ajuda-texto">Informe o nome usado para identificação do pedido.</p>
+          <p id="erroNome" class="erro erro-campo oculto"></p>
 
           <label for="telefone">Telefone ou WhatsApp:</label>
-          <input type="tel" id="telefone" placeholder="(88) 98888-7777" required />
+          <input type="tel" id="telefone" inputmode="tel" autocomplete="tel" data-erro-id="erroTelefone" aria-describedby="ajudaTelefone erroTelefone" placeholder="(88) 98888-7777" required>
+          <p id="ajudaTelefone" class="ajuda-texto">Use DDD + número. Exemplo: (88) 98888-7777.</p>
+          <p id="erroTelefone" class="erro erro-campo oculto"></p>
         </fieldset>
 
         <fieldset class="bloco-form">
           <legend>4. Pagamento</legend>
           <label for="pagamento">Forma de pagamento:</label>
-          <select id="pagamento" required>
+          <select id="pagamento" data-erro-id="erroPagamento" aria-describedby="erroPagamento" required>
             <option value="">Selecione</option>
             <option value="Pix">Pix</option>
             <option value="Dinheiro">Dinheiro</option>
             <option value="Cartão">Cartão</option>
           </select>
+          <p id="erroPagamento" class="erro erro-campo oculto"></p>
 
           <div id="pixInfo" class="painel-condicional oculto">
-            <p><strong>Chave PIX:</strong> <span id="chavePixTexto">SEU-PIX-AQUI</span></p>
+            <div class="pix-card">
+              <p class="pix-titulo">Dados do PIX</p>
+              <p class="pix-linha"><strong>Chave:</strong> <span id="chavePixTexto" class="pix-valor">-</span></p>
+              <p class="pix-linha"><strong>Titular:</strong> <span id="pixTitularTexto" class="pix-valor">-</span></p>
+              <p class="pix-linha"><strong>Banco:</strong> <span id="pixBancoTexto" class="pix-valor">-</span></p>
+            </div>
             <button type="button" id="botaoCopiarPix" class="botao botao-secundario">Copiar chave PIX</button>
             <p id="mensagemCopiaPix" class="sucesso oculto" role="status">Chave PIX copiada.</p>
             <p id="mensagemErroCopiaPix" class="erro oculto" role="alert"></p>
           </div>
 
           <div id="trocoInfo" class="painel-condicional oculto">
-            <label class="checkbox-linha" for="precisaTroco">
-              <input type="checkbox" id="precisaTroco" />
+            <label class="checkbox-linha">
+              <input type="checkbox" id="precisaTroco">
               Precisa de troco?
             </label>
 
             <div id="trocoParaBox" class="oculto">
               <label for="trocoPara">Troco para quanto?</label>
-              <input type="number" id="trocoPara" min="0" step="0.01" placeholder="Ex.: 50" />
+              <input type="number" id="trocoPara" min="0" step="0.01" data-erro-id="erroTrocoPara" aria-describedby="erroTrocoPara" placeholder="Ex.: 50">
+              <p id="erroTrocoPara" class="erro erro-campo oculto"></p>
             </div>
           </div>
         </fieldset>
@@ -147,29 +196,32 @@
         <fieldset class="bloco-form">
           <legend>5. Observações</legend>
           <label for="observacoes">Detalhes do pedido:</label>
-          <textarea id="observacoes" placeholder="Ex.: sem cebola, ponto da carne, etc."></textarea>
+          <textarea id="observacoes" placeholder="Ex.: sem cebola, sem verdura, etc."></textarea>
         </fieldset>
 
         <fieldset class="bloco-form">
           <legend>6. Consentimento</legend>
-          <label class="checkbox-linha" for="aceiteLgpd">
-            <input type="checkbox" id="aceiteLgpd" />
+          <label class="checkbox-linha">
+            <input type="checkbox" id="aceiteLgpd" data-erro-id="erroAceiteLgpd" aria-describedby="erroAceiteLgpd">
             Autorizo o uso dos meus dados para contato e processamento deste pedido.
           </label>
+          <p id="erroAceiteLgpd" class="erro erro-campo oculto"></p>
         </fieldset>
 
-        <p id="mensagemErro" class="erro oculto" role="alert"></p>
+        <button type="submit" class="sr-only" tabindex="-1">Enviar pedido</button>
+        <p id="mensagemErro" class="erro oculto" role="alert" tabindex="-1"></p>
       </form>
 
-      <div class="botoes-carrinho">
+      <div class="botoes-carrinho acoes-checkout">
         <button id="botaoFinalizar" class="botao botao-principal" type="button">Finalizar Pedido</button>
         <button id="botaoFechar" class="botao botao-secundario" type="button">Fechar</button>
       </div>
     </div>
   </section>
 
-  <section id="modalConfirmacao" class="fundo-escuro" tabindex="-1" aria-hidden="true">
+  <section id="modalConfirmacao" class="fundo-escuro" tabindex="-1" hidden inert>
     <div class="caixa-centro caixa-confirmacao" role="dialog" aria-modal="true" aria-labelledby="tituloConfirmacao">
+      <button id="botaoFecharConfirmacaoTopo" class="botao-fechar-modal" type="button" aria-label="Fechar confirmação">&times;</button>
       <h2 class="titulo-caixa" id="tituloConfirmacao">Confirmar pedido</h2>
       <p class="aviso">Confira os dados abaixo antes de enviar para o WhatsApp.</p>
       <div id="resumoConfirmacao" class="resumo-confirmacao"></div>
@@ -180,53 +232,291 @@
     </div>
   </section>
 
+  <section id="painelAdmin" class="fundo-escuro" tabindex="-1" hidden inert>
+    <div class="caixa-centro caixa-admin" role="dialog" aria-modal="true" aria-labelledby="tituloAdmin">
+      <button id="botaoFecharAdmin" class="botao-fechar-modal" type="button" aria-label="Fechar painel administrativo">×</button>
+      <header class="admin-topo">
+        <p class="admin-topo-kicker">Área administrativa</p>
+        <h2 class="titulo-caixa" id="tituloAdmin">Painel do Cardápio</h2>
+        <p class="admin-topo-descricao">Gerencie itens, adicionais e regras de combo sem editar código.</p>
+        <ul class="admin-topo-chips">
+          <li class="admin-topo-chip">Produtos</li>
+          <li class="admin-topo-chip">Adicionais</li>
+          <li class="admin-topo-chip">Combos</li>
+        </ul>
+      </header>
+
+      <section id="adminLoginBloco" class="bloco-form">
+        <h3 class="admin-subtitulo">Acesso</h3>
+        <p class="admin-descricao admin-descricao-login">Use o PIN para liberar edição de produtos, adicionais e combos.</p>
+        <label for="adminPin">PIN administrativo</label>
+        <input type="password" id="adminPin" inputmode="numeric" autocomplete="current-password" placeholder="Digite o PIN">
+        <button type="button" id="botaoEntrarAdmin" class="botao botao-principal">Entrar</button>
+      </section>
+      <p id="adminErro" class="erro oculto admin-erro" role="alert"></p>
+
+      <div id="adminConteudo" class="oculto">
+        <section class="admin-resumo" aria-label="Resumo do cardápio">
+          <article class="admin-metrica">
+            <span class="admin-metrica-rotulo">Produtos</span>
+            <strong id="adminTotalProdutos">0</strong>
+          </article>
+          <article class="admin-metrica">
+            <span class="admin-metrica-rotulo">Disponíveis</span>
+            <strong id="adminTotalDisponiveis">0</strong>
+          </article>
+          <article class="admin-metrica">
+            <span class="admin-metrica-rotulo">Combos possíveis</span>
+            <strong id="adminTotalCombos">0</strong>
+          </article>
+        </section>
+
+        <nav class="admin-tabs" role="tablist" aria-label="Seções do painel">
+          <button type="button" id="adminTabProdutos" class="admin-tab ativo" data-admin-tab="produtos" role="tab" aria-controls="painelAdminProdutos" aria-selected="true">Produtos</button>
+          <button type="button" id="adminTabAdicionais" class="admin-tab" data-admin-tab="adicionais" role="tab" aria-controls="painelAdminAdicionais" aria-selected="false">Adicionais</button>
+          <button type="button" id="adminTabCombos" class="admin-tab" data-admin-tab="combos" role="tab" aria-controls="painelAdminCombos" aria-selected="false">Combos</button>
+        </nav>
+
+        <section id="painelAdminProdutos" class="admin-painel ativo" data-admin-painel="produtos" role="tabpanel" aria-labelledby="adminTabProdutos">
+          <div class="admin-produtos-grid">
+            <section class="bloco-form admin-bloco">
+              <h3 class="admin-subtitulo">Cadastro de Produto</h3>
+              <p class="admin-descricao">Preencha os campos e clique em salvar para criar ou atualizar um item.</p>
+              <div class="admin-guia">
+                <p class="admin-guia-titulo">Fluxo recomendado</p>
+                <ol class="admin-guia-lista">
+                  <li>Cadastre ou edite o item.</li>
+                  <li>Confirme a disponibilidade.</li>
+                  <li>Aplique adicionais (quando houver).</li>
+                </ol>
+              </div>
+              <input type="hidden" id="adminProdutoId">
+
+              <label for="adminNomeProduto">Nome</label>
+              <input type="text" id="adminNomeProduto" maxlength="80">
+
+              <label for="adminDescricaoProduto">Descrição</label>
+              <textarea id="adminDescricaoProduto" maxlength="180" placeholder="Descrição curta do item"></textarea>
+
+              <label for="adminPrecoProduto">Preço (R$)</label>
+              <input type="number" id="adminPrecoProduto" min="0" step="0.01">
+
+              <label for="adminCategoriaProduto">Categoria</label>
+              <select id="adminCategoriaProduto">
+                <option value="pastel">Pastéis</option>
+                <option value="hamburguer">Hambúrgueres</option>
+                <option value="refrigerante">Refrigerantes</option>
+                <option value="batida">Batidas</option>
+              </select>
+
+              <label class="checkbox-linha">
+                <input type="checkbox" id="adminDisponivelProduto" checked>
+                Produto disponível
+              </label>
+
+              <div id="adminAdicionaisBox">
+                <p class="aviso">Adicionais permitidos:</p>
+                <div id="adminAdicionaisChecklist" class="add-on-list"></div>
+              </div>
+
+              <div class="botoes-carrinho">
+                <button type="button" id="botaoSalvarProduto" class="botao botao-principal">Salvar Produto</button>
+                <button type="button" id="botaoLimparProduto" class="botao botao-secundario">Limpar</button>
+              </div>
+              <p id="adminProdutoMsg" class="sucesso oculto" role="status"></p>
+            </section>
+
+            <section class="bloco-form admin-bloco admin-bloco-lista">
+              <div class="admin-headline">
+                <h3 class="admin-subtitulo">Itens Cadastrados</h3>
+                <p class="admin-descricao">Edite, pause ou exclua os itens existentes.</p>
+              </div>
+
+              <section class="admin-filtros-area" aria-label="Filtros da lista de produtos">
+                <h4 class="admin-secao-titulo">Filtros</h4>
+                <div class="admin-filtros" role="group" aria-label="Filtros de produtos">
+                  <div class="admin-campo">
+                    <label for="adminBuscaProduto">Buscar por nome</label>
+                    <input type="search" id="adminBuscaProduto" placeholder="Ex.: Frango Catupiry">
+                  </div>
+                  <div class="admin-campo">
+                    <label for="adminFiltroCategoria">Categoria</label>
+                    <select id="adminFiltroCategoria">
+                      <option value="">Todas</option>
+                      <option value="pastel">Pastéis</option>
+                      <option value="hamburguer">Hambúrgueres</option>
+                      <option value="refrigerante">Refrigerantes</option>
+                      <option value="batida">Batidas</option>
+                    </select>
+                  </div>
+                  <div class="admin-campo">
+                    <label for="adminFiltroDisponibilidade">Status</label>
+                    <select id="adminFiltroDisponibilidade">
+                      <option value="">Todos</option>
+                      <option value="disponivel">Disponíveis</option>
+                      <option value="indisponivel">Indisponíveis</option>
+                    </select>
+                  </div>
+                </div>
+                <p id="adminResumoFiltro" class="admin-resumo-filtro" role="status">Mostrando todos os itens.</p>
+              </section>
+
+              <section class="admin-lista-area" aria-label="Lista de produtos cadastrados">
+                <h4 class="admin-secao-titulo">Produtos</h4>
+                <ul id="adminListaProdutos" class="admin-lista"></ul>
+              </section>
+            </section>
+          </div>
+        </section>
+
+        <section id="painelAdminAdicionais" class="admin-painel" data-admin-painel="adicionais" role="tabpanel" aria-labelledby="adminTabAdicionais" hidden>
+          <section class="bloco-form admin-bloco">
+            <h3 class="admin-subtitulo">Adicionais</h3>
+            <p class="admin-descricao">Mantenha os adicionais padronizados para todos os produtos.</p>
+            <div id="adminListaAdicionais" class="admin-lista-adicionais"></div>
+            <div class="admin-grid">
+              <div>
+                <label for="adminNovoAdicionalNome">Novo adicional</label>
+                <input type="text" id="adminNovoAdicionalNome" maxlength="40" placeholder="Ex.: Calabresa">
+              </div>
+              <div>
+                <label for="adminNovoAdicionalPreco">Preço</label>
+                <input type="number" id="adminNovoAdicionalPreco" min="0" step="0.01" placeholder="0,00">
+              </div>
+            </div>
+            <button type="button" id="botaoAdicionarAdicional" class="botao botao-secundario">Adicionar adicional</button>
+          </section>
+        </section>
+
+        <section id="painelAdminCombos" class="admin-painel" data-admin-painel="combos" role="tabpanel" aria-labelledby="adminTabCombos" hidden>
+          <section class="bloco-form admin-bloco">
+            <h3 class="admin-subtitulo">Configuração de Combos</h3>
+            <p class="admin-descricao">Defina como os combos serão exibidos para o cliente.</p>
+            <label class="checkbox-linha">
+              <input type="checkbox" id="comboAtivo" checked>
+              Exibir categoria Combos
+            </label>
+            <p class="aviso">Base do combo:</p>
+            <label class="checkbox-linha">
+              <input type="checkbox" id="comboBasePastel" checked>
+              Pastel
+            </label>
+            <label class="checkbox-linha">
+              <input type="checkbox" id="comboBaseHamburguer" checked>
+              Hambúrguer
+            </label>
+            <label for="comboDesconto">Desconto por combo (R$)</label>
+            <input type="number" id="comboDesconto" min="0" step="0.01" value="0">
+            <button type="button" id="botaoSalvarCombos" class="botao botao-secundario">Salvar configuração de combos</button>
+          </section>
+        </section>
+
+        <div id="adminFeedback" class="admin-feedback oculto" aria-live="polite">
+          <p id="adminAcaoMsg" class="aviso admin-acao-msg oculto" role="status"></p>
+          <button type="button" id="botaoDesfazerAdmin" class="botao botao-secundario oculto">Desfazer exclusão</button>
+        </div>
+      </div>
+
+      <div id="adminAcoesFooter" class="botoes-carrinho oculto">
+        <button id="botaoSairAdmin" class="botao botao-secundario" type="button">Sair do Admin</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="barra-mobile" id="barraMobile">
+    <div class="barra-mobile-info">
+      <span class="barra-mobile-label">Total</span>
+      <strong id="totalBarraMobile">R$ 0,00</strong>
+    </div>
+    <button type="button" id="botaoAbrirCarrinhoMobile" class="botao botao-principal" aria-controls="caixaCarrinho" aria-expanded="false">Ver Carrinho</button>
+  </div>
+
   <script>
     const configuracaoLoja = {
       numeroWhatsApp: "5588988173336",
-      chavePix: "SEU-PIX-AQUI",
+      chavePix: "88 981732028",
+      pixTitular: "Karen Kyanne Magalhães Souza",
+      pixBanco: "Nubank",
       taxaEntrega: 2,
-      pedidoMinimoEntrega: 15,
-      enderecoRetirada: "RUA: Josias Costa Morais, Bairro: Carrapicho, Quiosque 03",
+      enderecoRetirada: "Rua Josias Costa Morais, Bairro Carrapicho, Quiosque 03 (Iracema-CE).",
       bairrosComEntrega: ["Centro", "Caixa D'água", "Holandino", "Campo", "Jatobá"],
       bairrosSemEntrega: ["Ema", "Bom Sucesso"],
       idsIndisponiveis: []
     };
 
     const horarioFuncionamento = {
-      0: { abre: "17:30", fecha: "23:00" },
-      1: { abre: "17:30", fecha: "23:30" },
-      2: { abre: "17:30", fecha: "23:30" },
-      3: { abre: "17:30", fecha: "23:30" },
-      4: { abre: "17:30", fecha: "23:30" },
-      5: { abre: "17:30", fecha: "23:59" },
-      6: { abre: "17:30", fecha: "23:59" }
+      0: { abre: "18:00", fecha: "23:00" },
+      4: { abre: "18:00", fecha: "23:00" },
+      5: { abre: "18:00", fecha: "23:00" },
+      6: { abre: "18:00", fecha: "23:00" }
     };
 
-    const adicionaisCatalogo = {
+    const categoriasCatalogo = {
+      combo: "Combos",
+      pastel: "Pastéis",
+      hamburguer: "Hambúrgueres",
+      refrigerante: "Refrigerantes",
+      batida: "Batidas"
+    };
+
+    const adicionaisPadrao = {
       queijo: { id: "queijo", nome: "Queijo extra", preco: 2 },
-      bacon: { id: "bacon", nome: "Bacon", preco: 3 },
       catupiry: { id: "catupiry", nome: "Catupiry", preco: 2.5 },
-      cheddar: { id: "cheddar", nome: "Cheddar", preco: 2 }
+      cheddar: { id: "cheddar", nome: "Cheddar", preco: 2 },
+      calabresa: { id: "calabresa", nome: "Calabresa", preco: 2 },
+      frango: { id: "frango", nome: "Frango", preco: 3 }
     };
 
-    const produtos = [
+    const produtosPadrao = [
       { id: 1, nome: "Pizza", descricao: "Misto ralado com orégano, milho, tomate, cebola e cheddar.", preco: 10, categoria: "pastel", disponivel: true, adicionais: ["queijo", "cheddar", "catupiry"] },
-      { id: 2, nome: "Frango Catupiry", descricao: "Frango, queijo fatiado, milho e catupiry.", preco: 10, categoria: "pastel", disponivel: true, adicionais: ["queijo", "catupiry"] },
+      { id: 2, nome: "Frango Catupiry", descricao: "Frango, queijo fatiado, milho e catupiry.", preco: 10, categoria: "pastel", disponivel: true, adicionais: ["queijo", "catupiry", "frango"] },
       { id: 3, nome: "3 Queijos", descricao: "Queijo coalho, cheddar e catupiry.", preco: 10, categoria: "pastel", disponivel: true, adicionais: ["queijo", "cheddar"] },
-      { id: 4, nome: "Moda da Casa", descricao: "Frango, calabresa, queijo fatiado e catupiry.", preco: 12, categoria: "pastel", disponivel: true, adicionais: ["bacon", "catupiry"] },
-      { id: 5, nome: "Bolonhesa", descricao: "Carne moída, frango, queijo coalho, milho, tomate, cheddar e catupiry.", preco: 12, categoria: "pastel", disponivel: true, adicionais: ["queijo", "bacon"] },
-      { id: 6, nome: "Pastel Árabe", descricao: "Carne moída, queijo coalho, cebola, tomate e limão.", preco: 12, categoria: "pastel", disponivel: true, adicionais: ["queijo"] },
-      { id: 7, nome: "Ponta Negra Misto", descricao: "Pão brioche, ovo, presunto, queijo, salada e molhos.", preco: 10, categoria: "hamburguer", disponivel: true, adicionais: ["queijo", "bacon", "cheddar"] },
-      { id: 8, nome: "Smach Encanto", descricao: "Carne artesanal, cheddar, salada e molhos.", preco: 12, categoria: "hamburguer", disponivel: true, adicionais: ["queijo", "bacon", "catupiry"] },
-      { id: 9, nome: "Majorlandia Frango", descricao: "Frango, queijo, presunto, milho, catupiry, salada e molhos.", preco: 14, categoria: "hamburguer", disponivel: true, adicionais: ["queijo", "bacon"] },
-      { id: 10, nome: "Canoa Quebrada Burguer", descricao: "Carne artesanal, calabresa, queijo, presunto, catupiry e molhos.", preco: 16, categoria: "hamburguer", disponivel: true, adicionais: ["queijo", "bacon", "catupiry"] },
-      { id: 11, nome: "Mão Branca Burguer", descricao: "Carne artesanal, frango, ovo, cheddar, salada e molhos.", preco: 18, categoria: "hamburguer", disponivel: true, adicionais: ["queijo", "bacon", "cheddar"] },
-      { id: 12, nome: "Iracema Burguer", descricao: "Carne artesanal, frango, queijo, presunto, calabresa, cheddar e molhos.", preco: 20, categoria: "hamburguer", disponivel: true, adicionais: ["queijo", "bacon", "catupiry"] }
+      { id: 4, nome: "Moda da Casa", descricao: "Frango, calabresa, queijo fatiado e catupiry.", preco: 12, categoria: "pastel", disponivel: true, adicionais: ["calabresa", "catupiry", "frango"] },
+      { id: 5, nome: "Bolonhesa", descricao: "Carne moída, frango, queijo coalho, milho, tomate, cheddar e catupiry.", preco: 12, categoria: "pastel", disponivel: true, adicionais: ["queijo", "calabresa", "frango"] },
+      { id: 6, nome: "Pastel Árabe", descricao: "Carne moída, queijo coalho, cebola, tomate e limão.", preco: 12, categoria: "pastel", disponivel: true, adicionais: ["queijo", "calabresa"] },
+      { id: 7, nome: "Ponta Negra Misto", descricao: "Pão brioche, ovo, presunto, queijo, salada e molhos.", preco: 10, categoria: "hamburguer", disponivel: true, adicionais: ["queijo", "calabresa", "cheddar"] },
+      { id: 8, nome: "Smach Encanto", descricao: "Carne artesanal, cheddar, salada e molhos.", preco: 12, categoria: "hamburguer", disponivel: true, adicionais: ["queijo", "calabresa", "catupiry"] },
+      { id: 9, nome: "Majorlandia Frango", descricao: "Frango, queijo, presunto, milho, catupiry, salada e molhos.", preco: 14, categoria: "hamburguer", disponivel: true, adicionais: ["queijo", "frango"] },
+      { id: 10, nome: "Canoa Quebrada Burguer", descricao: "Carne artesanal, calabresa, queijo, presunto, catupiry e molhos.", preco: 16, categoria: "hamburguer", disponivel: true, adicionais: ["queijo", "calabresa", "catupiry"] },
+      { id: 11, nome: "Mão Branca Burguer", descricao: "Carne artesanal, frango, ovo, cheddar, salada e molhos.", preco: 18, categoria: "hamburguer", disponivel: true, adicionais: ["queijo", "frango", "cheddar"] },
+      { id: 12, nome: "Iracema Burguer", descricao: "Carne artesanal, frango, queijo, presunto, calabresa, cheddar e molhos.", preco: 20, categoria: "hamburguer", disponivel: true, adicionais: ["queijo", "calabresa", "frango"] },
+      { id: 13, nome: "Coca-Cola 1L", descricao: "Refrigerante Coca-Cola 1 litro.", preco: 10, categoria: "refrigerante", disponivel: true, adicionais: [] },
+      { id: 14, nome: "Cajuína São Geraldo 1L", descricao: "Refrigerante Cajuína São Geraldo.", preco: 10, categoria: "refrigerante", disponivel: true, adicionais: [] },
+      { id: 15, nome: "Coca-Cola Lata Zero", descricao: "Coca-Cola zero em lata.", preco: 5, categoria: "refrigerante", disponivel: true, adicionais: [] },
+      { id: 16, nome: "Coca-Cola Lata", descricao: "Coca-Cola tradicional em lata.", preco: 5, categoria: "refrigerante", disponivel: true, adicionais: [] },
+      { id: 17, nome: "Cajuína Lata São Geraldo", descricao: "Cajuína São Geraldo em lata.", preco: 5, categoria: "refrigerante", disponivel: true, adicionais: [] },
+      { id: 18, nome: "Água sem gás", descricao: "Água mineral sem gás.", preco: 2, categoria: "refrigerante", disponivel: true, adicionais: [] },
+      { id: 19, nome: "Batida Tradicional", descricao: "Batida de açaí líquido tradicional.", preco: 12, categoria: "batida", disponivel: true, adicionais: [] },
+      { id: 20, nome: "Batida Banana", descricao: "Batida de açaí líquido com banana.", preco: 13, categoria: "batida", disponivel: true, adicionais: [] },
+      { id: 21, nome: "Batida Morango", descricao: "Batida de açaí líquido com morango.", preco: 14, categoria: "batida", disponivel: true, adicionais: [] }
     ];
+
+    const configuracaoCombosPadrao = {
+      ativo: true,
+      desconto: 0,
+      categoriasBase: ["pastel", "hamburguer"],
+      categoriaBebida: "refrigerante"
+    };
+
+    function clonar(objeto) {
+      return JSON.parse(JSON.stringify(objeto));
+    }
+
+    let adicionaisCatalogo = clonar(adicionaisPadrao);
+    let produtos = clonar(produtosPadrao);
+    let configuracaoCombos = clonar(configuracaoCombosPadrao);
 
     const CHAVE_STORAGE_CARRINHO = "tobias_lanches_carrinho_v3";
     const CHAVE_STORAGE_FORMULARIO = "tobias_lanches_form_v3";
     const CHAVE_SEQUENCIA_PEDIDO = "tobias_lanches_seq_";
+    const CHAVE_STORAGE_PRODUTOS = "tobias_lanches_produtos_v1";
+    const CHAVE_STORAGE_ADICIONAIS = "tobias_lanches_adicionais_v1";
+    const CHAVE_STORAGE_COMBOS = "tobias_lanches_combos_v1";
+    const CHAVE_STORAGE_ADMIN_PIN = "tobias_lanches_admin_pin_v1";
+    const PIN_ADMIN_PADRAO = "2580";
+    const LIMITE_TENTATIVAS_ADMIN = 5;
+    const BLOQUEIO_ADMIN_MS = 30000;
+    const sequenciaPedidoMemoria = Object.create(null);
 
     const formatadorMoeda = new Intl.NumberFormat("pt-BR", {
       style: "currency",
@@ -242,19 +532,24 @@
     let timerBloqueio = null;
 
     const areaProdutos = document.getElementById("areaProdutos");
+    const menuCategorias = document.getElementById("menuCategorias");
     const caixaCarrinho = document.getElementById("caixaCarrinho");
     const listaCarrinho = document.getElementById("listaCarrinho");
     const valorTotal = document.getElementById("valorTotal");
     const resumoPedido = document.getElementById("resumoPedido");
+    const carrinhoSubtitulo = document.getElementById("carrinhoSubtitulo");
+    const resumoTopoItens = document.getElementById("resumoTopoItens");
+    const resumoTopoSubtotal = document.getElementById("resumoTopoSubtotal");
     const contadorCarrinho = document.getElementById("quantidadeCarrinho");
     const botaoCarrinho = document.getElementById("botaoCarrinho");
+    const botaoFecharCarrinhoTopo = document.getElementById("botaoFecharCarrinhoTopo");
     const botaoFechar = document.getElementById("botaoFechar");
     const botaoFinalizar = document.getElementById("botaoFinalizar");
     const mensagemErro = document.getElementById("mensagemErro");
 
     const statusLoja = document.getElementById("statusLoja");
-    const pedidoMinimoLabel = document.getElementById("pedidoMinimoLabel");
-    const pedidoMinimoAjuda = document.getElementById("pedidoMinimoAjuda");
+    const detalheHorario = document.getElementById("detalheHorario");
+    const statusCategoria = document.getElementById("statusCategoria");
 
     const formCliente = document.getElementById("formCliente");
     const radiosAtendimento = document.querySelectorAll('input[name="tipoAtendimento"]');
@@ -276,6 +571,8 @@
     const pixInfo = document.getElementById("pixInfo");
     const botaoCopiarPix = document.getElementById("botaoCopiarPix");
     const chavePixTexto = document.getElementById("chavePixTexto");
+    const pixTitularTexto = document.getElementById("pixTitularTexto");
+    const pixBancoTexto = document.getElementById("pixBancoTexto");
     const mensagemCopiaPix = document.getElementById("mensagemCopiaPix");
     const mensagemErroCopiaPix = document.getElementById("mensagemErroCopiaPix");
 
@@ -290,9 +587,210 @@
     const resumoConfirmacao = document.getElementById("resumoConfirmacao");
     const botaoConfirmarEnvio = document.getElementById("botaoConfirmarEnvio");
     const botaoCancelarConfirmacao = document.getElementById("botaoCancelarConfirmacao");
+    const botaoFecharConfirmacaoTopo = document.getElementById("botaoFecharConfirmacaoTopo");
+    const totalBarraMobile = document.getElementById("totalBarraMobile");
+    const botaoAbrirCarrinhoMobile = document.getElementById("botaoAbrirCarrinhoMobile");
+    const caixaCarrinhoConteudo = caixaCarrinho.querySelector(".caixa-carrinho");
+    const mediaTecladoMobile = window.matchMedia("(max-width: 900px)");
+
+    const painelAdmin = document.getElementById("painelAdmin");
+    const botaoAbrirAdmin = document.getElementById("botaoAbrirAdmin");
+    const botaoFecharAdmin = document.getElementById("botaoFecharAdmin");
+    const botaoSairAdmin = document.getElementById("botaoSairAdmin");
+    const adminAcoesFooter = document.getElementById("adminAcoesFooter");
+    const adminLoginBloco = document.getElementById("adminLoginBloco");
+    const adminConteudo = document.getElementById("adminConteudo");
+    const adminTabs = document.querySelectorAll(".admin-tab");
+    const adminPaineis = document.querySelectorAll(".admin-painel");
+    const adminTotalProdutos = document.getElementById("adminTotalProdutos");
+    const adminTotalDisponiveis = document.getElementById("adminTotalDisponiveis");
+    const adminTotalCombos = document.getElementById("adminTotalCombos");
+    const adminPin = document.getElementById("adminPin");
+    const botaoEntrarAdmin = document.getElementById("botaoEntrarAdmin");
+    const adminErro = document.getElementById("adminErro");
+
+    const adminProdutoId = document.getElementById("adminProdutoId");
+    const adminNomeProduto = document.getElementById("adminNomeProduto");
+    const adminDescricaoProduto = document.getElementById("adminDescricaoProduto");
+    const adminPrecoProduto = document.getElementById("adminPrecoProduto");
+    const adminCategoriaProduto = document.getElementById("adminCategoriaProduto");
+    const adminDisponivelProduto = document.getElementById("adminDisponivelProduto");
+    const adminAdicionaisChecklist = document.getElementById("adminAdicionaisChecklist");
+    const botaoSalvarProduto = document.getElementById("botaoSalvarProduto");
+    const botaoLimparProduto = document.getElementById("botaoLimparProduto");
+    const adminProdutoMsg = document.getElementById("adminProdutoMsg");
+    const adminListaProdutos = document.getElementById("adminListaProdutos");
+    const adminBuscaProduto = document.getElementById("adminBuscaProduto");
+    const adminFiltroCategoria = document.getElementById("adminFiltroCategoria");
+    const adminFiltroDisponibilidade = document.getElementById("adminFiltroDisponibilidade");
+    const adminResumoFiltro = document.getElementById("adminResumoFiltro");
+    const adminListaAdicionais = document.getElementById("adminListaAdicionais");
+    const adminNovoAdicionalNome = document.getElementById("adminNovoAdicionalNome");
+    const adminNovoAdicionalPreco = document.getElementById("adminNovoAdicionalPreco");
+    const botaoAdicionarAdicional = document.getElementById("botaoAdicionarAdicional");
+    const adminFeedback = document.getElementById("adminFeedback");
+    const adminAcaoMsg = document.getElementById("adminAcaoMsg");
+    const botaoDesfazerAdmin = document.getElementById("botaoDesfazerAdmin");
+    const comboAtivo = document.getElementById("comboAtivo");
+    const comboBasePastel = document.getElementById("comboBasePastel");
+    const comboBaseHamburguer = document.getElementById("comboBaseHamburguer");
+    const comboDesconto = document.getElementById("comboDesconto");
+    const botaoSalvarCombos = document.getElementById("botaoSalvarCombos");
+
+    const erroTipoEntrega = document.getElementById("erroTipoEntrega");
+    const erroBairroEntrega = document.getElementById("erroBairroEntrega");
+    const erroEnderecoEntrega = document.getElementById("erroEnderecoEntrega");
+    const erroNumeroMesa = document.getElementById("erroNumeroMesa");
+    const erroNome = document.getElementById("erroNome");
+    const erroTelefone = document.getElementById("erroTelefone");
+    const erroPagamento = document.getElementById("erroPagamento");
+    const erroTrocoPara = document.getElementById("erroTrocoPara");
+    const erroAceiteLgpd = document.getElementById("erroAceiteLgpd");
+
+    const seletorFocoModal = [
+      "a[href]",
+      "button:not([disabled])",
+      "input:not([disabled]):not([type=\"hidden\"])",
+      "select:not([disabled])",
+      "textarea:not([disabled])",
+      "summary",
+      "[tabindex]:not([tabindex=\"-1\"])"
+    ].join(",");
+
+    const JANELA_DESFAZER_MS = 8000;
+    let adminAutenticado = false;
+    let adminAbaAtual = "produtos";
+    let ultimaExclusaoAdmin = null;
+    let timerDesfazerAdmin = null;
+    let pilhaRetornoFoco = [];
+    let tentativasAdminFalhas = 0;
+    let adminBloqueadoAte = 0;
 
     function formatarMoeda(valor) {
       return formatadorMoeda.format(valor);
+    }
+
+    function lerStorageSeguro(chave) {
+      try {
+        return localStorage.getItem(chave);
+      } catch {
+        return null;
+      }
+    }
+
+    function salvarStorageSeguro(chave, valor) {
+      try {
+        localStorage.setItem(chave, valor);
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    function escaparHtml(valor) {
+      return String(valor ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function obterElementosFocaveis(container) {
+      return Array.from(container.querySelectorAll(seletorFocoModal))
+        .filter((elemento) =>
+          !elemento.closest(".oculto")
+          && !elemento.closest("[hidden]")
+          && !elemento.closest("[inert]"));
+    }
+
+    function modalAtivo() {
+      if (painelAdmin.classList.contains("show")) {
+        return painelAdmin;
+      }
+      if (modalConfirmacao.classList.contains("show")) {
+        return modalConfirmacao;
+      }
+      if (caixaCarrinho.classList.contains("show")) {
+        return caixaCarrinho;
+      }
+      return null;
+    }
+
+    function atualizarBloqueioRolagem() {
+      document.body.style.overflow = modalAtivo() ? "hidden" : "auto";
+    }
+
+    function abrirModal(modal, focoPreferencial) {
+      if (modal.classList.contains("show")) {
+        const alvoAberto = focoPreferencial || obterElementosFocaveis(modal)[0] || modal;
+        if (alvoAberto && typeof alvoAberto.focus === "function") {
+          setTimeout(() => alvoAberto.focus(), 0);
+        }
+        return;
+      }
+
+      const ultimoFoco = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      pilhaRetornoFoco.push(ultimoFoco);
+      modal.hidden = false;
+      modal.inert = false;
+      modal.classList.add("show");
+      atualizarBloqueioRolagem();
+
+      const alvoFoco = focoPreferencial || obterElementosFocaveis(modal)[0] || modal;
+      setTimeout(() => {
+        if (alvoFoco && typeof alvoFoco.focus === "function") {
+          alvoFoco.focus();
+        }
+      }, 0);
+    }
+
+    function fecharModal(modal, fallbackFoco = null) {
+      if (!modal.classList.contains("show")) {
+        return;
+      }
+
+      modal.classList.remove("show");
+      modal.inert = true;
+      modal.hidden = true;
+      atualizarBloqueioRolagem();
+
+      const retornoFoco = pilhaRetornoFoco.pop() || fallbackFoco;
+      if (retornoFoco && typeof retornoFoco.focus === "function") {
+        setTimeout(() => retornoFoco.focus(), 0);
+      }
+    }
+
+    function limitarFocoNoModal(evento) {
+      if (evento.key !== "Tab") {
+        return;
+      }
+
+      const modal = modalAtivo();
+      if (!modal) {
+        return;
+      }
+
+      const focaveis = obterElementosFocaveis(modal);
+      if (focaveis.length === 0) {
+        evento.preventDefault();
+        modal.focus();
+        return;
+      }
+
+      const primeiro = focaveis[0];
+      const ultimo = focaveis[focaveis.length - 1];
+
+      if (evento.shiftKey && document.activeElement === primeiro) {
+        evento.preventDefault();
+        ultimo.focus();
+        return;
+      }
+
+      if (!evento.shiftKey && document.activeElement === ultimo) {
+        evento.preventDefault();
+        primeiro.focus();
+      }
     }
 
     function obterMinutos(horaTexto) {
@@ -304,6 +802,182 @@
       return produto.disponivel !== false && !configuracaoLoja.idsIndisponiveis.includes(produto.id);
     }
 
+    function obterPinAdmin() {
+      return lerStorageSeguro(CHAVE_STORAGE_ADMIN_PIN) || PIN_ADMIN_PADRAO;
+    }
+
+    function salvarEstadoCardapio() {
+      salvarStorageSeguro(CHAVE_STORAGE_PRODUTOS, JSON.stringify(produtos));
+      salvarStorageSeguro(CHAVE_STORAGE_ADICIONAIS, JSON.stringify(adicionaisCatalogo));
+      salvarStorageSeguro(CHAVE_STORAGE_COMBOS, JSON.stringify(configuracaoCombos));
+    }
+
+    function normalizarAdicionais(dados) {
+      if (!dados || typeof dados !== "object") {
+        return clonar(adicionaisPadrao);
+      }
+
+      const itens = Object.values(dados)
+        .filter((item) => item && typeof item.id === "string")
+        .map((item) => ({
+          id: item.id,
+          nome: String(item.nome || item.id),
+          preco: Number(item.preco) || 0
+        }));
+
+      if (itens.length === 0) {
+        return clonar(adicionaisPadrao);
+      }
+
+      const normalizados = itens.reduce((acumulador, item) => {
+        acumulador[item.id] = item;
+        return acumulador;
+      }, {});
+
+      delete normalizados.bacon;
+      if (!normalizados.calabresa) {
+        normalizados.calabresa = clonar(adicionaisPadrao.calabresa);
+      }
+      if (!normalizados.frango) {
+        normalizados.frango = clonar(adicionaisPadrao.frango);
+      }
+      return normalizados;
+    }
+
+    function normalizarProdutos(dados, adicionais) {
+      if (!Array.isArray(dados) || dados.length === 0) {
+        return clonar(produtosPadrao);
+      }
+
+      const categoriasPermitidas = ["pastel", "hamburguer", "refrigerante", "batida"];
+      const lista = dados
+        .filter((item) => item && typeof item === "object")
+        .map((item) => ({
+          id: Number(item.id) || 0,
+          nome: String(item.nome || "Item sem nome"),
+          descricao: String(item.descricao || ""),
+          preco: Number(item.preco) || 0,
+          categoria: categoriasPermitidas.includes(item.categoria) ? item.categoria : "pastel",
+          disponivel: item.disponivel !== false,
+          adicionais: Array.isArray(item.adicionais)
+            ? item.adicionais.filter((idExtra) => Boolean(adicionais[idExtra]))
+            : []
+        }))
+        .filter((item) => item.id > 0);
+
+      const possuiRefrigerante = lista.some((item) => item.categoria === "refrigerante");
+      const possuiBatida = lista.some((item) => item.categoria === "batida");
+
+      if (!possuiRefrigerante) {
+        lista.push(...clonar(produtosPadrao.filter((item) => item.categoria === "refrigerante")));
+      }
+      if (!possuiBatida) {
+        lista.push(...clonar(produtosPadrao.filter((item) => item.categoria === "batida")));
+      }
+
+      return lista;
+    }
+
+    function normalizarConfigCombos(dados) {
+      const base = clonar(configuracaoCombosPadrao);
+      if (!dados || typeof dados !== "object") {
+        return base;
+      }
+
+      const categoriasBase = Array.isArray(dados.categoriasBase)
+        ? dados.categoriasBase.filter((categoria) => categoria === "pastel" || categoria === "hamburguer")
+        : [];
+
+      return {
+        ativo: dados.ativo !== false,
+        desconto: Math.max(0, Number(dados.desconto) || 0),
+        categoriasBase: categoriasBase.length > 0 ? categoriasBase : clonar(base.categoriasBase),
+        categoriaBebida: "refrigerante"
+      };
+    }
+
+    function carregarEstadoCardapio() {
+      try {
+        const adicionaisCarregados = JSON.parse(lerStorageSeguro(CHAVE_STORAGE_ADICIONAIS) || "null");
+        adicionaisCatalogo = normalizarAdicionais(adicionaisCarregados);
+      } catch {
+        adicionaisCatalogo = clonar(adicionaisPadrao);
+      }
+
+      try {
+        const produtosCarregados = JSON.parse(lerStorageSeguro(CHAVE_STORAGE_PRODUTOS) || "null");
+        produtos = normalizarProdutos(produtosCarregados, adicionaisCatalogo);
+      } catch {
+        produtos = clonar(produtosPadrao);
+      }
+
+      try {
+        const combosCarregados = JSON.parse(lerStorageSeguro(CHAVE_STORAGE_COMBOS) || "null");
+        configuracaoCombos = normalizarConfigCombos(combosCarregados);
+      } catch {
+        configuracaoCombos = clonar(configuracaoCombosPadrao);
+      }
+    }
+
+    function obterCategoriasDisponiveis() {
+      const categorias = [];
+      const produtosDisponiveis = new Set(produtos.map((produto) => produto.categoria));
+      const possuiBebida = produtos.some((produto) =>
+        produto.categoria === configuracaoCombos.categoriaBebida && produtoEstaDisponivel(produto));
+      const possuiBase = configuracaoCombos.categoriasBase.some((categoriaBase) =>
+        produtos.some((produto) => produto.categoria === categoriaBase && produtoEstaDisponivel(produto)));
+
+      if (configuracaoCombos.ativo && possuiBebida && possuiBase) {
+        categorias.push("combo");
+      }
+
+      ["pastel", "hamburguer", "refrigerante", "batida"].forEach((categoria) => {
+        if (produtosDisponiveis.has(categoria)) {
+          categorias.push(categoria);
+        }
+      });
+
+      return categorias;
+    }
+
+    function renderizarCategorias() {
+      const categorias = obterCategoriasDisponiveis();
+      if (!categorias.includes(categoriaAtual)) {
+        categoriaAtual = categorias[0] || "pastel";
+      }
+
+      menuCategorias.innerHTML = categorias
+        .map((categoria) => `
+          <button class="categoria ${categoria === categoriaAtual ? "ativa" : ""}" data-categoria="${categoria}" type="button" aria-pressed="${categoria === categoriaAtual ? "true" : "false"}">
+            ${categoriasCatalogo[categoria] || categoria}
+          </button>
+        `)
+        .join("");
+    }
+
+    function obterProdutoPorId(id) {
+      return produtos.find((produto) => String(produto.id) === String(id));
+    }
+
+    function proximoIdProduto() {
+      const maiorId = produtos.reduce((maior, produto) => Math.max(maior, Number(produto.id) || 0), 0);
+      return maiorId + 1;
+    }
+
+    function slugify(texto) {
+      return texto
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "_")
+        .replace(/^_+|_+$/g, "");
+    }
+
+    function calcularPrecoCombo(itemBase, bebida) {
+      const bruto = itemBase.preco + bebida.preco;
+      return Math.max(0, bruto - (Number(configuracaoCombos.desconto) || 0));
+    }
+
     function obterStatusLoja(dataAtual = new Date()) {
       const diaAtual = dataAtual.getDay();
       const agendaHoje = horarioFuncionamento[diaAtual];
@@ -313,7 +987,7 @@
         return {
           aberta: false,
           mensagem: "Loja fechada hoje",
-          detalhe: "Sem horário de atendimento cadastrado para hoje."
+          detalhe: "Sem atendimento hoje"
         };
       }
 
@@ -356,7 +1030,8 @@
     function atualizarStatusLoja() {
       const status = obterStatusLoja();
       statusLoja.className = `status-loja ${status.aberta ? "status-aberta" : "status-fechada"}`;
-      statusLoja.textContent = `${status.mensagem} - ${status.detalhe}`;
+      statusLoja.textContent = status.mensagem;
+      detalheHorario.textContent = status.detalhe;
     }
 
     function atendimentoAtual() {
@@ -405,9 +1080,17 @@
 
     function atualizarResumoValores() {
       const { subtotal, taxa, total } = calcularTotaisPedido();
+      const quantidadeTotal = carrinho.reduce((acumulador, item) => acumulador + item.quantidade, 0);
       resumoPedido.textContent = `Subtotal: ${formatarMoeda(subtotal)} | Taxa de entrega: ${formatarMoeda(taxa)}`;
       valorTotal.textContent = `Total: ${formatarMoeda(total)}`;
-      contadorCarrinho.textContent = carrinho.reduce((acumulador, item) => acumulador + item.quantidade, 0);
+      totalBarraMobile.textContent = formatarMoeda(total);
+      contadorCarrinho.textContent = quantidadeTotal;
+      carrinhoSubtitulo.textContent = quantidadeTotal === 0
+        ? "Seu carrinho está vazio."
+        : `${quantidadeTotal} item${quantidadeTotal > 1 ? "s" : ""} no carrinho.`;
+      resumoTopoItens.textContent = `${quantidadeTotal} item${quantidadeTotal > 1 ? "s" : ""}`;
+      resumoTopoSubtotal.textContent = `Subtotal: ${formatarMoeda(subtotal)}`;
+      atualizarBotoesBloqueio();
       return { subtotal, taxa, total };
     }
 
@@ -416,13 +1099,92 @@
       mensagemErro.classList.add("oculto");
     }
 
-    function mostrarErro(texto) {
+    function mostrarErro(texto, moverFoco = false) {
       mensagemErro.textContent = texto;
       mensagemErro.classList.remove("oculto");
+      if (moverFoco) {
+        mensagemErro.focus();
+      }
+    }
+
+    function limparErroCampo(campo) {
+      if (!campo) {
+        return;
+      }
+      campo.removeAttribute("aria-invalid");
+      const idErro = campo.dataset.erroId;
+      if (!idErro) {
+        return;
+      }
+      const caixaErro = document.getElementById(idErro);
+      if (caixaErro) {
+        caixaErro.textContent = "";
+        caixaErro.classList.add("oculto");
+      }
+    }
+
+    function limparErrosCampos() {
+      [tipoEntrega, bairroEntrega, enderecoEntrega, numeroMesa, nome, telefone, pagamento, trocoPara, aceiteLgpd]
+        .forEach((campo) => limparErroCampo(campo));
+    }
+
+    function marcarErroCampo(campo, caixaErro, mensagem) {
+      if (campo) {
+        campo.setAttribute("aria-invalid", "true");
+      }
+      if (caixaErro) {
+        caixaErro.textContent = mensagem;
+        caixaErro.classList.remove("oculto");
+      }
+    }
+
+    function anunciarCategoriaExibida() {
+      if (!statusCategoria) {
+        return;
+      }
+      const categoria = categoriasCatalogo[categoriaAtual] || categoriaAtual;
+      const totalOpcoes = areaProdutos.querySelectorAll(".produto-card").length;
+      statusCategoria.textContent = `${categoria} selecionada. ${totalOpcoes} opção${totalOpcoes === 1 ? "" : "ões"} exibida${totalOpcoes === 1 ? "" : "s"}.`;
+    }
+
+    function renderizarCabecalhoCategoria(titulo, quantidadeItens) {
+      const cabecalho = document.createElement("section");
+      cabecalho.className = "cabecalho-categoria";
+      const plural = quantidadeItens === 1 ? "item" : "itens";
+      cabecalho.innerHTML = `
+        <h2>${escaparHtml(titulo)}</h2>
+        <p>${quantidadeItens} ${plural} no cardapio.</p>
+      `;
+      areaProdutos.appendChild(cabecalho);
+    }
+
+    function aplicarFeedbackBotaoAdicionar(botao, textoTemporario = "Adicionado \u2713") {
+      if (!botao || botao.disabled) {
+        return;
+      }
+      const labelOriginal = botao.dataset.labelDefault || botao.textContent.trim() || "Adicionar";
+      botao.dataset.labelDefault = labelOriginal;
+      botao.classList.add("is-added");
+      botao.textContent = textoTemporario;
+      botao.disabled = true;
+
+      const timerAnterior = Number(botao.dataset.feedbackTimer || "0");
+      if (timerAnterior) {
+        clearTimeout(timerAnterior);
+      }
+
+      const timer = window.setTimeout(() => {
+        botao.classList.remove("is-added");
+        botao.textContent = labelOriginal;
+        botao.disabled = botao.hasAttribute("aria-disabled");
+        delete botao.dataset.feedbackTimer;
+      }, 900);
+
+      botao.dataset.feedbackTimer = String(timer);
     }
 
     function salvarCarrinhoLocal() {
-      localStorage.setItem(CHAVE_STORAGE_CARRINHO, JSON.stringify(carrinho));
+      salvarStorageSeguro(CHAVE_STORAGE_CARRINHO, JSON.stringify(carrinho));
     }
 
     function salvarFormularioLocal() {
@@ -441,12 +1203,12 @@
         observacoes: observacoes.value,
         aceiteLgpd: aceiteLgpd.checked
       };
-      localStorage.setItem(CHAVE_STORAGE_FORMULARIO, JSON.stringify(estado));
+      salvarStorageSeguro(CHAVE_STORAGE_FORMULARIO, JSON.stringify(estado));
     }
 
     function restaurarCarrinhoLocal() {
       try {
-        const dados = JSON.parse(localStorage.getItem(CHAVE_STORAGE_CARRINHO) || "[]");
+        const dados = JSON.parse(lerStorageSeguro(CHAVE_STORAGE_CARRINHO) || "[]");
         if (Array.isArray(dados)) {
           carrinho = dados;
         }
@@ -457,7 +1219,7 @@
 
     function restaurarFormularioLocal() {
       try {
-        const estado = JSON.parse(localStorage.getItem(CHAVE_STORAGE_FORMULARIO) || "{}");
+        const estado = JSON.parse(lerStorageSeguro(CHAVE_STORAGE_FORMULARIO) || "{}");
         if (!estado || typeof estado !== "object") {
           return;
         }
@@ -486,59 +1248,171 @@
       }
     }
 
+    function criarCardProduto(produto) {
+      const disponivel = produtoEstaDisponivel(produto);
+      const adicionais = (produto.adicionais || [])
+        .map((idAdicional) => adicionaisCatalogo[idAdicional])
+        .filter(Boolean);
+      const nomeProdutoSeguro = escaparHtml(produto.nome);
+      const descricaoProdutoSegura = escaparHtml(produto.descricao);
+
+      const htmlAdicionais = adicionais
+        .map((adicional) => {
+          const idExtra = escaparHtml(adicional.id);
+          const nomeExtra = escaparHtml(adicional.nome);
+          return `
+            <label class="checkbox-linha add-on-item">
+              <input
+                type="checkbox"
+                data-extra="${idExtra}"
+                data-nome="${nomeExtra}"
+                data-preco="${adicional.preco}"
+              />
+              ${nomeExtra} (+${formatarMoeda(adicional.preco)})
+            </label>
+          `;
+        })
+        .join("");
+
+      const personalizacao = disponivel
+        ? `
+          <details class="personalizacao">
+            <summary>Personalizar item</summary>
+            <div class="add-on-list">
+              ${htmlAdicionais || '<p class="aviso">Sem adicionais para este item.</p>'}
+            </div>
+            <label for="obs-item-${produto.id}">Observação deste item:</label>
+            <input id="obs-item-${produto.id}" class="obs-item" type="text" maxlength="70" placeholder="Opcional" />
+          </details>
+        `
+        : '<p class="aviso aviso-indisponivel">Item indisponível no momento.</p>';
+
+      const card = document.createElement("article");
+      card.className = "produto-card";
+      card.innerHTML = `
+        <div class="produto-conteudo">
+          <div class="produto-topo">
+            <h3>${nomeProdutoSeguro}</h3>
+            ${!disponivel ? '<span class="badge-esgotado">Esgotado</span>' : ""}
+          </div>
+          <p class="produto-descricao">${descricaoProdutoSegura}</p>
+          ${personalizacao}
+        </div>
+        <div class="produto-rodape">
+          <span class="preco-produto">${formatarMoeda(produto.preco)}</span>
+          <button class="botao botao-principal botao-adicionar" data-id="${produto.id}" data-label-default="${disponivel ? "Adicionar" : "Indisponivel"}" type="button" ${!disponivel ? "disabled aria-disabled=\"true\"" : ""}>
+            ${disponivel ? "Adicionar" : "Indisponivel"}
+          </button>
+        </div>
+      `;
+      return card;
+    }
+
+    function atualizarPrecoCardCombo(card) {
+      const baseSelect = card.querySelector(".combo-base");
+      const bebidaSelect = card.querySelector(".combo-bebida");
+      const precoLabel = card.querySelector(".combo-preco");
+      const botao = card.querySelector(".botao-adicionar-combo");
+
+      const itemBase = obterProdutoPorId(baseSelect.value);
+      const bebida = obterProdutoPorId(bebidaSelect.value);
+      const ambosSelecionados = Boolean(itemBase && bebida);
+
+      if (!ambosSelecionados) {
+        precoLabel.textContent = "Selecione os itens para ver o valor do combo.";
+        botao.disabled = true;
+        botao.setAttribute("aria-disabled", "true");
+        return;
+      }
+
+      const precoCombo = calcularPrecoCombo(itemBase, bebida);
+      precoLabel.textContent = `Total do combo: ${formatarMoeda(precoCombo)}${configuracaoCombos.desconto > 0 ? ` (desconto de ${formatarMoeda(configuracaoCombos.desconto)})` : ""}`;
+      botao.disabled = false;
+      botao.removeAttribute("aria-disabled");
+    }
+
+    function mostrarCombos() {
+      areaProdutos.innerHTML = "";
+      const bebidas = produtos.filter((produto) => produto.categoria === configuracaoCombos.categoriaBebida && produtoEstaDisponivel(produto));
+      let totalCombos = 0;
+      const cardsCombo = [];
+
+      configuracaoCombos.categoriasBase.forEach((categoriaBase) => {
+        const bases = produtos.filter((produto) => produto.categoria === categoriaBase && produtoEstaDisponivel(produto));
+        if (bases.length === 0 || bebidas.length === 0) {
+          return;
+        }
+
+        const card = document.createElement("article");
+        card.className = "produto-card combo-card";
+        card.innerHTML = `
+          <div class="produto-conteudo">
+            <div class="produto-topo">
+              <h3>Combo ${categoriasCatalogo[categoriaBase] || categoriaBase} + ${categoriasCatalogo[configuracaoCombos.categoriaBebida]}</h3>
+            </div>
+            <p class="produto-descricao">Escolha 1 item base e 1 bebida para montar o combo.</p>
+            <label class="combo-label">Item base:</label>
+            <select class="combo-base combo-select">
+              <option value="">Selecione</option>
+              ${bases.map((produto) => `<option value="${produto.id}">${escaparHtml(produto.nome)} (${formatarMoeda(produto.preco)})</option>`).join("")}
+            </select>
+            <label class="combo-label">Bebida:</label>
+            <select class="combo-bebida combo-select">
+              <option value="">Selecione</option>
+              ${bebidas.map((produto) => `<option value="${produto.id}">${escaparHtml(produto.nome)} (${formatarMoeda(produto.preco)})</option>`).join("")}
+            </select>
+            <p class="preco-produto combo-preco"></p>
+          </div>
+          <div class="produto-rodape">
+            <button class="botao botao-principal botao-adicionar-combo" data-label-default="Adicionar combo" type="button" data-base-categoria="${categoriaBase}" disabled aria-disabled="true">
+              Adicionar combo
+            </button>
+          </div>
+        `;
+        cardsCombo.push(card);
+        totalCombos += 1;
+        atualizarPrecoCardCombo(card);
+      });
+
+      renderizarCabecalhoCategoria("Combos", totalCombos);
+
+      if (cardsCombo.length === 0) {
+        const vazio = document.createElement("article");
+        vazio.className = "produto-card";
+        vazio.innerHTML = `
+          <h3>Combos indisponíveis</h3>
+          <p>Cadastre itens base e refrigerantes no painel administrativo para ativar os combos.</p>
+        `;
+        areaProdutos.appendChild(vazio);
+      } else {
+        cardsCombo.forEach((card) => areaProdutos.appendChild(card));
+      }
+
+      anunciarCategoriaExibida();
+    }
+
     function mostrarProdutos() {
       areaProdutos.innerHTML = "";
-      produtos
-        .filter((produto) => produto.categoria === categoriaAtual)
-        .forEach((produto) => {
-          const disponivel = produtoEstaDisponivel(produto);
-          const adicionais = (produto.adicionais || [])
-            .map((idAdicional) => adicionaisCatalogo[idAdicional])
-            .filter(Boolean);
 
-          const htmlAdicionais = adicionais
-            .map((adicional) => `
-              <label class="checkbox-linha add-on-item">
-                <input
-                  type="checkbox"
-                  data-extra="${adicional.id}"
-                  data-nome="${adicional.nome}"
-                  data-preco="${adicional.preco}"
-                />
-                ${adicional.nome} (+${formatarMoeda(adicional.preco)})
-              </label>
-            `)
-            .join("");
+      if (categoriaAtual === "combo") {
+        mostrarCombos();
+        return;
+      }
 
-          const personalizacao = disponivel
-            ? `
-              <details class="personalizacao">
-                <summary>Personalizar item</summary>
-                <div class="add-on-list">
-                  ${htmlAdicionais || '<p class="aviso">Sem adicionais para este item.</p>'}
-                </div>
-                <label for="obs-item-${produto.id}">Observação deste item:</label>
-                <input id="obs-item-${produto.id}" class="obs-item" type="text" maxlength="70" placeholder="Opcional" />
-              </details>
-            `
-            : '<p class="aviso aviso-indisponivel">Item indisponível no momento.</p>';
+      const itensDaCategoria = produtos.filter((produto) => produto.categoria === categoriaAtual);
+      renderizarCabecalhoCategoria(categoriasCatalogo[categoriaAtual] || categoriaAtual, itensDaCategoria.length);
+      itensDaCategoria.forEach((produto) => {
+        areaProdutos.appendChild(criarCardProduto(produto));
+      });
 
-          const card = document.createElement("article");
-          card.className = "produto-card";
-          card.innerHTML = `
-            <div class="produto-topo">
-              <h3>${produto.nome}</h3>
-              ${!disponivel ? '<span class="badge-esgotado">Esgotado</span>' : ""}
-            </div>
-            <p>${produto.descricao}</p>
-            <span class="preco-produto">${formatarMoeda(produto.preco)}</span>
-            ${personalizacao}
-            <button class="botao botao-principal botao-adicionar" data-id="${produto.id}" type="button" ${!disponivel ? "disabled aria-disabled=\"true\"" : ""}>
-              ${disponivel ? "Adicionar" : "Indisponível"}
-            </button>
-          `;
-          areaProdutos.appendChild(card);
-        });
+      if (itensDaCategoria.length === 0) {
+        const vazio = document.createElement("article");
+        vazio.className = "produto-card";
+        vazio.innerHTML = "<p>Nenhum item cadastrado nesta categoria.</p>";
+        areaProdutos.appendChild(vazio);
+      }
+
+      anunciarCategoriaExibida();
     }
 
     function adicionarAoCarrinho(produto, extras, observacaoItem) {
@@ -597,12 +1471,13 @@
       carrinho.forEach((item) => {
         const totalItem = precoUnitarioItem(item) * item.quantidade;
         const detalhes = [];
+        const nomeItemSeguro = escaparHtml(item.nome);
 
         if (item.extras.length > 0) {
-          detalhes.push(`Adicionais: ${item.extras.map((extra) => extra.nome).join(", ")}`);
+          detalhes.push(`Adicionais: ${item.extras.map((extra) => escaparHtml(extra.nome)).join(", ")}`);
         }
         if (item.observacaoItem) {
-          detalhes.push(`Obs: ${item.observacaoItem}`);
+          detalhes.push(`Obs: ${escaparHtml(item.observacaoItem)}`);
         }
 
         const li = document.createElement("li");
@@ -610,7 +1485,7 @@
         li.innerHTML = `
           <div class="item-linha">
             <div class="item-descricao">
-              <strong>${item.nome}</strong>
+              <strong>${nomeItemSeguro}</strong>
               ${detalhes.length > 0 ? `<p class="item-detalhes">${detalhes.join(" | ")}</p>` : ""}
             </div>
             <span class="item-valor">${formatarMoeda(totalItem)}</span>
@@ -644,6 +1519,11 @@
         enderecoRetiradaBox.classList.add("oculto");
         bairroEntrega.value = "";
         enderecoEntrega.value = "";
+        limparErroCampo(tipoEntrega);
+        limparErroCampo(bairroEntrega);
+        limparErroCampo(enderecoEntrega);
+      } else {
+        limparErroCampo(numeroMesa);
       }
 
       atualizarVisibilidadeEntrega();
@@ -692,6 +1572,8 @@
       if (!isEntrega) {
         taxaEntregaInfo.textContent = "";
         bloqueioEntregaInfo.classList.add("oculto");
+        limparErroCampo(bairroEntrega);
+        limparErroCampo(enderecoEntrega);
       } else {
         atualizarTaxaInfo();
       }
@@ -713,6 +1595,7 @@
         trocoPara.value = "";
         trocoPara.required = false;
         trocoParaBox.classList.add("oculto");
+        limparErroCampo(trocoPara);
       } else {
         trocoParaBox.classList.toggle("oculto", !precisaTroco.checked);
         trocoPara.required = precisaTroco.checked;
@@ -722,7 +1605,7 @@
     }
 
     function copiarChavePix() {
-      const chave = chavePixTexto.textContent.trim();
+      const chave = String(configuracaoLoja.chavePix || "").trim();
       mensagemCopiaPix.classList.add("oculto");
       mensagemErroCopiaPix.classList.add("oculto");
 
@@ -743,31 +1626,70 @@
         });
     }
 
+    let alturaViewportBase = window.innerHeight;
+
+    function focoEmCampoCarrinho() {
+      const ativo = document.activeElement;
+      if (!ativo || !caixaCarrinho.contains(ativo)) {
+        return false;
+      }
+      if (ativo.isContentEditable) {
+        return true;
+      }
+      const tag = ativo.tagName ? ativo.tagName.toLowerCase() : "";
+      return tag === "input" || tag === "textarea" || tag === "select";
+    }
+
+    function tecladoVisivel() {
+      if (!focoEmCampoCarrinho()) {
+        alturaViewportBase = window.innerHeight;
+        return false;
+      }
+
+      if (window.visualViewport) {
+        const diferenca = window.innerHeight - window.visualViewport.height;
+        return diferenca > 120;
+      }
+
+      const diferenca = alturaViewportBase - window.innerHeight;
+      return diferenca > 120;
+    }
+
+    function atualizarEstadoTecladoCarrinho() {
+      if (!caixaCarrinho.classList.contains("show")) {
+        caixaCarrinhoConteudo.classList.remove("teclado-ativo");
+        return;
+      }
+      if (!mediaTecladoMobile.matches) {
+        caixaCarrinhoConteudo.classList.remove("teclado-ativo");
+        return;
+      }
+      caixaCarrinhoConteudo.classList.toggle("teclado-ativo", tecladoVisivel());
+    }
+
     function abrirCarrinho() {
-      caixaCarrinho.classList.add("show");
-      caixaCarrinho.setAttribute("aria-hidden", "false");
+      abrirModal(caixaCarrinho, botaoFecharCarrinhoTopo);
       botaoCarrinho.setAttribute("aria-expanded", "true");
-      document.body.style.overflow = "hidden";
+      botaoAbrirCarrinhoMobile.setAttribute("aria-expanded", "true");
+      alturaViewportBase = window.innerHeight;
+      atualizarEstadoTecladoCarrinho();
       limparErro();
     }
 
     function fecharCarrinho() {
-      caixaCarrinho.classList.remove("show");
-      caixaCarrinho.setAttribute("aria-hidden", "true");
+      fecharModal(caixaCarrinho, botaoCarrinho);
       botaoCarrinho.setAttribute("aria-expanded", "false");
-      document.body.style.overflow = "auto";
-      botaoCarrinho.focus();
+      botaoAbrirCarrinhoMobile.setAttribute("aria-expanded", "false");
+      caixaCarrinhoConteudo.classList.remove("teclado-ativo");
     }
 
     function abrirConfirmacao(textoResumo) {
       resumoConfirmacao.textContent = textoResumo;
-      modalConfirmacao.classList.add("show");
-      modalConfirmacao.setAttribute("aria-hidden", "false");
+      abrirModal(modalConfirmacao, botaoConfirmarEnvio);
     }
 
     function fecharConfirmacao() {
-      modalConfirmacao.classList.remove("show");
-      modalConfirmacao.setAttribute("aria-hidden", "true");
+      fecharModal(modalConfirmacao, botaoFinalizar);
     }
 
     function dataCompactaLocal(data) {
@@ -780,8 +1702,14 @@
     function gerarNumeroPedido() {
       const hoje = dataCompactaLocal(new Date());
       const chaveDia = `${CHAVE_SEQUENCIA_PEDIDO}${hoje}`;
-      const sequencia = Number(localStorage.getItem(chaveDia) || "0") + 1;
-      localStorage.setItem(chaveDia, String(sequencia));
+      const sequenciaStorage = Number(lerStorageSeguro(chaveDia) || "0");
+      let sequencia = Number.isFinite(sequenciaStorage) && sequenciaStorage > 0 ? sequenciaStorage + 1 : 1;
+      const salvo = salvarStorageSeguro(chaveDia, String(sequencia));
+      if (!salvo) {
+        const sequenciaMemoria = Number(sequenciaPedidoMemoria[chaveDia] || 0) + 1;
+        sequenciaPedidoMemoria[chaveDia] = sequenciaMemoria;
+        sequencia = sequenciaMemoria;
+      }
       return `TL-${hoje.slice(2)}-${String(sequencia).padStart(3, "0")}`;
     }
 
@@ -805,67 +1733,82 @@
     }
 
     function validarFormulario() {
+      limparErrosCampos();
       const statusAtual = obterStatusLoja();
       const tipoAtendimento = atendimentoAtual();
       const tipoPedido = tipoEntrega.value;
-      const { subtotal, total } = calcularTotaisPedido();
+      const { total } = calcularTotaisPedido();
 
       if (!statusAtual.aberta) {
-        return `Não é possível finalizar agora. ${statusAtual.detalhe}.`;
+        return { mensagem: `Não é possível finalizar agora. ${statusAtual.detalhe}.`, campo: null };
       }
       if (carrinho.length === 0) {
-        return "Adicione pelo menos um item ao carrinho.";
+        return { mensagem: "Adicione pelo menos um item ao carrinho.", campo: null };
       }
-      if (!nome.value.trim() || !telefone.value.trim()) {
-        return "Preencha nome e telefone.";
+      if (!nome.value.trim()) {
+        marcarErroCampo(nome, erroNome, "Informe o nome completo.");
+        return { mensagem: "Preencha o nome completo.", campo: nome };
+      }
+      if (!telefone.value.trim()) {
+        marcarErroCampo(telefone, erroTelefone, "Informe o telefone com DDD.");
+        return { mensagem: "Preencha o telefone ou WhatsApp.", campo: telefone };
       }
       if (!validarTelefone(telefone.value.trim())) {
-        return "Informe um telefone ou WhatsApp válido com DDD.";
+        marcarErroCampo(telefone, erroTelefone, "Formato inválido. Use DDD + número.");
+        return { mensagem: "Informe um telefone ou WhatsApp válido com DDD.", campo: telefone };
       }
       if (!pagamento.value) {
-        return "Selecione a forma de pagamento.";
+        marcarErroCampo(pagamento, erroPagamento, "Selecione uma forma de pagamento.");
+        return { mensagem: "Selecione a forma de pagamento.", campo: pagamento };
       }
       if (!aceiteLgpd.checked) {
-        return "É necessário aceitar o consentimento de dados para finalizar.";
+        marcarErroCampo(aceiteLgpd, erroAceiteLgpd, "Confirme o consentimento para continuar.");
+        return { mensagem: "É necessário aceitar o consentimento de dados para finalizar.", campo: aceiteLgpd };
       }
 
       if (pagamento.value === "Dinheiro" && precisaTroco.checked) {
         const valorTroco = Number(String(trocoPara.value).replace(",", "."));
         if (!Number.isFinite(valorTroco) || valorTroco <= 0) {
-          return "Informe um valor válido para troco.";
+          marcarErroCampo(trocoPara, erroTrocoPara, "Informe um valor válido para troco.");
+          return { mensagem: "Informe um valor válido para troco.", campo: trocoPara };
         }
         if (valorTroco < total) {
-          return `O troco precisa ser para um valor igual ou maior que ${formatarMoeda(total)}.`;
+          const mensagemTroco = `O troco precisa ser para um valor igual ou maior que ${formatarMoeda(total)}.`;
+          marcarErroCampo(trocoPara, erroTrocoPara, mensagemTroco);
+          return { mensagem: mensagemTroco, campo: trocoPara };
         }
       }
 
       if (tipoAtendimento === "no_local") {
         if (!numeroMesa.value || Number(numeroMesa.value) < 1) {
-          return "Informe um número de mesa válido.";
+          marcarErroCampo(numeroMesa, erroNumeroMesa, "Informe um número de mesa válido.");
+          return { mensagem: "Informe um número de mesa válido.", campo: numeroMesa };
         }
-        return "";
+        return { mensagem: "", campo: null };
       }
 
       if (!tipoPedido) {
-        return "Selecione se o pedido é entrega ou retirada.";
+        marcarErroCampo(tipoEntrega, erroTipoEntrega, "Selecione se o pedido é entrega ou retirada.");
+        return { mensagem: "Selecione se o pedido é entrega ou retirada.", campo: tipoEntrega };
       }
 
       if (tipoPedido === "entrega") {
         if (!bairroEntrega.value) {
-          return "Selecione a localidade de entrega.";
+          marcarErroCampo(bairroEntrega, erroBairroEntrega, "Selecione a localidade de entrega.");
+          return { mensagem: "Selecione a localidade de entrega.", campo: bairroEntrega };
         }
         if (configuracaoLoja.bairrosSemEntrega.includes(bairroEntrega.value)) {
-          return `Não há entrega para ${bairroEntrega.value}. Escolha retirada no local.`;
+          const mensagemBairro = `Não há entrega para ${bairroEntrega.value}. Escolha retirada no local.`;
+          marcarErroCampo(bairroEntrega, erroBairroEntrega, mensagemBairro);
+          return { mensagem: mensagemBairro, campo: bairroEntrega };
         }
         if (!enderecoEntrega.value.trim()) {
-          return "Informe o endereço de entrega.";
-        }
-        if (subtotal < configuracaoLoja.pedidoMinimoEntrega) {
-          return `Pedido mínimo para entrega: ${formatarMoeda(configuracaoLoja.pedidoMinimoEntrega)}.`;
+          marcarErroCampo(enderecoEntrega, erroEnderecoEntrega, "Informe o endereço de entrega.");
+          return { mensagem: "Informe o endereço de entrega.", campo: enderecoEntrega };
         }
       }
 
-      return "";
+      return { mensagem: "", campo: null };
     }
 
     function montarMensagemPedido(numeroPedido) {
@@ -907,6 +1850,8 @@
       linhas.push(`Pagamento: ${pagamento.value}`);
       if (pagamento.value === "Pix") {
         linhas.push(`Chave PIX: ${configuracaoLoja.chavePix}`);
+        linhas.push(`Titular PIX: ${configuracaoLoja.pixTitular}`);
+        linhas.push(`Banco PIX: ${configuracaoLoja.pixBanco}`);
       }
       if (pagamento.value === "Dinheiro") {
         if (precisaTroco.checked) {
@@ -925,10 +1870,565 @@
       return linhas.join("\n");
     }
 
+    function calcularCombosPossiveis() {
+      if (!configuracaoCombos.ativo) {
+        return 0;
+      }
+      const bebidas = produtos.filter((produto) =>
+        produto.categoria === configuracaoCombos.categoriaBebida && produtoEstaDisponivel(produto));
+      if (bebidas.length === 0) {
+        return 0;
+      }
+
+      const totalBases = configuracaoCombos.categoriasBase.reduce((acumulador, categoriaBase) => {
+        const quantidade = produtos.filter((produto) =>
+          produto.categoria === categoriaBase && produtoEstaDisponivel(produto)).length;
+        return acumulador + quantidade;
+      }, 0);
+
+      return totalBases * bebidas.length;
+    }
+
+    function atualizarResumoAdmin() {
+      if (!adminTotalProdutos || !adminTotalDisponiveis || !adminTotalCombos) {
+        return;
+      }
+      const totalProdutos = produtos.length;
+      const totalDisponiveis = produtos.filter((produto) => produtoEstaDisponivel(produto)).length;
+      adminTotalProdutos.textContent = String(totalProdutos);
+      adminTotalDisponiveis.textContent = String(totalDisponiveis);
+      adminTotalCombos.textContent = String(calcularCombosPossiveis());
+    }
+
+    function ativarAbaAdmin(idAba) {
+      adminAbaAtual = idAba;
+      adminTabs.forEach((botao) => {
+        const ativo = botao.dataset.adminTab === idAba;
+        botao.classList.toggle("ativo", ativo);
+        botao.setAttribute("aria-selected", ativo ? "true" : "false");
+      });
+
+      adminPaineis.forEach((painel) => {
+        const ativo = painel.dataset.adminPainel === idAba;
+        painel.classList.toggle("ativo", ativo);
+        painel.hidden = !ativo;
+      });
+    }
+
+    function limparFormularioProdutoAdmin() {
+      adminProdutoId.value = "";
+      adminNomeProduto.value = "";
+      adminDescricaoProduto.value = "";
+      adminPrecoProduto.value = "";
+      adminCategoriaProduto.value = "pastel";
+      adminDisponivelProduto.checked = true;
+      adminProdutoMsg.classList.add("oculto");
+      adminProdutoMsg.textContent = "";
+      renderizarChecklistAdicionaisAdmin();
+    }
+
+    function renderizarChecklistAdicionaisAdmin() {
+      const adicionais = Object.values(adicionaisCatalogo);
+      const categoria = adminCategoriaProduto.value;
+      const permiteAdicional = categoria === "pastel" || categoria === "hamburguer";
+      adminAdicionaisChecklist.innerHTML = adicionais
+        .map((adicional) => {
+          const idSeguro = escaparHtml(adicional.id);
+          const nomeSeguro = escaparHtml(adicional.nome);
+          return `
+            <label class="checkbox-linha add-on-item">
+              <input type="checkbox" data-admin-adicional="${idSeguro}" ${!permiteAdicional ? "disabled" : ""} />
+              ${nomeSeguro} (+${formatarMoeda(adicional.preco)})
+            </label>
+          `;
+        })
+        .join("");
+    }
+
+    function marcarAdicionaisAdmin(idsAdicionais = []) {
+      adminAdicionaisChecklist.querySelectorAll("input[data-admin-adicional]").forEach((inputExtra) => {
+        inputExtra.checked = idsAdicionais.includes(inputExtra.dataset.adminAdicional);
+      });
+    }
+
+    function renderizarListaProdutosAdmin(opcoes = {}) {
+      const resetarRolagem = Boolean(opcoes.resetarRolagem);
+      const rolagemAnterior = adminListaProdutos.scrollTop;
+      const termoBusca = (adminBuscaProduto?.value || "").trim().toLowerCase();
+      const categoriaFiltro = adminFiltroCategoria?.value || "";
+      const disponibilidadeFiltro = adminFiltroDisponibilidade?.value || "";
+
+      const listaFiltrada = produtos
+        .filter((produto) => {
+          const nomeProduto = String(produto.nome || "").toLowerCase();
+          const passaBusca = !termoBusca || nomeProduto.includes(termoBusca);
+          const passaCategoria = !categoriaFiltro || produto.categoria === categoriaFiltro;
+          const disponivel = produtoEstaDisponivel(produto);
+          const passaDisponibilidade = disponibilidadeFiltro === "disponivel"
+            ? disponivel
+            : disponibilidadeFiltro === "indisponivel"
+              ? !disponivel
+              : true;
+          return passaBusca && passaCategoria && passaDisponibilidade;
+        })
+        .slice()
+        .sort((a, b) => a.id - b.id);
+
+      if (adminResumoFiltro) {
+        const partesFiltro = [];
+        if (categoriaFiltro) {
+          partesFiltro.push(`categoria: ${categoriasCatalogo[categoriaFiltro] || categoriaFiltro}`);
+        }
+        if (disponibilidadeFiltro) {
+          partesFiltro.push(disponibilidadeFiltro === "disponivel" ? "status: disponíveis" : "status: indisponíveis");
+        }
+        if (termoBusca) {
+          partesFiltro.push(`busca: "${adminBuscaProduto.value.trim()}"`);
+        }
+        const sufixoFiltro = partesFiltro.length > 0 ? ` (${partesFiltro.join(" | ")})` : "";
+        adminResumoFiltro.textContent = `Mostrando ${listaFiltrada.length} de ${produtos.length} itens${sufixoFiltro}.`;
+      }
+
+      if (listaFiltrada.length === 0) {
+        adminListaProdutos.innerHTML = `
+          <li class="admin-item admin-item-vazio">
+            Nenhum produto encontrado com os filtros atuais.
+          </li>
+        `;
+        adminListaProdutos.scrollTop = 0;
+        return;
+      }
+
+      adminListaProdutos.innerHTML = listaFiltrada
+        .map((produto) => {
+          const disponivel = produtoEstaDisponivel(produto);
+          const nomeProdutoSeguro = escaparHtml(produto.nome);
+          const descricaoProdutoSegura = produto.descricao
+            ? escaparHtml(produto.descricao)
+            : "Sem descrição cadastrada.";
+          const totalAdicionais = Array.isArray(produto.adicionais) ? produto.adicionais.length : 0;
+          const exibirTagAdicionais = produto.categoria === "pastel" || produto.categoria === "hamburguer";
+          return `
+            <li class="admin-item">
+              <div class="admin-item-info">
+                <strong>#${produto.id} ${nomeProdutoSeguro}</strong>
+                <p class="admin-item-descricao">${descricaoProdutoSegura}</p>
+                <small class="admin-item-metas">
+                  <span class="admin-tag">${categoriasCatalogo[produto.categoria] || produto.categoria}</span>
+                  <span class="admin-tag">${formatarMoeda(produto.preco)}</span>
+                  ${exibirTagAdicionais ? `<span class="admin-tag">Adicionais: ${totalAdicionais}</span>` : ""}
+                  <span class="admin-tag ${disponivel ? "admin-tag-ok" : "admin-tag-off"}">${disponivel ? "Disponível" : "Indisponível"}</span>
+                </small>
+              </div>
+              <div class="admin-item-acoes">
+                <button type="button" class="botao botao-secundario admin-btn-edit" data-admin-acao="editar-produto" data-id="${produto.id}" aria-label="Editar produto ${nomeProdutoSeguro}">Editar</button>
+                <button type="button" class="botao botao-secundario admin-btn-toggle" data-admin-acao="toggle-produto" data-id="${produto.id}" aria-label="${disponivel ? "Pausar" : "Ativar"} produto ${nomeProdutoSeguro}">${disponivel ? "Pausar" : "Ativar"}</button>
+                <button type="button" class="botao botao-secundario admin-btn-remove" data-admin-acao="remover-produto" data-id="${produto.id}" aria-label="Excluir produto ${nomeProdutoSeguro}">Excluir</button>
+              </div>
+            </li>
+          `;
+        })
+        .join("");
+      adminListaProdutos.scrollTop = resetarRolagem ? 0 : rolagemAnterior;
+    }
+
+    function renderizarListaAdicionaisAdmin() {
+      adminListaAdicionais.innerHTML = Object.values(adicionaisCatalogo)
+        .map((adicional, indice) => {
+          const idAdicionalSeguro = escaparHtml(adicional.id);
+          const nomeAdicionalSeguro = escaparHtml(adicional.nome);
+          const idDomSeguro = slugify(adicional.id) || `adicional_${Date.now()}_${indice}`;
+          const inputNomeId = `adminAdicionalNome_${idDomSeguro}`;
+          const inputPrecoId = `adminAdicionalPreco_${idDomSeguro}`;
+          return `
+            <div class="admin-adicional-item">
+              <label class="sr-only" for="${inputNomeId}">Nome do adicional ${nomeAdicionalSeguro}</label>
+              <input id="${inputNomeId}" type="text" value="${nomeAdicionalSeguro}" data-admin-adicional-nome="${idAdicionalSeguro}" maxlength="40" />
+              <label class="sr-only" for="${inputPrecoId}">Preço do adicional ${nomeAdicionalSeguro}</label>
+              <input id="${inputPrecoId}" type="number" value="${adicional.preco}" data-admin-adicional-preco="${idAdicionalSeguro}" min="0" step="0.01" />
+              <button type="button" class="botao botao-secundario admin-btn-save" data-admin-acao="salvar-adicional" data-id="${idAdicionalSeguro}">Salvar</button>
+              <button type="button" class="botao botao-secundario admin-btn-remove" data-admin-acao="remover-adicional" data-id="${idAdicionalSeguro}">Remover</button>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    function preencherConfigCombosAdmin() {
+      comboAtivo.checked = configuracaoCombos.ativo !== false;
+      comboBasePastel.checked = configuracaoCombos.categoriasBase.includes("pastel");
+      comboBaseHamburguer.checked = configuracaoCombos.categoriasBase.includes("hamburguer");
+      comboDesconto.value = Number(configuracaoCombos.desconto || 0);
+    }
+
+    function aplicarAtualizacoesCardapio() {
+      salvarEstadoCardapio();
+      renderizarCategorias();
+      mostrarProdutos();
+      atualizarCarrinho();
+      renderizarListaProdutosAdmin();
+      renderizarListaAdicionaisAdmin();
+      preencherConfigCombosAdmin();
+      renderizarChecklistAdicionaisAdmin();
+      atualizarResumoAdmin();
+    }
+
+    function salvarProdutoAdmin() {
+      const nomeProduto = adminNomeProduto.value.trim();
+      const descricaoProduto = adminDescricaoProduto.value.trim();
+      const precoProduto = Number(String(adminPrecoProduto.value).replace(",", "."));
+      const categoriaProduto = adminCategoriaProduto.value;
+      const disponivelProduto = adminDisponivelProduto.checked;
+      const idsAdicionais = Array.from(adminAdicionaisChecklist.querySelectorAll("input[data-admin-adicional]:checked"))
+        .map((inputExtra) => inputExtra.dataset.adminAdicional)
+        .filter((idExtra) => Boolean(adicionaisCatalogo[idExtra]));
+
+      if (!nomeProduto) {
+        mostrarErroAdmin("Informe o nome do produto.");
+        return;
+      }
+      if (!Number.isFinite(precoProduto) || precoProduto < 0) {
+        mostrarErroAdmin("Informe um preço válido.");
+        return;
+      }
+
+      adminErro.classList.add("oculto");
+      adminErro.textContent = "";
+      const idEdicao = Number(adminProdutoId.value);
+      const produtoSalvo = {
+        id: idEdicao || proximoIdProduto(),
+        nome: nomeProduto,
+        descricao: descricaoProduto,
+        preco: precoProduto,
+        categoria: categoriaProduto,
+        disponivel: disponivelProduto,
+        adicionais: categoriaProduto === "pastel" || categoriaProduto === "hamburguer" ? idsAdicionais : []
+      };
+
+      const indice = produtos.findIndex((produto) => produto.id === produtoSalvo.id);
+      if (indice >= 0) {
+        produtos[indice] = produtoSalvo;
+      } else {
+        produtos.push(produtoSalvo);
+      }
+
+      limparFormularioProdutoAdmin();
+      adminProdutoMsg.textContent = "Produto salvo com sucesso.";
+      adminProdutoMsg.classList.remove("oculto");
+      aplicarAtualizacoesCardapio();
+    }
+
+    function carregarProdutoParaEdicao(idProduto) {
+      const produto = obterProdutoPorId(idProduto);
+      if (!produto) {
+        return;
+      }
+
+      adminProdutoId.value = String(produto.id);
+      adminNomeProduto.value = produto.nome;
+      adminDescricaoProduto.value = produto.descricao;
+      adminPrecoProduto.value = String(produto.preco);
+      adminCategoriaProduto.value = produto.categoria;
+      adminDisponivelProduto.checked = produto.disponivel !== false;
+      renderizarChecklistAdicionaisAdmin();
+      marcarAdicionaisAdmin(produto.adicionais || []);
+      adminProdutoMsg.textContent = `Editando produto #${produto.id}.`;
+      adminProdutoMsg.classList.remove("oculto");
+    }
+
+    function alternarDisponibilidadeProduto(idProduto) {
+      const produto = obterProdutoPorId(idProduto);
+      if (!produto) {
+        return;
+      }
+      produto.disponivel = !produto.disponivel;
+      aplicarAtualizacoesCardapio();
+    }
+
+    function removerProdutoAdmin(idProduto) {
+      const id = Number(idProduto);
+      const produto = obterProdutoPorId(id);
+      if (!produto) {
+        return;
+      }
+
+      const confirmou = window.confirm(`Excluir o produto "${produto.nome}"?`);
+      if (!confirmou) {
+        return;
+      }
+
+      const indiceProduto = produtos.findIndex((registro) => registro.id === id);
+      const carrinhoAntes = clonar(carrinho);
+      produtos = produtos.filter((registro) => registro.id !== id);
+      carrinho = carrinho.filter((item) => String(item.produtoId) !== String(id));
+      salvarCarrinhoLocal();
+      aplicarAtualizacoesCardapio();
+      iniciarDesfazerAdmin({
+        tipo: "produto",
+        produto: clonar(produto),
+        indice: indiceProduto,
+        carrinhoAntes
+      }, `Produto "${produto.nome}" excluído.`);
+    }
+
+    function atualizarAdicionalAdmin(idAdicional) {
+      const campoNome = adminListaAdicionais.querySelector(`input[data-admin-adicional-nome="${idAdicional}"]`);
+      const campoPreco = adminListaAdicionais.querySelector(`input[data-admin-adicional-preco="${idAdicional}"]`);
+      if (!campoNome || !campoPreco) {
+        return;
+      }
+
+      const nomeAdicional = campoNome.value.trim();
+      const precoAdicional = Number(String(campoPreco.value).replace(",", "."));
+
+      if (!nomeAdicional || !Number.isFinite(precoAdicional) || precoAdicional < 0) {
+        mostrarErroAdmin("Preencha nome e preço válidos para o adicional.");
+        return;
+      }
+
+      adicionaisCatalogo[idAdicional] = {
+        id: idAdicional,
+        nome: nomeAdicional,
+        preco: precoAdicional
+      };
+      adminErro.textContent = "";
+      adminErro.classList.add("oculto");
+      aplicarAtualizacoesCardapio();
+    }
+
+    function removerAdicionalAdmin(idAdicional) {
+      const adicional = adicionaisCatalogo[idAdicional];
+      if (!adicional) {
+        return;
+      }
+
+      const confirmou = window.confirm(`Excluir o adicional "${adicional.nome}"?`);
+      if (!confirmou) {
+        return;
+      }
+
+      const produtosAfetados = produtos
+        .filter((produto) => (produto.adicionais || []).includes(idAdicional))
+        .map((produto) => ({
+          id: produto.id,
+          adicionais: clonar(produto.adicionais || [])
+        }));
+
+      delete adicionaisCatalogo[idAdicional];
+      produtos = produtos.map((produto) => ({
+        ...produto,
+        adicionais: (produto.adicionais || []).filter((idExtra) => idExtra !== idAdicional)
+      }));
+      aplicarAtualizacoesCardapio();
+      iniciarDesfazerAdmin({
+        tipo: "adicional",
+        adicional: clonar(adicional),
+        produtosAfetados
+      }, `Adicional "${adicional.nome}" excluído.`);
+    }
+
+    function adicionarAdicionalAdmin() {
+      const nome = adminNovoAdicionalNome.value.trim();
+      const preco = Number(String(adminNovoAdicionalPreco.value).replace(",", "."));
+      if (!nome || !Number.isFinite(preco) || preco < 0) {
+        mostrarErroAdmin("Informe nome e preço válidos para adicionar.");
+        return;
+      }
+
+      let id = slugify(nome);
+      if (!id) {
+        id = `extra_${Date.now()}`;
+      }
+      let sufixo = 1;
+      while (adicionaisCatalogo[id]) {
+        id = `${slugify(nome)}_${sufixo}`;
+        sufixo += 1;
+      }
+
+      adicionaisCatalogo[id] = { id, nome, preco };
+      adminErro.textContent = "";
+      adminErro.classList.add("oculto");
+      adminNovoAdicionalNome.value = "";
+      adminNovoAdicionalPreco.value = "";
+      aplicarAtualizacoesCardapio();
+    }
+
+    function salvarConfigCombosAdmin() {
+      const categoriasBase = [];
+      if (comboBasePastel.checked) {
+        categoriasBase.push("pastel");
+      }
+      if (comboBaseHamburguer.checked) {
+        categoriasBase.push("hamburguer");
+      }
+      if (categoriasBase.length === 0) {
+        categoriasBase.push("pastel");
+      }
+
+      configuracaoCombos = {
+        ...configuracaoCombos,
+        ativo: comboAtivo.checked,
+        desconto: Math.max(0, Number(String(comboDesconto.value).replace(",", ".")) || 0),
+        categoriasBase
+      };
+      aplicarAtualizacoesCardapio();
+    }
+
+    function atualizarVisibilidadeFeedbackAdmin() {
+      if (!adminFeedback) {
+        return;
+      }
+      const mensagemVisivel = !adminAcaoMsg.classList.contains("oculto") && adminAcaoMsg.textContent.trim() !== "";
+      const botaoVisivel = !botaoDesfazerAdmin.classList.contains("oculto");
+      adminFeedback.classList.toggle("oculto", !(mensagemVisivel || botaoVisivel));
+    }
+
+    function limparDesfazerAdmin() {
+      ultimaExclusaoAdmin = null;
+      if (timerDesfazerAdmin) {
+        clearTimeout(timerDesfazerAdmin);
+        timerDesfazerAdmin = null;
+      }
+      adminAcaoMsg.textContent = "";
+      adminAcaoMsg.classList.add("oculto");
+      botaoDesfazerAdmin.classList.add("oculto");
+      atualizarVisibilidadeFeedbackAdmin();
+    }
+
+    function iniciarDesfazerAdmin(operacao, texto) {
+      limparDesfazerAdmin();
+      ultimaExclusaoAdmin = operacao;
+      adminAcaoMsg.textContent = `${texto} Você pode desfazer por 8 segundos.`;
+      adminAcaoMsg.classList.remove("oculto");
+      botaoDesfazerAdmin.classList.remove("oculto");
+      atualizarVisibilidadeFeedbackAdmin();
+      timerDesfazerAdmin = setTimeout(() => {
+        limparDesfazerAdmin();
+      }, JANELA_DESFAZER_MS);
+    }
+
+    function desfazerUltimaExclusaoAdmin() {
+      if (!ultimaExclusaoAdmin) {
+        return;
+      }
+      const operacao = ultimaExclusaoAdmin;
+      limparDesfazerAdmin();
+
+      if (operacao.tipo === "produto" && operacao.produto) {
+        const jaExiste = produtos.some((produto) => produto.id === operacao.produto.id);
+        if (!jaExiste) {
+          const indice = Math.max(0, Math.min(Number(operacao.indice) || 0, produtos.length));
+          produtos.splice(indice, 0, operacao.produto);
+        }
+        if (Array.isArray(operacao.carrinhoAntes)) {
+          carrinho = operacao.carrinhoAntes;
+          salvarCarrinhoLocal();
+        }
+        aplicarAtualizacoesCardapio();
+        adminProdutoMsg.textContent = `Exclusão desfeita: ${operacao.produto.nome}.`;
+        adminProdutoMsg.classList.remove("oculto");
+        return;
+      }
+
+      if (operacao.tipo === "adicional" && operacao.adicional) {
+        adicionaisCatalogo[operacao.adicional.id] = operacao.adicional;
+        if (Array.isArray(operacao.produtosAfetados)) {
+          operacao.produtosAfetados.forEach((registro) => {
+            const produto = obterProdutoPorId(registro.id);
+            if (produto) {
+              produto.adicionais = Array.isArray(registro.adicionais) ? registro.adicionais : [];
+            }
+          });
+        }
+        aplicarAtualizacoesCardapio();
+        adminProdutoMsg.textContent = `Exclusão desfeita: adicional ${operacao.adicional.nome}.`;
+        adminProdutoMsg.classList.remove("oculto");
+      }
+    }
+
+    function mostrarErroAdmin(texto) {
+      adminErro.textContent = texto;
+      adminErro.classList.remove("oculto");
+    }
+
+    function segundosRestantesBloqueioAdmin() {
+      return Math.max(0, Math.ceil((adminBloqueadoAte - Date.now()) / 1000));
+    }
+
+    function abrirAdmin() {
+      adminPin.value = "";
+      botaoAbrirAdmin.setAttribute("aria-expanded", "true");
+      const focoInicial = adminAutenticado
+        ? document.querySelector(".admin-tab.ativo") || botaoFecharAdmin
+        : adminPin;
+      abrirModal(painelAdmin, focoInicial);
+    }
+
+    function fecharAdmin() {
+      botaoAbrirAdmin.setAttribute("aria-expanded", "false");
+      fecharModal(painelAdmin, botaoAbrirAdmin);
+      adminErro.textContent = "";
+      adminErro.classList.add("oculto");
+      limparDesfazerAdmin();
+    }
+
+    function aplicarEstadoAdmin() {
+      adminLoginBloco.classList.toggle("oculto", adminAutenticado);
+      adminConteudo.classList.toggle("oculto", !adminAutenticado);
+      adminAcoesFooter.classList.toggle("oculto", !adminAutenticado);
+      if (adminAutenticado) {
+        adminErro.textContent = "";
+        adminErro.classList.add("oculto");
+      }
+      if (adminAutenticado) {
+        renderizarChecklistAdicionaisAdmin();
+        renderizarListaProdutosAdmin({ resetarRolagem: true });
+        renderizarListaAdicionaisAdmin();
+        preencherConfigCombosAdmin();
+        atualizarResumoAdmin();
+        ativarAbaAdmin(adminAbaAtual);
+      }
+    }
+
+    function entrarAdmin() {
+      if (Date.now() < adminBloqueadoAte) {
+        mostrarErroAdmin(`Acesso bloqueado. Tente novamente em ${segundosRestantesBloqueioAdmin()}s.`);
+        return;
+      }
+
+      const pinInformado = adminPin.value.trim();
+      if (pinInformado !== obterPinAdmin()) {
+        tentativasAdminFalhas += 1;
+        const tentativasRestantes = LIMITE_TENTATIVAS_ADMIN - tentativasAdminFalhas;
+        if (tentativasRestantes <= 0) {
+          adminBloqueadoAte = Date.now() + BLOQUEIO_ADMIN_MS;
+          tentativasAdminFalhas = 0;
+          mostrarErroAdmin(`Muitas tentativas. Acesso bloqueado por ${Math.ceil(BLOQUEIO_ADMIN_MS / 1000)}s.`);
+          return;
+        }
+        mostrarErroAdmin(`PIN incorreto. Restam ${tentativasRestantes} tentativa(s).`);
+        return;
+      }
+      tentativasAdminFalhas = 0;
+      adminBloqueadoAte = 0;
+      adminAutenticado = true;
+      adminErro.classList.add("oculto");
+      aplicarEstadoAdmin();
+    }
+
+    function sairAdmin() {
+      adminAutenticado = false;
+      aplicarEstadoAdmin();
+      limparFormularioProdutoAdmin();
+      limparDesfazerAdmin();
+    }
+
     function atualizarBotoesBloqueio() {
       const restante = Math.max(0, Math.ceil((bloqueioEnvioAte - Date.now()) / 1000));
       const bloqueado = restante > 0;
-      botaoFinalizar.disabled = bloqueado;
+      const carrinhoVazio = carrinho.length === 0;
+      botaoFinalizar.disabled = bloqueado || carrinhoVazio;
+      botaoFinalizar.setAttribute("aria-disabled", botaoFinalizar.disabled ? "true" : "false");
       botaoConfirmarEnvio.disabled = bloqueado;
       botaoFinalizar.textContent = bloqueado ? `Aguarde ${restante}s` : "Finalizar Pedido";
       botaoConfirmarEnvio.textContent = bloqueado ? `Aguarde ${restante}s` : "Confirmar e Enviar";
@@ -955,10 +2455,40 @@
       const alvo = evento.target;
 
       if (alvo.classList.contains("categoria")) {
-        document.querySelectorAll(".categoria").forEach((categoria) => categoria.classList.remove("ativa"));
-        alvo.classList.add("ativa");
+        document.querySelectorAll(".categoria").forEach((categoria) => {
+          const ativa = categoria === alvo;
+          categoria.classList.toggle("ativa", ativa);
+          categoria.setAttribute("aria-pressed", ativa ? "true" : "false");
+        });
         categoriaAtual = alvo.dataset.categoria;
         mostrarProdutos();
+      }
+
+      const botaoAdicionarCombo = alvo.closest(".botao-adicionar-combo");
+      if (botaoAdicionarCombo) {
+        const card = botaoAdicionarCombo.closest(".combo-card");
+        const baseId = card.querySelector(".combo-base").value;
+        const bebidaId = card.querySelector(".combo-bebida").value;
+        const categoriaBase = botaoAdicionarCombo.dataset.baseCategoria;
+
+        const itemBase = obterProdutoPorId(baseId);
+        const bebida = obterProdutoPorId(bebidaId);
+        if (!itemBase || !bebida) {
+          return;
+        }
+
+        const nomeCombo = `Combo ${categoriasCatalogo[categoriaBase] || categoriaBase}: ${itemBase.nome} + ${bebida.nome}`;
+        const produtoCombo = {
+          id: `combo-${categoriaBase}-${itemBase.id}-${bebida.id}`,
+          nome: nomeCombo,
+          preco: calcularPrecoCombo(itemBase, bebida)
+        };
+
+        adicionarAoCarrinho(produtoCombo, [], "");
+        card.querySelector(".combo-base").value = "";
+        card.querySelector(".combo-bebida").value = "";
+        atualizarPrecoCardCombo(card);
+        aplicarFeedbackBotaoAdicionar(botaoAdicionarCombo);
       }
 
       const botaoAdicionar = alvo.closest(".botao-adicionar");
@@ -976,6 +2506,7 @@
         const obsItem = obsItemInput ? obsItemInput.value.trim() : "";
 
         adicionarAoCarrinho(produto, extras, obsItem);
+        aplicarFeedbackBotaoAdicionar(botaoAdicionar);
 
         card.querySelectorAll("input[data-extra]").forEach((inputExtra) => {
           inputExtra.checked = false;
@@ -983,6 +2514,17 @@
         if (obsItemInput) {
           obsItemInput.value = "";
         }
+      }
+    });
+
+    areaProdutos.addEventListener("change", (evento) => {
+      const seletorCombo = evento.target.closest(".combo-select");
+      if (!seletorCombo) {
+        return;
+      }
+      const card = seletorCombo.closest(".combo-card");
+      if (card) {
+        atualizarPrecoCardCombo(card);
       }
     });
 
@@ -1037,36 +2579,139 @@
     });
 
     formCliente.addEventListener("input", (evento) => {
+      limparErroCampo(evento.target);
       if (evento.target !== telefone) {
         salvarFormularioLocal();
       }
     });
 
-    formCliente.addEventListener("change", () => {
+    formCliente.addEventListener("change", (evento) => {
+      limparErroCampo(evento.target);
       salvarFormularioLocal();
     });
 
     botaoCarrinho.addEventListener("click", abrirCarrinho);
+    botaoAbrirCarrinhoMobile.addEventListener("click", abrirCarrinho);
+    botaoFecharCarrinhoTopo.addEventListener("click", fecharCarrinho);
     botaoFechar.addEventListener("click", fecharCarrinho);
+    botaoAbrirAdmin.addEventListener("click", abrirAdmin);
+    botaoFecharAdmin.addEventListener("click", fecharAdmin);
+    botaoEntrarAdmin.addEventListener("click", entrarAdmin);
+    botaoSairAdmin.addEventListener("click", sairAdmin);
+    botaoSalvarProduto.addEventListener("click", salvarProdutoAdmin);
+    botaoLimparProduto.addEventListener("click", limparFormularioProdutoAdmin);
+    botaoAdicionarAdicional.addEventListener("click", adicionarAdicionalAdmin);
+    botaoSalvarCombos.addEventListener("click", salvarConfigCombosAdmin);
+    adminTabs.forEach((botao) => {
+      botao.addEventListener("click", () => {
+        ativarAbaAdmin(botao.dataset.adminTab);
+      });
+    });
+
+    adminPin.addEventListener("keydown", (evento) => {
+      if (evento.key === "Enter") {
+        entrarAdmin();
+      }
+    });
+
+    adminCategoriaProduto.addEventListener("change", () => {
+      renderizarChecklistAdicionaisAdmin();
+      const produtoEmEdicao = adminProdutoId.value ? obterProdutoPorId(Number(adminProdutoId.value)) : null;
+      marcarAdicionaisAdmin(produtoEmEdicao ? (produtoEmEdicao.adicionais || []) : []);
+    });
+
+    if (adminBuscaProduto) {
+      adminBuscaProduto.addEventListener("input", () => {
+        renderizarListaProdutosAdmin({ resetarRolagem: true });
+      });
+    }
+
+    if (adminFiltroCategoria) {
+      adminFiltroCategoria.addEventListener("change", () => {
+        renderizarListaProdutosAdmin({ resetarRolagem: true });
+      });
+    }
+
+    if (adminFiltroDisponibilidade) {
+      adminFiltroDisponibilidade.addEventListener("change", () => {
+        renderizarListaProdutosAdmin({ resetarRolagem: true });
+      });
+    }
+
+    botaoDesfazerAdmin.addEventListener("click", desfazerUltimaExclusaoAdmin);
+
+    adminListaProdutos.addEventListener("click", (evento) => {
+      const botao = evento.target.closest("button[data-admin-acao]");
+      if (!botao) {
+        return;
+      }
+      const acao = botao.dataset.adminAcao;
+      const idProduto = Number(botao.dataset.id);
+
+      if (acao === "editar-produto") {
+        carregarProdutoParaEdicao(idProduto);
+      }
+      if (acao === "toggle-produto") {
+        alternarDisponibilidadeProduto(idProduto);
+      }
+      if (acao === "remover-produto") {
+        removerProdutoAdmin(idProduto);
+      }
+    });
+
+    adminListaAdicionais.addEventListener("click", (evento) => {
+      const botao = evento.target.closest("button[data-admin-acao]");
+      if (!botao) {
+        return;
+      }
+      const acao = botao.dataset.adminAcao;
+      const idAdicional = botao.dataset.id;
+
+      if (acao === "salvar-adicional") {
+        atualizarAdicionalAdmin(idAdicional);
+      }
+      if (acao === "remover-adicional") {
+        removerAdicionalAdmin(idAdicional);
+      }
+    });
 
     caixaCarrinho.addEventListener("click", (evento) => {
       if (evento.target === caixaCarrinho) {
         fecharCarrinho();
       }
     });
+    const monitorarTeclado = () => {
+      setTimeout(atualizarEstadoTecladoCarrinho, 60);
+    };
 
-    botaoFinalizar.addEventListener("click", () => {
+    caixaCarrinho.addEventListener("focusin", monitorarTeclado);
+    caixaCarrinho.addEventListener("focusout", monitorarTeclado);
+    window.addEventListener("resize", atualizarEstadoTecladoCarrinho);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", atualizarEstadoTecladoCarrinho);
+      window.visualViewport.addEventListener("scroll", atualizarEstadoTecladoCarrinho);
+    }
+    if (typeof mediaTecladoMobile.addEventListener === "function") {
+      mediaTecladoMobile.addEventListener("change", atualizarEstadoTecladoCarrinho);
+    } else if (typeof mediaTecladoMobile.addListener === "function") {
+      mediaTecladoMobile.addListener(atualizarEstadoTecladoCarrinho);
+    }
+
+    function iniciarFluxoFinalizacao() {
       limparErro();
 
       if (Date.now() < bloqueioEnvioAte) {
-        mostrarErro("Aguarde alguns segundos antes de enviar outro pedido.");
-        return;
+        mostrarErro("Aguarde alguns segundos antes de enviar outro pedido.", true);
+        return false;
       }
 
-      const erro = validarFormulario();
-      if (erro) {
-        mostrarErro(erro);
-        return;
+      const validacao = validarFormulario();
+      if (validacao.mensagem) {
+        mostrarErro(validacao.mensagem, !validacao.campo);
+        if (validacao.campo && typeof validacao.campo.focus === "function") {
+          validacao.campo.focus();
+        }
+        return false;
       }
 
       const numeroPedido = gerarNumeroPedido();
@@ -1076,11 +2721,22 @@
         mensagem
       };
       abrirConfirmacao(mensagem);
+      return true;
+    }
+
+    botaoFinalizar.addEventListener("click", () => {
+      iniciarFluxoFinalizacao();
+    });
+
+    formCliente.addEventListener("submit", (evento) => {
+      evento.preventDefault();
+      iniciarFluxoFinalizacao();
     });
 
     botaoCancelarConfirmacao.addEventListener("click", () => {
       fecharConfirmacao();
     });
+    botaoFecharConfirmacaoTopo.addEventListener("click", fecharConfirmacao);
 
     botaoConfirmarEnvio.addEventListener("click", () => {
       if (!pedidoPendente) {
@@ -1088,12 +2744,16 @@
       }
 
       if (Date.now() < bloqueioEnvioAte) {
-        mostrarErro("Aguarde alguns segundos antes de enviar outro pedido.");
+        mostrarErro("Aguarde alguns segundos antes de enviar outro pedido.", true);
         return;
       }
 
       const url = `https://wa.me/${configuracaoLoja.numeroWhatsApp}?text=${encodeURIComponent(pedidoPendente.mensagem)}`;
-      window.open(url, "_blank", "noopener,noreferrer");
+      const janelaWhatsApp = window.open(url, "_blank", "noopener,noreferrer");
+      if (!janelaWhatsApp) {
+        mostrarErro("Não foi possível abrir o WhatsApp. Permita pop-ups e tente novamente.", true);
+        return;
+      }
 
       iniciarBloqueioEnvio(8);
       fecharConfirmacao();
@@ -1107,8 +2767,21 @@
       }
     });
 
+    painelAdmin.addEventListener("click", (evento) => {
+      if (evento.target === painelAdmin) {
+        // Evita fechamento acidental durante interação com o PIN.
+        return;
+      }
+    });
+
     document.addEventListener("keydown", (evento) => {
+      limitarFocoNoModal(evento);
+
       if (evento.key === "Escape") {
+        if (painelAdmin.classList.contains("show")) {
+          fecharAdmin();
+          return;
+        }
         if (modalConfirmacao.classList.contains("show")) {
           fecharConfirmacao();
           return;
@@ -1128,12 +2801,16 @@
       }
     });
 
-    pedidoMinimoLabel.textContent = formatarMoeda(configuracaoLoja.pedidoMinimoEntrega);
-    pedidoMinimoAjuda.textContent = formatarMoeda(configuracaoLoja.pedidoMinimoEntrega);
     chavePixTexto.textContent = configuracaoLoja.chavePix;
+    pixTitularTexto.textContent = configuracaoLoja.pixTitular;
+    pixBancoTexto.textContent = configuracaoLoja.pixBanco;
 
+    carregarEstadoCardapio();
     restaurarCarrinhoLocal();
     restaurarFormularioLocal();
+    renderizarCategorias();
+    aplicarEstadoAdmin();
+    limparFormularioProdutoAdmin();
 
     mostrarProdutos();
     atualizarFluxoAtendimento();
@@ -1147,3 +2824,4 @@
   </script>
 </body>
 </html>
+
