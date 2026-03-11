@@ -1032,12 +1032,25 @@ summary:focus-visible {
   bottom: 0;
   z-index: 4;
   margin-top: 0;
+  max-height: 140px;
   padding-top: 0.72rem;
   padding-bottom: max(0.1rem, env(safe-area-inset-bottom));
   border-top: 1px solid rgba(255, 255, 255, 0.12);
   background: linear-gradient(180deg, rgba(24, 24, 24, 0.36), rgba(24, 24, 24, 0.94) 45%);
   -webkit-backdrop-filter: blur(10px) saturate(125%);
   backdrop-filter: blur(10px) saturate(125%);
+  transition: transform 0.2s ease, opacity 0.2s ease, max-height 0.2s ease, padding 0.2s ease;
+}
+
+.caixa-carrinho.teclado-ativo .acoes-checkout {
+  opacity: 0;
+  transform: translateY(120%);
+  pointer-events: none;
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-top-color: transparent;
+  overflow: hidden;
 }
 
 /* Header Refinement */

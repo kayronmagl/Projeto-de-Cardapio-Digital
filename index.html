@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
@@ -196,7 +196,7 @@
         <fieldset class="bloco-form">
           <legend>5. Observações</legend>
           <label for="observacoes">Detalhes do pedido:</label>
-          <textarea id="observacoes" placeholder="Ex.: sem cebola, ponto da carne, etc."></textarea>
+          <textarea id="observacoes" placeholder="Ex.: sem cebola, sem verdura, etc."></textarea>
         </fieldset>
 
         <fieldset class="bloco-form">
@@ -590,6 +590,8 @@
     const botaoFecharConfirmacaoTopo = document.getElementById("botaoFecharConfirmacaoTopo");
     const totalBarraMobile = document.getElementById("totalBarraMobile");
     const botaoAbrirCarrinhoMobile = document.getElementById("botaoAbrirCarrinhoMobile");
+    const caixaCarrinhoConteudo = caixaCarrinho.querySelector(".caixa-carrinho");
+    const mediaTecladoMobile = window.matchMedia("(max-width: 900px)");
 
     const painelAdmin = document.getElementById("painelAdmin");
     const botaoAbrirAdmin = document.getElementById("botaoAbrirAdmin");
@@ -1624,10 +1626,53 @@
         });
     }
 
+    let alturaViewportBase = window.innerHeight;
+
+    function focoEmCampoCarrinho() {
+      const ativo = document.activeElement;
+      if (!ativo || !caixaCarrinho.contains(ativo)) {
+        return false;
+      }
+      if (ativo.isContentEditable) {
+        return true;
+      }
+      const tag = ativo.tagName ? ativo.tagName.toLowerCase() : "";
+      return tag === "input" || tag === "textarea" || tag === "select";
+    }
+
+    function tecladoVisivel() {
+      if (!focoEmCampoCarrinho()) {
+        alturaViewportBase = window.innerHeight;
+        return false;
+      }
+
+      if (window.visualViewport) {
+        const diferenca = window.innerHeight - window.visualViewport.height;
+        return diferenca > 120;
+      }
+
+      const diferenca = alturaViewportBase - window.innerHeight;
+      return diferenca > 120;
+    }
+
+    function atualizarEstadoTecladoCarrinho() {
+      if (!caixaCarrinho.classList.contains("show")) {
+        caixaCarrinhoConteudo.classList.remove("teclado-ativo");
+        return;
+      }
+      if (!mediaTecladoMobile.matches) {
+        caixaCarrinhoConteudo.classList.remove("teclado-ativo");
+        return;
+      }
+      caixaCarrinhoConteudo.classList.toggle("teclado-ativo", tecladoVisivel());
+    }
+
     function abrirCarrinho() {
       abrirModal(caixaCarrinho, botaoFecharCarrinhoTopo);
       botaoCarrinho.setAttribute("aria-expanded", "true");
       botaoAbrirCarrinhoMobile.setAttribute("aria-expanded", "true");
+      alturaViewportBase = window.innerHeight;
+      atualizarEstadoTecladoCarrinho();
       limparErro();
     }
 
@@ -1635,6 +1680,7 @@
       fecharModal(caixaCarrinho, botaoCarrinho);
       botaoCarrinho.setAttribute("aria-expanded", "false");
       botaoAbrirCarrinhoMobile.setAttribute("aria-expanded", "false");
+      caixaCarrinhoConteudo.classList.remove("teclado-ativo");
     }
 
     function abrirConfirmacao(textoResumo) {
@@ -2634,6 +2680,22 @@
         fecharCarrinho();
       }
     });
+    const monitorarTeclado = () => {
+      setTimeout(atualizarEstadoTecladoCarrinho, 60);
+    };
+
+    caixaCarrinho.addEventListener("focusin", monitorarTeclado);
+    caixaCarrinho.addEventListener("focusout", monitorarTeclado);
+    window.addEventListener("resize", atualizarEstadoTecladoCarrinho);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", atualizarEstadoTecladoCarrinho);
+      window.visualViewport.addEventListener("scroll", atualizarEstadoTecladoCarrinho);
+    }
+    if (typeof mediaTecladoMobile.addEventListener === "function") {
+      mediaTecladoMobile.addEventListener("change", atualizarEstadoTecladoCarrinho);
+    } else if (typeof mediaTecladoMobile.addListener === "function") {
+      mediaTecladoMobile.addListener(atualizarEstadoTecladoCarrinho);
+    }
 
     function iniciarFluxoFinalizacao() {
       limparErro();
