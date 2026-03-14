@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
   <title>Tobia's Lanches</title>
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
   <a class="skip-link" href="#areaProdutos">Pular para o cardápio</a>
   <div class="fundo-animado" aria-hidden="true"></div>
@@ -54,12 +56,14 @@
 
   <footer class="rodape-utilitarios layout-shell" aria-label="Acessos internos">
     <p class="rodape-nota">Acesso interno da equipe</p>
-    <button id="botaoAbrirAdmin" type="button" class="link-admin" aria-controls="painelAdmin" aria-expanded="false">Abrir área administrativa</button>
+    <button id="botaoAbrirAdmin" type="button" class="link-admin" aria-controls="painelAdmin"
+      aria-expanded="false">Abrir área administrativa</button>
   </footer>
 
   <section id="caixaCarrinho" class="fundo-escuro" tabindex="-1" hidden inert>
     <div class="caixa-centro caixa-carrinho" role="dialog" aria-modal="true" aria-labelledby="tituloCarrinho">
-      <button id="botaoFecharCarrinhoTopo" class="botao-fechar-modal" type="button" aria-label="Fechar carrinho">&times;</button>
+      <button id="botaoFecharCarrinhoTopo" class="botao-fechar-modal" type="button"
+        aria-label="Fechar carrinho">&times;</button>
       <h2 class="titulo-caixa" id="tituloCarrinho">Carrinho e Checkout</h2>
       <p id="carrinhoSubtitulo" class="carrinho-subtitulo">Seu carrinho está vazio.</p>
       <div id="resumoTopoCarrinho" class="resumo-topo-carrinho" aria-live="polite">
@@ -93,12 +97,14 @@
         <fieldset class="bloco-form" id="blocoDelivery">
           <legend>2. Pedido via site</legend>
           <label for="tipoEntrega">Pedido para:</label>
-          <select id="tipoEntrega" data-erro-id="erroTipoEntrega" aria-describedby="ajudaTipoEntrega erroTipoEntrega" required>
+          <select id="tipoEntrega" data-erro-id="erroTipoEntrega" aria-describedby="ajudaTipoEntrega erroTipoEntrega"
+            required>
             <option value="">Selecione</option>
             <option value="entrega">Entrega</option>
             <option value="retirada">Retirada no local</option>
           </select>
-          <p id="ajudaTipoEntrega" class="ajuda-texto">Escolha entrega para receber no endereço ou retirada para buscar no quiosque.</p>
+          <p id="ajudaTipoEntrega" class="ajuda-texto">Escolha entrega para receber no endereço ou retirada para buscar
+            no quiosque.</p>
           <p id="erroTipoEntrega" class="erro erro-campo oculto"></p>
 
           <p class="aviso tempo-espera">Tempo aproximado: 20 a 40 minutos.</p>
@@ -117,7 +123,8 @@
             <p id="erroBairroEntrega" class="erro erro-campo oculto"></p>
 
             <label for="enderecoEntrega">Endereço para entrega:</label>
-            <input type="text" id="enderecoEntrega" data-erro-id="erroEnderecoEntrega" aria-describedby="erroEnderecoEntrega" placeholder="Rua, número e complemento">
+            <input type="text" id="enderecoEntrega" data-erro-id="erroEnderecoEntrega"
+              aria-describedby="erroEnderecoEntrega" placeholder="Rua, número e complemento">
             <p id="erroEnderecoEntrega" class="erro erro-campo oculto"></p>
 
             <label for="referencia">Ponto de referência:</label>
@@ -139,19 +146,22 @@
           <legend>2. Pedido no local</legend>
           <p class="aviso tempo-espera">Tempo aproximado: 20 a 40 minutos.</p>
           <label for="numeroMesa">Número da mesa:</label>
-          <input type="number" id="numeroMesa" min="1" step="1" data-erro-id="erroNumeroMesa" aria-describedby="erroNumeroMesa" placeholder="Ex.: 3">
+          <input type="number" id="numeroMesa" min="1" step="1" data-erro-id="erroNumeroMesa"
+            aria-describedby="erroNumeroMesa" placeholder="Ex.: 3">
           <p id="erroNumeroMesa" class="erro erro-campo oculto"></p>
         </fieldset>
 
         <fieldset class="bloco-form">
           <legend>3. Dados do cliente</legend>
           <label for="nome">Nome completo:</label>
-          <input type="text" id="nome" autocomplete="name" data-erro-id="erroNome" aria-describedby="ajudaNome erroNome" required>
+          <input type="text" id="nome" autocomplete="name" data-erro-id="erroNome" aria-describedby="ajudaNome erroNome"
+            required>
           <p id="ajudaNome" class="ajuda-texto">Informe o nome usado para identificação do pedido.</p>
           <p id="erroNome" class="erro erro-campo oculto"></p>
 
           <label for="telefone">Telefone ou WhatsApp:</label>
-          <input type="tel" id="telefone" inputmode="tel" autocomplete="tel" data-erro-id="erroTelefone" aria-describedby="ajudaTelefone erroTelefone" placeholder="(88) 98888-7777" required>
+          <input type="tel" id="telefone" inputmode="tel" autocomplete="tel" data-erro-id="erroTelefone"
+            aria-describedby="ajudaTelefone erroTelefone" placeholder="(88) 98888-7777" required>
           <p id="ajudaTelefone" class="ajuda-texto">Use DDD + número. Exemplo: (88) 98888-7777.</p>
           <p id="erroTelefone" class="erro erro-campo oculto"></p>
         </fieldset>
@@ -187,7 +197,8 @@
 
             <div id="trocoParaBox" class="oculto">
               <label for="trocoPara">Troco para quanto?</label>
-              <input type="number" id="trocoPara" min="0" step="0.01" data-erro-id="erroTrocoPara" aria-describedby="erroTrocoPara" placeholder="Ex.: 50">
+              <input type="number" id="trocoPara" min="0" step="0.01" data-erro-id="erroTrocoPara"
+                aria-describedby="erroTrocoPara" placeholder="Ex.: 50">
               <p id="erroTrocoPara" class="erro erro-campo oculto"></p>
             </div>
           </div>
@@ -221,7 +232,8 @@
 
   <section id="modalConfirmacao" class="fundo-escuro" tabindex="-1" hidden inert>
     <div class="caixa-centro caixa-confirmacao" role="dialog" aria-modal="true" aria-labelledby="tituloConfirmacao">
-      <button id="botaoFecharConfirmacaoTopo" class="botao-fechar-modal" type="button" aria-label="Fechar confirmação">&times;</button>
+      <button id="botaoFecharConfirmacaoTopo" class="botao-fechar-modal" type="button"
+        aria-label="Fechar confirmação">&times;</button>
       <h2 class="titulo-caixa" id="tituloConfirmacao">Confirmar pedido</h2>
       <p class="aviso">Confira os dados abaixo antes de enviar para o WhatsApp.</p>
       <div id="resumoConfirmacao" class="resumo-confirmacao"></div>
@@ -234,7 +246,8 @@
 
   <section id="painelAdmin" class="fundo-escuro" tabindex="-1" hidden inert>
     <div class="caixa-centro caixa-admin" role="dialog" aria-modal="true" aria-labelledby="tituloAdmin">
-      <button id="botaoFecharAdmin" class="botao-fechar-modal" type="button" aria-label="Fechar painel administrativo">×</button>
+      <button id="botaoFecharAdmin" class="botao-fechar-modal" type="button"
+        aria-label="Fechar painel administrativo">×</button>
       <header class="admin-topo">
         <p class="admin-topo-kicker">Área administrativa</p>
         <h2 class="titulo-caixa" id="tituloAdmin">Painel do Cardápio</h2>
@@ -248,9 +261,11 @@
 
       <section id="adminLoginBloco" class="bloco-form">
         <h3 class="admin-subtitulo">Acesso</h3>
-        <p class="admin-descricao admin-descricao-login">Use o PIN para liberar edição de produtos, adicionais e combos.</p>
+        <p class="admin-descricao admin-descricao-login">Use o PIN para liberar edição de produtos, adicionais e combos.
+        </p>
         <label for="adminPin">PIN administrativo</label>
-        <input type="password" id="adminPin" inputmode="numeric" autocomplete="current-password" placeholder="Digite o PIN">
+        <input type="password" id="adminPin" inputmode="numeric" autocomplete="current-password"
+          placeholder="Digite o PIN">
         <button type="button" id="botaoEntrarAdmin" class="botao botao-principal">Entrar</button>
       </section>
       <p id="adminErro" class="erro oculto admin-erro" role="alert"></p>
@@ -272,12 +287,16 @@
         </section>
 
         <nav class="admin-tabs" role="tablist" aria-label="Seções do painel">
-          <button type="button" id="adminTabProdutos" class="admin-tab ativo" data-admin-tab="produtos" role="tab" aria-controls="painelAdminProdutos" aria-selected="true">Produtos</button>
-          <button type="button" id="adminTabAdicionais" class="admin-tab" data-admin-tab="adicionais" role="tab" aria-controls="painelAdminAdicionais" aria-selected="false">Adicionais</button>
-          <button type="button" id="adminTabCombos" class="admin-tab" data-admin-tab="combos" role="tab" aria-controls="painelAdminCombos" aria-selected="false">Combos</button>
+          <button type="button" id="adminTabProdutos" class="admin-tab ativo" data-admin-tab="produtos" role="tab"
+            aria-controls="painelAdminProdutos" aria-selected="true">Produtos</button>
+          <button type="button" id="adminTabAdicionais" class="admin-tab" data-admin-tab="adicionais" role="tab"
+            aria-controls="painelAdminAdicionais" aria-selected="false">Adicionais</button>
+          <button type="button" id="adminTabCombos" class="admin-tab" data-admin-tab="combos" role="tab"
+            aria-controls="painelAdminCombos" aria-selected="false">Combos</button>
         </nav>
 
-        <section id="painelAdminProdutos" class="admin-painel ativo" data-admin-painel="produtos" role="tabpanel" aria-labelledby="adminTabProdutos">
+        <section id="painelAdminProdutos" class="admin-painel ativo" data-admin-painel="produtos" role="tabpanel"
+          aria-labelledby="adminTabProdutos">
           <div class="admin-produtos-grid">
             <section class="bloco-form admin-bloco">
               <h3 class="admin-subtitulo">Cadastro de Produto</h3>
@@ -369,7 +388,8 @@
           </div>
         </section>
 
-        <section id="painelAdminAdicionais" class="admin-painel" data-admin-painel="adicionais" role="tabpanel" aria-labelledby="adminTabAdicionais" hidden>
+        <section id="painelAdminAdicionais" class="admin-painel" data-admin-painel="adicionais" role="tabpanel"
+          aria-labelledby="adminTabAdicionais" hidden>
           <section class="bloco-form admin-bloco">
             <h3 class="admin-subtitulo">Adicionais</h3>
             <p class="admin-descricao">Mantenha os adicionais padronizados para todos os produtos.</p>
@@ -384,11 +404,13 @@
                 <input type="number" id="adminNovoAdicionalPreco" min="0" step="0.01" placeholder="0,00">
               </div>
             </div>
-            <button type="button" id="botaoAdicionarAdicional" class="botao botao-secundario">Adicionar adicional</button>
+            <button type="button" id="botaoAdicionarAdicional" class="botao botao-secundario">Adicionar
+              adicional</button>
           </section>
         </section>
 
-        <section id="painelAdminCombos" class="admin-painel" data-admin-painel="combos" role="tabpanel" aria-labelledby="adminTabCombos" hidden>
+        <section id="painelAdminCombos" class="admin-painel" data-admin-painel="combos" role="tabpanel"
+          aria-labelledby="adminTabCombos" hidden>
           <section class="bloco-form admin-bloco">
             <h3 class="admin-subtitulo">Configuração de Combos</h3>
             <p class="admin-descricao">Defina como os combos serão exibidos para o cliente.</p>
@@ -407,7 +429,8 @@
             </label>
             <label for="comboDesconto">Desconto por combo (R$)</label>
             <input type="number" id="comboDesconto" min="0" step="0.01" value="0">
-            <button type="button" id="botaoSalvarCombos" class="botao botao-secundario">Salvar configuração de combos</button>
+            <button type="button" id="botaoSalvarCombos" class="botao botao-secundario">Salvar configuração de
+              combos</button>
           </section>
         </section>
 
@@ -428,75 +451,9 @@
       <span class="barra-mobile-label">Total</span>
       <strong id="totalBarraMobile">R$ 0,00</strong>
     </div>
-    <button type="button" id="botaoAbrirCarrinhoMobile" class="botao botao-principal" aria-controls="caixaCarrinho" aria-expanded="false">Ver Carrinho</button>
+    <button type="button" id="botaoAbrirCarrinhoMobile" class="botao botao-principal" aria-controls="caixaCarrinho"
+      aria-expanded="false">Ver Carrinho</button>
   </div>
-
-  <div id="cardapio"></div>
-  
-  <script>
-    async function carregarProdutos() {
-      
-    const { data, error } = await supabaseClient
-    .from("produtos")
-    .select("*");
-    
-    if (error) {
-    console.error(error);
-    return;
-    }
-    
-    const container = document.getElementById("cardapio");
-    
-    container.innerHTML = "";
-    
-    data.forEach(produto => {
-    
-    container.innerHTML += `
-    <div class="item-cardapio">
-      <h3>${produto.nome}</h3>
-      <p>${produto.descricao}</p>
-      <span>R$ ${produto.preco}</span>
-    </div>
-    `;
-    
-    });
-    
-    }
-    
-    carregarProdutos();
-
-  </script>
-
-
-
-
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  
-  <script>
-    const supabaseClient = supabase.createClient(
-      "https://chgngyuancvutzubensn.supabase.co",
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoZ25neXVhbmN2dXR6dWJlbnNuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxOTI5NzEsImV4cCI6MjA4ODc2ODk3MX0.CVmviqYNLbLsMAzGL6c5uNIcP7p0eEx8XVsw7BtfMl8"
-    );
-
-    async function carregarProdutos() {
-
-      const { data, error } = await supabaseClient
-        .from("produtos")
-        .select("*");
-
-      if (error) {
-        console.error(error);
-        return;
-      }
-
-      console.log(data);
-
-    }
-
-    carregarProdutos();
-  </script>
-
 
   <script>
     const configuracaoLoja = {
@@ -2890,5 +2847,5 @@
     window.addEventListener("focus", atualizarStatusLoja);
   </script>
 </body>
-</html>
 
+</html>
