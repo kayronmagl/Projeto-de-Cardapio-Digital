@@ -45,7 +45,7 @@
         <p id="statusLoja" class="status-loja"></p>
       </div>
       <p id="detalheHorario" class="detalhe-horario"></p>
-      <p class="agenda-horario">Funcionamento: quinta a domingo, 18:00 às 23:00.</p>
+      <p class="agenda-horario">Funcionamento: carregando...</p>
     </div>
   </section>
 
@@ -112,13 +112,6 @@
             <label for="bairroEntrega">Localidade de entrega (Iracema - CE):</label>
             <select id="bairroEntrega" data-erro-id="erroBairroEntrega" aria-describedby="erroBairroEntrega">
               <option value="">Selecione a localidade</option>
-              <option value="Centro">Centro</option>
-              <option value="Caixa D'água">Caixa D'água</option>
-              <option value="Holandino">Holandino</option>
-              <option value="Campo">Campo</option>
-              <option value="Jatobá">Jatobá</option>
-              <option value="Ema">Ema (sem entrega)</option>
-              <option value="Bom Sucesso">Bom Sucesso (sem entrega)</option>
             </select>
             <p id="erroBairroEntrega" class="erro erro-campo oculto"></p>
 
@@ -137,7 +130,7 @@
           <div id="enderecoRetirada" class="painel-condicional oculto">
             <p class="aviso aviso-retirada">
               <strong>Retirada no local:</strong><br>
-              Rua Josias Costa Morais, Bairro Carrapicho, Quiosque 03 (Iracema-CE).
+              Carregando endereço...
             </p>
           </div>
         </fieldset>
@@ -261,12 +254,15 @@
 
       <section id="adminLoginBloco" class="bloco-form">
         <h3 class="admin-subtitulo">Acesso</h3>
-        <p class="admin-descricao admin-descricao-login">Use o PIN para liberar edição de produtos, adicionais e combos.
-        </p>
-        <label for="adminPin">PIN administrativo</label>
-        <input type="password" id="adminPin" inputmode="numeric" autocomplete="current-password"
-          placeholder="Digite o PIN">
-        <button type="button" id="botaoEntrarAdmin" class="botao botao-principal">Entrar</button>
+        <p class="admin-descricao admin-descricao-login">Use seu e-mail e senha para liberar edição de produtos,
+          adicionais e combos.</p>
+        <form id="adminLoginForm" novalidate>
+          <label for="adminEmail">E-mail</label>
+          <input type="email" id="adminEmail" autocomplete="email" placeholder="email@dominio.com">
+          <label for="adminSenha">Senha</label>
+          <input type="password" id="adminSenha" autocomplete="current-password" placeholder="Digite sua senha">
+          <button type="submit" id="botaoEntrarAdmin" class="botao botao-principal">Entrar</button>
+        </form>
       </section>
       <p id="adminErro" class="erro oculto admin-erro" role="alert"></p>
 
@@ -322,10 +318,7 @@
 
               <label for="adminCategoriaProduto">Categoria</label>
               <select id="adminCategoriaProduto">
-                <option value="pastel">Pastéis</option>
-                <option value="hamburguer">Hambúrgueres</option>
-                <option value="refrigerante">Refrigerantes</option>
-                <option value="batida">Batidas</option>
+                <option value="">Carregando categorias...</option>
               </select>
 
               <label class="checkbox-linha">
@@ -362,10 +355,6 @@
                     <label for="adminFiltroCategoria">Categoria</label>
                     <select id="adminFiltroCategoria">
                       <option value="">Todas</option>
-                      <option value="pastel">Pastéis</option>
-                      <option value="hamburguer">Hambúrgueres</option>
-                      <option value="refrigerante">Refrigerantes</option>
-                      <option value="batida">Batidas</option>
                     </select>
                   </div>
                   <div class="admin-campo">
@@ -455,91 +444,47 @@
       aria-expanded="false">Ver Carrinho</button>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const configuracaoLoja = {
-      numeroWhatsApp: "5588988173336",
-      chavePix: "88 981732028",
-      pixTitular: "Karen Kyanne Magalhães Souza",
-      pixBanco: "Nubank",
-      taxaEntrega: 2,
-      enderecoRetirada: "Rua Josias Costa Morais, Bairro Carrapicho, Quiosque 03 (Iracema-CE).",
-      bairrosComEntrega: ["Centro", "Caixa D'água", "Holandino", "Campo", "Jatobá"],
-      bairrosSemEntrega: ["Ema", "Bom Sucesso"],
+    (() => {
+    const SUPABASE_URL = "https://ffnurwfuwjsyzrmyjskv.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZmbnVyd2Z1d2pzeXpybXlqc2t2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0NjU4ODAsImV4cCI6MjA4OTA0MTg4MH0.AMgL0tlaQZOK4HyBXAEMHG46XaTNw1eopLX-2GFtDCA";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let configuracaoLoja = {
+      numeroWhatsApp: "",
+      chavePix: "",
+      pixTitular: "",
+      pixBanco: "",
+      taxaEntrega: 0,
+      enderecoRetirada: "",
+      bairrosComEntrega: [],
+      bairrosSemEntrega: [],
       idsIndisponiveis: []
     };
 
-    const horarioFuncionamento = {
-      0: { abre: "18:00", fecha: "23:00" },
-      4: { abre: "18:00", fecha: "23:00" },
-      5: { abre: "18:00", fecha: "23:00" },
-      6: { abre: "18:00", fecha: "23:00" }
-    };
-
-    const categoriasCatalogo = {
-      combo: "Combos",
-      pastel: "Pastéis",
-      hamburguer: "Hambúrgueres",
-      refrigerante: "Refrigerantes",
-      batida: "Batidas"
-    };
-
-    const adicionaisPadrao = {
-      queijo: { id: "queijo", nome: "Queijo extra", preco: 2 },
-      catupiry: { id: "catupiry", nome: "Catupiry", preco: 2.5 },
-      cheddar: { id: "cheddar", nome: "Cheddar", preco: 2 },
-      calabresa: { id: "calabresa", nome: "Calabresa", preco: 2 },
-      frango: { id: "frango", nome: "Frango", preco: 3 }
-    };
-
-    const produtosPadrao = [
-      { id: 1, nome: "Pizza", descricao: "Misto ralado com orégano, milho, tomate, cebola e cheddar.", preco: 10, categoria: "pastel", disponivel: true, adicionais: ["queijo", "cheddar", "catupiry"] },
-      { id: 2, nome: "Frango Catupiry", descricao: "Frango, queijo fatiado, milho e catupiry.", preco: 10, categoria: "pastel", disponivel: true, adicionais: ["queijo", "catupiry", "frango"] },
-      { id: 3, nome: "3 Queijos", descricao: "Queijo coalho, cheddar e catupiry.", preco: 10, categoria: "pastel", disponivel: true, adicionais: ["queijo", "cheddar"] },
-      { id: 4, nome: "Moda da Casa", descricao: "Frango, calabresa, queijo fatiado e catupiry.", preco: 12, categoria: "pastel", disponivel: true, adicionais: ["calabresa", "catupiry", "frango"] },
-      { id: 5, nome: "Bolonhesa", descricao: "Carne moída, frango, queijo coalho, milho, tomate, cheddar e catupiry.", preco: 12, categoria: "pastel", disponivel: true, adicionais: ["queijo", "calabresa", "frango"] },
-      { id: 6, nome: "Pastel Árabe", descricao: "Carne moída, queijo coalho, cebola, tomate e limão.", preco: 12, categoria: "pastel", disponivel: true, adicionais: ["queijo", "calabresa"] },
-      { id: 7, nome: "Ponta Negra Misto", descricao: "Pão brioche, ovo, presunto, queijo, salada e molhos.", preco: 10, categoria: "hamburguer", disponivel: true, adicionais: ["queijo", "calabresa", "cheddar"] },
-      { id: 8, nome: "Smach Encanto", descricao: "Carne artesanal, cheddar, salada e molhos.", preco: 12, categoria: "hamburguer", disponivel: true, adicionais: ["queijo", "calabresa", "catupiry"] },
-      { id: 9, nome: "Majorlandia Frango", descricao: "Frango, queijo, presunto, milho, catupiry, salada e molhos.", preco: 14, categoria: "hamburguer", disponivel: true, adicionais: ["queijo", "frango"] },
-      { id: 10, nome: "Canoa Quebrada Burguer", descricao: "Carne artesanal, calabresa, queijo, presunto, catupiry e molhos.", preco: 16, categoria: "hamburguer", disponivel: true, adicionais: ["queijo", "calabresa", "catupiry"] },
-      { id: 11, nome: "Mão Branca Burguer", descricao: "Carne artesanal, frango, ovo, cheddar, salada e molhos.", preco: 18, categoria: "hamburguer", disponivel: true, adicionais: ["queijo", "frango", "cheddar"] },
-      { id: 12, nome: "Iracema Burguer", descricao: "Carne artesanal, frango, queijo, presunto, calabresa, cheddar e molhos.", preco: 20, categoria: "hamburguer", disponivel: true, adicionais: ["queijo", "calabresa", "frango"] },
-      { id: 13, nome: "Coca-Cola 1L", descricao: "Refrigerante Coca-Cola 1 litro.", preco: 10, categoria: "refrigerante", disponivel: true, adicionais: [] },
-      { id: 14, nome: "Cajuína São Geraldo 1L", descricao: "Refrigerante Cajuína São Geraldo.", preco: 10, categoria: "refrigerante", disponivel: true, adicionais: [] },
-      { id: 15, nome: "Coca-Cola Lata Zero", descricao: "Coca-Cola zero em lata.", preco: 5, categoria: "refrigerante", disponivel: true, adicionais: [] },
-      { id: 16, nome: "Coca-Cola Lata", descricao: "Coca-Cola tradicional em lata.", preco: 5, categoria: "refrigerante", disponivel: true, adicionais: [] },
-      { id: 17, nome: "Cajuína Lata São Geraldo", descricao: "Cajuína São Geraldo em lata.", preco: 5, categoria: "refrigerante", disponivel: true, adicionais: [] },
-      { id: 18, nome: "Água sem gás", descricao: "Água mineral sem gás.", preco: 2, categoria: "refrigerante", disponivel: true, adicionais: [] },
-      { id: 19, nome: "Batida Tradicional", descricao: "Batida de açaí líquido tradicional.", preco: 12, categoria: "batida", disponivel: true, adicionais: [] },
-      { id: 20, nome: "Batida Banana", descricao: "Batida de açaí líquido com banana.", preco: 13, categoria: "batida", disponivel: true, adicionais: [] },
-      { id: 21, nome: "Batida Morango", descricao: "Batida de açaí líquido com morango.", preco: 14, categoria: "batida", disponivel: true, adicionais: [] }
-    ];
-
-    const configuracaoCombosPadrao = {
-      ativo: true,
+    let horarioFuncionamento = {};
+    let categoriasCatalogo = {};
+    let categoriasDetalhes = [];
+    let categoriasOrdem = [];
+    let categoriasProduto = [];
+    let categoriaComboSlug = "combo";
+    let adicionaisCatalogo = {};
+    let produtos = [];
+    let configuracaoCombos = {
+      ativo: false,
       desconto: 0,
-      categoriasBase: ["pastel", "hamburguer"],
-      categoriaBebida: "refrigerante"
+      categoriasBase: [],
+      categoriaBebida: ""
     };
 
     function clonar(objeto) {
       return JSON.parse(JSON.stringify(objeto));
     }
 
-    let adicionaisCatalogo = clonar(adicionaisPadrao);
-    let produtos = clonar(produtosPadrao);
-    let configuracaoCombos = clonar(configuracaoCombosPadrao);
-
     const CHAVE_STORAGE_CARRINHO = "tobias_lanches_carrinho_v3";
     const CHAVE_STORAGE_FORMULARIO = "tobias_lanches_form_v3";
     const CHAVE_SEQUENCIA_PEDIDO = "tobias_lanches_seq_";
-    const CHAVE_STORAGE_PRODUTOS = "tobias_lanches_produtos_v1";
-    const CHAVE_STORAGE_ADICIONAIS = "tobias_lanches_adicionais_v1";
-    const CHAVE_STORAGE_COMBOS = "tobias_lanches_combos_v1";
-    const CHAVE_STORAGE_ADMIN_PIN = "tobias_lanches_admin_pin_v1";
-    const PIN_ADMIN_PADRAO = "2580";
-    const LIMITE_TENTATIVAS_ADMIN = 5;
-    const BLOQUEIO_ADMIN_MS = 30000;
     const sequenciaPedidoMemoria = Object.create(null);
 
     const formatadorMoeda = new Intl.NumberFormat("pt-BR", {
@@ -549,7 +494,7 @@
 
     const nomesDiasSemana = ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"];
 
-    let categoriaAtual = "pastel";
+    let categoriaAtual = "";
     let carrinho = [];
     let pedidoPendente = null;
     let bloqueioEnvioAte = 0;
@@ -582,6 +527,8 @@
     const tipoEntrega = document.getElementById("tipoEntrega");
     const camposEntrega = document.getElementById("camposEntrega");
     const enderecoRetiradaBox = document.getElementById("enderecoRetirada");
+    const avisoRetirada = enderecoRetiradaBox ? enderecoRetiradaBox.querySelector(".aviso-retirada") : null;
+    const agendaHorario = document.querySelector(".agenda-horario");
     const bairroEntrega = document.getElementById("bairroEntrega");
     const enderecoEntrega = document.getElementById("enderecoEntrega");
     const numeroMesa = document.getElementById("numeroMesa");
@@ -623,13 +570,15 @@
     const botaoSairAdmin = document.getElementById("botaoSairAdmin");
     const adminAcoesFooter = document.getElementById("adminAcoesFooter");
     const adminLoginBloco = document.getElementById("adminLoginBloco");
+    const adminLoginForm = document.getElementById("adminLoginForm");
     const adminConteudo = document.getElementById("adminConteudo");
     const adminTabs = document.querySelectorAll(".admin-tab");
     const adminPaineis = document.querySelectorAll(".admin-painel");
     const adminTotalProdutos = document.getElementById("adminTotalProdutos");
     const adminTotalDisponiveis = document.getElementById("adminTotalDisponiveis");
     const adminTotalCombos = document.getElementById("adminTotalCombos");
-    const adminPin = document.getElementById("adminPin");
+    const adminEmail = document.getElementById("adminEmail");
+    const adminSenha = document.getElementById("adminSenha");
     const botaoEntrarAdmin = document.getElementById("botaoEntrarAdmin");
     const adminErro = document.getElementById("adminErro");
 
@@ -687,8 +636,6 @@
     let ultimaExclusaoAdmin = null;
     let timerDesfazerAdmin = null;
     let pilhaRetornoFoco = [];
-    let tentativasAdminFalhas = 0;
-    let adminBloqueadoAte = 0;
 
     function formatarMoeda(valor) {
       return formatadorMoeda.format(valor);
@@ -826,121 +773,354 @@
       return produto.disponivel !== false && !configuracaoLoja.idsIndisponiveis.includes(produto.id);
     }
 
-    function obterPinAdmin() {
-      return lerStorageSeguro(CHAVE_STORAGE_ADMIN_PIN) || PIN_ADMIN_PADRAO;
+    function aplicarConfigLojaNaInterface() {
+      chavePixTexto.textContent = configuracaoLoja.chavePix || "-";
+      pixTitularTexto.textContent = configuracaoLoja.pixTitular || "-";
+      pixBancoTexto.textContent = configuracaoLoja.pixBanco || "-";
     }
 
-    function salvarEstadoCardapio() {
-      salvarStorageSeguro(CHAVE_STORAGE_PRODUTOS, JSON.stringify(produtos));
-      salvarStorageSeguro(CHAVE_STORAGE_ADICIONAIS, JSON.stringify(adicionaisCatalogo));
-      salvarStorageSeguro(CHAVE_STORAGE_COMBOS, JSON.stringify(configuracaoCombos));
+    function atualizarEnderecoRetiradaUI() {
+      if (!avisoRetirada) {
+        return;
+      }
+      const enderecoSeguro = escaparHtml(configuracaoLoja.enderecoRetirada || "");
+      avisoRetirada.innerHTML = `
+        <strong>Retirada no local:</strong><br>
+        ${enderecoSeguro}
+      `;
     }
 
-    function normalizarAdicionais(dados) {
-      if (!dados || typeof dados !== "object") {
-        return clonar(adicionaisPadrao);
+    function atualizarBairrosEntregaUI() {
+      if (!bairroEntrega) {
+        return;
       }
-
-      const itens = Object.values(dados)
-        .filter((item) => item && typeof item.id === "string")
-        .map((item) => ({
-          id: item.id,
-          nome: String(item.nome || item.id),
-          preco: Number(item.preco) || 0
-        }));
-
-      if (itens.length === 0) {
-        return clonar(adicionaisPadrao);
+      const bairrosDisponiveis = new Set([
+        ...configuracaoLoja.bairrosComEntrega,
+        ...configuracaoLoja.bairrosSemEntrega
+      ]);
+      const opcoes = ['<option value="">Selecione a localidade</option>'];
+      configuracaoLoja.bairrosComEntrega.forEach((bairro) => {
+        const nomeSeguro = escaparHtml(bairro);
+        opcoes.push(`<option value="${nomeSeguro}">${nomeSeguro}</option>`);
+      });
+      configuracaoLoja.bairrosSemEntrega.forEach((bairro) => {
+        const nomeSeguro = escaparHtml(bairro);
+        opcoes.push(`<option value="${nomeSeguro}">${nomeSeguro} (sem entrega)</option>`);
+      });
+      bairroEntrega.innerHTML = opcoes.join("");
+      if (bairroEntrega.value && !bairrosDisponiveis.has(bairroEntrega.value)) {
+        bairroEntrega.value = "";
       }
+    }
 
-      const normalizados = itens.reduce((acumulador, item) => {
-        acumulador[item.id] = item;
-        return acumulador;
+    function atualizarAgendaHorarioUI() {
+      if (!agendaHorario) {
+        return;
+      }
+      const dias = Object.keys(horarioFuncionamento)
+        .map((dia) => Number(dia))
+        .filter((dia) => Number.isFinite(dia))
+        .sort((a, b) => a - b);
+      if (dias.length === 0) {
+        agendaHorario.textContent = "Funcionamento: consulte horários.";
+        return;
+      }
+      const linhas = dias.map((dia) => {
+        const agenda = horarioFuncionamento[dia];
+        return `${nomesDiasSemana[dia]}: ${agenda.abre} às ${agenda.fecha}`;
+      });
+      agendaHorario.textContent = `Funcionamento: ${linhas.join(" | ")}.`;
+    }
+
+    function atualizarMapasCategorias(categorias) {
+      const categoriasValidas = categorias.filter((categoria) => categoria && categoria.slug);
+      categoriasDetalhes = categoriasValidas;
+      categoriasCatalogo = categoriasValidas.reduce((mapa, categoria) => {
+        const slug = String(categoria.slug);
+        const nome = String(categoria.nome || categoria.slug);
+        mapa[slug] = nome;
+        return mapa;
       }, {});
-
-      delete normalizados.bacon;
-      if (!normalizados.calabresa) {
-        normalizados.calabresa = clonar(adicionaisPadrao.calabresa);
-      }
-      if (!normalizados.frango) {
-        normalizados.frango = clonar(adicionaisPadrao.frango);
-      }
-      return normalizados;
+      const categoriasAtivas = categoriasValidas.filter((categoria) => categoria.ativa !== false);
+      categoriasOrdem = categoriasAtivas
+        .slice()
+        .sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0))
+        .map((categoria) => String(categoria.slug));
+      categoriasProduto = categoriasAtivas
+        .filter((categoria) => categoria.is_combo !== true)
+        .sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0))
+        .map((categoria) => String(categoria.slug));
+      const categoriaCombo = categoriasAtivas.find((categoria) => categoria.is_combo === true);
+      categoriaComboSlug = categoriaCombo ? String(categoriaCombo.slug) : "combo";
     }
 
-    function normalizarProdutos(dados, adicionais) {
-      if (!Array.isArray(dados) || dados.length === 0) {
-        return clonar(produtosPadrao);
+    function atualizarOpcoesCategoriasAdmin() {
+      if (!adminCategoriaProduto || !adminFiltroCategoria) {
+        return;
       }
+      const opcoesProdutos = categoriasProduto
+        .map((slug) => {
+          const nome = categoriasCatalogo[slug] || slug;
+          const slugSeguro = escaparHtml(slug);
+          const nomeSeguro = escaparHtml(nome);
+          return `<option value="${slugSeguro}">${nomeSeguro}</option>`;
+        })
+        .join("");
 
-      const categoriasPermitidas = ["pastel", "hamburguer", "refrigerante", "batida"];
-      const lista = dados
-        .filter((item) => item && typeof item === "object")
-        .map((item) => ({
+      adminCategoriaProduto.innerHTML = opcoesProdutos || "<option value=\"\">Sem categorias</option>";
+      adminFiltroCategoria.innerHTML = `
+        <option value="">Todas</option>
+        ${opcoesProdutos}
+      `;
+
+      if (!categoriasProduto.includes(adminCategoriaProduto.value)) {
+        adminCategoriaProduto.value = categoriasProduto[0] || "";
+      }
+    }
+
+    async function carregarDadosSupabase() {
+      try {
+        const [
+          categoriasResp,
+          adicionaisResp,
+          produtosResp,
+          relacoesResp,
+          combosResp,
+          lojaResp,
+          horarioResp
+        ] = await Promise.all([
+          supabase.from("categorias").select("*").order("ordem", { ascending: true }),
+          supabase.from("adicionais").select("*").order("ordem", { ascending: true }),
+          supabase.from("produtos").select("*").order("id", { ascending: true }),
+          supabase.from("produto_adicionais").select("produto_id, adicional_id"),
+          supabase.from("combos_config").select("*").eq("id", 1).maybeSingle(),
+          supabase.from("loja_config").select("*").eq("id", 1).maybeSingle(),
+          supabase.from("horario_funcionamento").select("*").order("dia_semana", { ascending: true })
+        ]);
+
+        if (categoriasResp.error || adicionaisResp.error || produtosResp.error || relacoesResp.error
+          || combosResp.error || lojaResp.error || horarioResp.error) {
+          console.error("Erro ao carregar dados do Supabase", {
+            categorias: categoriasResp.error,
+            adicionais: adicionaisResp.error,
+            produtos: produtosResp.error,
+            relacoes: relacoesResp.error,
+            combos: combosResp.error,
+            loja: lojaResp.error,
+            horario: horarioResp.error
+          });
+          if (mensagemErro) {
+            mensagemErro.textContent = "Não foi possível carregar o cardápio. Tente novamente.";
+            mensagemErro.classList.remove("oculto");
+          }
+          return false;
+        }
+
+        const categoriasData = categoriasResp.data || [];
+        atualizarMapasCategorias(categoriasData);
+        atualizarOpcoesCategoriasAdmin();
+
+        adicionaisCatalogo = (adicionaisResp.data || []).reduce((mapa, adicional) => {
+          const id = String(adicional.id || "").trim();
+          if (!id) {
+            return mapa;
+          }
+          mapa[id] = {
+            id,
+            nome: String(adicional.nome || id),
+            preco: Number(adicional.preco) || 0
+          };
+          return mapa;
+        }, {});
+
+        const relacoes = relacoesResp.data || [];
+        const adicionaisPorProduto = new Map();
+        relacoes.forEach((registro) => {
+          if (!adicionaisCatalogo[registro.adicional_id]) {
+            return;
+          }
+          if (!adicionaisPorProduto.has(registro.produto_id)) {
+            adicionaisPorProduto.set(registro.produto_id, []);
+          }
+          adicionaisPorProduto.get(registro.produto_id).push(registro.adicional_id);
+        });
+
+        produtos = (produtosResp.data || []).map((item) => ({
           id: Number(item.id) || 0,
           nome: String(item.nome || "Item sem nome"),
           descricao: String(item.descricao || ""),
           preco: Number(item.preco) || 0,
-          categoria: categoriasPermitidas.includes(item.categoria) ? item.categoria : "pastel",
+          categoria: String(item.categoria_slug || ""),
           disponivel: item.disponivel !== false,
-          adicionais: Array.isArray(item.adicionais)
-            ? item.adicionais.filter((idExtra) => Boolean(adicionais[idExtra]))
-            : []
-        }))
-        .filter((item) => item.id > 0);
+          adicionais: adicionaisPorProduto.get(item.id) || []
+        })).filter((item) => item.id > 0);
 
-      const possuiRefrigerante = lista.some((item) => item.categoria === "refrigerante");
-      const possuiBatida = lista.some((item) => item.categoria === "batida");
+        if (combosResp.data) {
+          configuracaoCombos = {
+            ativo: combosResp.data.ativo !== false,
+            desconto: Math.max(0, Number(combosResp.data.desconto) || 0),
+            categoriasBase: Array.isArray(combosResp.data.categorias_base)
+              ? combosResp.data.categorias_base
+                .map((categoria) => String(categoria))
+                .filter((categoria) => categoria)
+              : [],
+            categoriaBebida: String(combosResp.data.categoria_bebida_slug || "")
+          };
+        }
 
-      if (!possuiRefrigerante) {
-        lista.push(...clonar(produtosPadrao.filter((item) => item.categoria === "refrigerante")));
+        if (categoriasProduto.length > 0) {
+          configuracaoCombos.categoriasBase = configuracaoCombos.categoriasBase
+            .filter((categoria) => categoriasProduto.includes(categoria));
+          if (configuracaoCombos.categoriasBase.length === 0) {
+            configuracaoCombos.categoriasBase = [categoriasProduto[0]];
+          }
+        }
+
+        if (!configuracaoCombos.categoriaBebida) {
+          configuracaoCombos.categoriaBebida = categoriasProduto.find((slug) => slug === "refrigerante")
+            || categoriasProduto[0]
+            || "";
+        }
+
+        if (lojaResp.data) {
+          configuracaoLoja = {
+            numeroWhatsApp: String(lojaResp.data.numero_whatsapp || ""),
+            chavePix: String(lojaResp.data.chave_pix || ""),
+            pixTitular: String(lojaResp.data.pix_titular || ""),
+            pixBanco: String(lojaResp.data.pix_banco || ""),
+            taxaEntrega: Number(lojaResp.data.taxa_entrega) || 0,
+            enderecoRetirada: String(lojaResp.data.endereco_retirada || ""),
+            bairrosComEntrega: Array.isArray(lojaResp.data.bairros_com_entrega)
+              ? lojaResp.data.bairros_com_entrega.map((bairro) => String(bairro))
+              : [],
+            bairrosSemEntrega: Array.isArray(lojaResp.data.bairros_sem_entrega)
+              ? lojaResp.data.bairros_sem_entrega.map((bairro) => String(bairro))
+              : [],
+            idsIndisponiveis: Array.isArray(lojaResp.data.ids_indisponiveis)
+              ? lojaResp.data.ids_indisponiveis
+                .map((id) => Number(id))
+                .filter((id) => Number.isFinite(id))
+              : []
+          };
+        }
+
+        horarioFuncionamento = {};
+        (horarioResp.data || []).forEach((registro) => {
+          if (registro.ativo === false) {
+            return;
+          }
+          const abre = String(registro.abre || "").slice(0, 5);
+          const fecha = String(registro.fecha || "").slice(0, 5);
+          if (abre && fecha) {
+            horarioFuncionamento[registro.dia_semana] = { abre, fecha };
+          }
+        });
+
+        aplicarConfigLojaNaInterface();
+        atualizarEnderecoRetiradaUI();
+        atualizarBairrosEntregaUI();
+        atualizarAgendaHorarioUI();
+        return true;
+      } catch (erro) {
+        console.error("Erro inesperado ao carregar dados", erro);
+        if (mensagemErro) {
+          mensagemErro.textContent = "Não foi possível carregar o cardápio. Tente novamente.";
+          mensagemErro.classList.remove("oculto");
+        }
+        return false;
       }
-      if (!possuiBatida) {
-        lista.push(...clonar(produtosPadrao.filter((item) => item.categoria === "batida")));
-      }
-
-      return lista;
     }
 
-    function normalizarConfigCombos(dados) {
-      const base = clonar(configuracaoCombosPadrao);
-      if (!dados || typeof dados !== "object") {
-        return base;
+    const REALTIME_DEBOUNCE_MS = 400;
+    let realtimeTimer = null;
+    let realtimeChannel = null;
+    let realtimePendente = false;
+    let adminEdicaoAtiva = false;
+
+    function adminTemFocoEmEdicao() {
+      if (!adminAutenticado || !painelAdmin.classList.contains("show")) {
+        return false;
       }
-
-      const categoriasBase = Array.isArray(dados.categoriasBase)
-        ? dados.categoriasBase.filter((categoria) => categoria === "pastel" || categoria === "hamburguer")
-        : [];
-
-      return {
-        ativo: dados.ativo !== false,
-        desconto: Math.max(0, Number(dados.desconto) || 0),
-        categoriasBase: categoriasBase.length > 0 ? categoriasBase : clonar(base.categoriasBase),
-        categoriaBebida: "refrigerante"
-      };
+      const ativo = document.activeElement;
+      if (!ativo || !painelAdmin.contains(ativo)) {
+        return false;
+      }
+      const tag = ativo.tagName ? ativo.tagName.toLowerCase() : "";
+      return tag === "input" || tag === "textarea" || tag === "select";
     }
 
-    function carregarEstadoCardapio() {
-      try {
-        const adicionaisCarregados = JSON.parse(lerStorageSeguro(CHAVE_STORAGE_ADICIONAIS) || "null");
-        adicionaisCatalogo = normalizarAdicionais(adicionaisCarregados);
-      } catch {
-        adicionaisCatalogo = clonar(adicionaisPadrao);
+    function podeAtualizarRealtimeAgora() {
+      if (!adminAutenticado) {
+        return true;
+      }
+      if (!painelAdmin.classList.contains("show")) {
+        return true;
+      }
+      if (adminEdicaoAtiva || adminTemFocoEmEdicao()) {
+        return false;
+      }
+      return true;
+    }
+
+    function finalizarEdicaoAdmin() {
+      adminEdicaoAtiva = false;
+      if (realtimePendente && podeAtualizarRealtimeAgora()) {
+        realtimePendente = false;
+        agendarAtualizacaoRealtime();
+      }
+    }
+
+    async function atualizarInterfaceAposDados() {
+      renderizarCategorias();
+      mostrarProdutos();
+      atualizarCarrinho();
+      atualizarStatusLoja();
+      atualizarBotoesBloqueio();
+
+      if (atendimentoAtual() === "delivery" && tipoEntrega.value === "entrega") {
+        atualizarTaxaInfo();
       }
 
-      try {
-        const produtosCarregados = JSON.parse(lerStorageSeguro(CHAVE_STORAGE_PRODUTOS) || "null");
-        produtos = normalizarProdutos(produtosCarregados, adicionaisCatalogo);
-      } catch {
-        produtos = clonar(produtosPadrao);
+      if (adminAutenticado) {
+        renderizarChecklistAdicionaisAdmin();
+        renderizarListaProdutosAdmin({ resetarRolagem: true });
+        renderizarListaAdicionaisAdmin();
+        preencherConfigCombosAdmin();
+        atualizarResumoAdmin();
+        ativarAbaAdmin(adminAbaAtual);
       }
+    }
 
-      try {
-        const combosCarregados = JSON.parse(lerStorageSeguro(CHAVE_STORAGE_COMBOS) || "null");
-        configuracaoCombos = normalizarConfigCombos(combosCarregados);
-      } catch {
-        configuracaoCombos = clonar(configuracaoCombosPadrao);
+    function agendarAtualizacaoRealtime() {
+      if (!podeAtualizarRealtimeAgora()) {
+        realtimePendente = true;
+        return;
       }
+      if (realtimeTimer) {
+        clearTimeout(realtimeTimer);
+      }
+      realtimeTimer = setTimeout(async () => {
+        const ok = await carregarDadosSupabase();
+        if (ok) {
+          atualizarInterfaceAposDados();
+        }
+      }, REALTIME_DEBOUNCE_MS);
+    }
+
+    function iniciarRealtime() {
+      if (realtimeChannel) {
+        realtimeChannel.unsubscribe();
+      }
+      realtimeChannel = supabase
+        .channel("cardapio-realtime")
+        .on("postgres_changes", { event: "*", schema: "public", table: "categorias" }, agendarAtualizacaoRealtime)
+        .on("postgres_changes", { event: "*", schema: "public", table: "adicionais" }, agendarAtualizacaoRealtime)
+        .on("postgres_changes", { event: "*", schema: "public", table: "produtos" }, agendarAtualizacaoRealtime)
+        .on("postgres_changes", { event: "*", schema: "public", table: "produto_adicionais" }, agendarAtualizacaoRealtime)
+        .on("postgres_changes", { event: "*", schema: "public", table: "combos_config" }, agendarAtualizacaoRealtime)
+        .on("postgres_changes", { event: "*", schema: "public", table: "loja_config" }, agendarAtualizacaoRealtime)
+        .on("postgres_changes", { event: "*", schema: "public", table: "horario_funcionamento" }, agendarAtualizacaoRealtime)
+        .subscribe();
     }
 
     function obterCategoriasDisponiveis() {
@@ -952,10 +1132,10 @@
         produtos.some((produto) => produto.categoria === categoriaBase && produtoEstaDisponivel(produto)));
 
       if (configuracaoCombos.ativo && possuiBebida && possuiBase) {
-        categorias.push("combo");
+        categorias.push(categoriaComboSlug);
       }
 
-      ["pastel", "hamburguer", "refrigerante", "batida"].forEach((categoria) => {
+      categoriasProduto.forEach((categoria) => {
         if (produtosDisponiveis.has(categoria)) {
           categorias.push(categoria);
         }
@@ -967,25 +1147,25 @@
     function renderizarCategorias() {
       const categorias = obterCategoriasDisponiveis();
       if (!categorias.includes(categoriaAtual)) {
-        categoriaAtual = categorias[0] || "pastel";
+        categoriaAtual = categorias[0] || "";
       }
 
       menuCategorias.innerHTML = categorias
-        .map((categoria) => `
-          <button class="categoria ${categoria === categoriaAtual ? "ativa" : ""}" data-categoria="${categoria}" type="button" aria-pressed="${categoria === categoriaAtual ? "true" : "false"}">
-            ${categoriasCatalogo[categoria] || categoria}
+        .map((categoria) => {
+          const categoriaSegura = escaparHtml(categoria);
+          const nomeCategoria = categoriasCatalogo[categoria] || categoria;
+          const nomeSeguro = escaparHtml(nomeCategoria);
+          return `
+          <button class="categoria ${categoria === categoriaAtual ? "ativa" : ""}" data-categoria="${categoriaSegura}" type="button" aria-pressed="${categoria === categoriaAtual ? "true" : "false"}">
+            ${nomeSeguro}
           </button>
-        `)
+        `;
+        })
         .join("");
     }
 
     function obterProdutoPorId(id) {
       return produtos.find((produto) => String(produto.id) === String(id));
-    }
-
-    function proximoIdProduto() {
-      const maiorId = produtos.reduce((maior, produto) => Math.max(maior, Number(produto.id) || 0), 0);
-      return maiorId + 1;
     }
 
     function slugify(texto) {
@@ -1367,12 +1547,16 @@
           return;
         }
 
+        const nomeCategoriaBase = escaparHtml(categoriasCatalogo[categoriaBase] || categoriaBase);
+        const nomeCategoriaBebida = escaparHtml(categoriasCatalogo[configuracaoCombos.categoriaBebida] || configuracaoCombos.categoriaBebida);
+        const categoriaBaseSegura = escaparHtml(categoriaBase);
+
         const card = document.createElement("article");
         card.className = "produto-card combo-card";
         card.innerHTML = `
           <div class="produto-conteudo">
             <div class="produto-topo">
-              <h3>Combo ${categoriasCatalogo[categoriaBase] || categoriaBase} + ${categoriasCatalogo[configuracaoCombos.categoriaBebida]}</h3>
+              <h3>Combo ${nomeCategoriaBase} + ${nomeCategoriaBebida}</h3>
             </div>
             <p class="produto-descricao">Escolha 1 item base e 1 bebida para montar o combo.</p>
             <label class="combo-label">Item base:</label>
@@ -1388,7 +1572,7 @@
             <p class="preco-produto combo-preco"></p>
           </div>
           <div class="produto-rodape">
-            <button class="botao botao-principal botao-adicionar-combo" data-label-default="Adicionar combo" type="button" data-base-categoria="${categoriaBase}" disabled aria-disabled="true">
+            <button class="botao botao-principal botao-adicionar-combo" data-label-default="Adicionar combo" type="button" data-base-categoria="${categoriaBaseSegura}" disabled aria-disabled="true">
               Adicionar combo
             </button>
           </div>
@@ -1398,14 +1582,16 @@
         atualizarPrecoCardCombo(card);
       });
 
-      renderizarCabecalhoCategoria("Combos", totalCombos);
+      const tituloCombo = categoriasCatalogo[categoriaComboSlug] || "Combos";
+      renderizarCabecalhoCategoria(tituloCombo, totalCombos);
 
       if (cardsCombo.length === 0) {
         const vazio = document.createElement("article");
         vazio.className = "produto-card";
+        const nomeBebida = categoriasCatalogo[configuracaoCombos.categoriaBebida] || "bebidas";
         vazio.innerHTML = `
           <h3>Combos indisponíveis</h3>
-          <p>Cadastre itens base e refrigerantes no painel administrativo para ativar os combos.</p>
+          <p>Cadastre itens base e ${escaparHtml(nomeBebida.toLowerCase())} no painel administrativo para ativar os combos.</p>
         `;
         areaProdutos.appendChild(vazio);
       } else {
@@ -1418,7 +1604,15 @@
     function mostrarProdutos() {
       areaProdutos.innerHTML = "";
 
-      if (categoriaAtual === "combo") {
+      if (!categoriaAtual) {
+        const vazio = document.createElement("article");
+        vazio.className = "produto-card";
+        vazio.innerHTML = "<p>Cardápio indisponível no momento.</p>";
+        areaProdutos.appendChild(vazio);
+        return;
+      }
+
+      if (categoriaAtual === categoriaComboSlug) {
         mostrarCombos();
         return;
       }
@@ -1559,7 +1753,10 @@
       const bairro = bairroEntrega.value;
 
       if (!bairro) {
-        taxaEntregaInfo.textContent = `Taxa para Centro, Caixa D'água, Holandino, Campo e Jatobá: ${formatarMoeda(configuracaoLoja.taxaEntrega)}.`;
+        const bairrosTexto = configuracaoLoja.bairrosComEntrega.length > 0
+          ? configuracaoLoja.bairrosComEntrega.join(", ")
+          : "localidades disponíveis";
+        taxaEntregaInfo.textContent = `Taxa para ${bairrosTexto}: ${formatarMoeda(configuracaoLoja.taxaEntrega)}.`;
         bloqueioEntregaInfo.classList.add("oculto");
         return;
       }
@@ -1940,21 +2137,31 @@
     }
 
     function limparFormularioProdutoAdmin() {
+      adminEdicaoAtiva = false;
       adminProdutoId.value = "";
       adminNomeProduto.value = "";
       adminDescricaoProduto.value = "";
       adminPrecoProduto.value = "";
-      adminCategoriaProduto.value = "pastel";
+      adminCategoriaProduto.value = categoriasProduto[0] || "";
       adminDisponivelProduto.checked = true;
       adminProdutoMsg.classList.add("oculto");
       adminProdutoMsg.textContent = "";
       renderizarChecklistAdicionaisAdmin();
+      finalizarEdicaoAdmin();
+    }
+
+    function categoriaPermiteAdicionais(slug) {
+      const infoCategoria = categoriasDetalhes.find((item) => item.slug === slug);
+      if (infoCategoria) {
+        return infoCategoria.permite_adicionais === true;
+      }
+      return slug === "pastel" || slug === "hamburguer";
     }
 
     function renderizarChecklistAdicionaisAdmin() {
       const adicionais = Object.values(adicionaisCatalogo);
       const categoria = adminCategoriaProduto.value;
-      const permiteAdicional = categoria === "pastel" || categoria === "hamburguer";
+      const permiteAdicional = categoriaPermiteAdicionais(categoria);
       adminAdicionaisChecklist.innerHTML = adicionais
         .map((adicional) => {
           const idSeguro = escaparHtml(adicional.id);
@@ -2031,14 +2238,15 @@
             ? escaparHtml(produto.descricao)
             : "Sem descrição cadastrada.";
           const totalAdicionais = Array.isArray(produto.adicionais) ? produto.adicionais.length : 0;
-          const exibirTagAdicionais = produto.categoria === "pastel" || produto.categoria === "hamburguer";
+          const exibirTagAdicionais = categoriaPermiteAdicionais(produto.categoria);
+          const categoriaLabel = escaparHtml(categoriasCatalogo[produto.categoria] || produto.categoria);
           return `
             <li class="admin-item">
               <div class="admin-item-info">
                 <strong>#${produto.id} ${nomeProdutoSeguro}</strong>
                 <p class="admin-item-descricao">${descricaoProdutoSegura}</p>
                 <small class="admin-item-metas">
-                  <span class="admin-tag">${categoriasCatalogo[produto.categoria] || produto.categoria}</span>
+                  <span class="admin-tag">${categoriaLabel}</span>
                   <span class="admin-tag">${formatarMoeda(produto.preco)}</span>
                   ${exibirTagAdicionais ? `<span class="admin-tag">Adicionais: ${totalAdicionais}</span>` : ""}
                   <span class="admin-tag ${disponivel ? "admin-tag-ok" : "admin-tag-off"}">${disponivel ? "Disponível" : "Indisponível"}</span>
@@ -2086,7 +2294,6 @@
     }
 
     function aplicarAtualizacoesCardapio() {
-      salvarEstadoCardapio();
       renderizarCategorias();
       mostrarProdutos();
       atualizarCarrinho();
@@ -2097,18 +2304,28 @@
       atualizarResumoAdmin();
     }
 
-    function salvarProdutoAdmin() {
+    async function salvarProdutoAdmin() {
+      if (!adminAutenticado) {
+        mostrarErroAdmin("Faça login para salvar produtos.");
+        return;
+      }
       const nomeProduto = adminNomeProduto.value.trim();
       const descricaoProduto = adminDescricaoProduto.value.trim();
       const precoProduto = Number(String(adminPrecoProduto.value).replace(",", "."));
       const categoriaProduto = adminCategoriaProduto.value;
       const disponivelProduto = adminDisponivelProduto.checked;
-      const idsAdicionais = Array.from(adminAdicionaisChecklist.querySelectorAll("input[data-admin-adicional]:checked"))
-        .map((inputExtra) => inputExtra.dataset.adminAdicional)
-        .filter((idExtra) => Boolean(adicionaisCatalogo[idExtra]));
+      const idsAdicionais = categoriaPermiteAdicionais(categoriaProduto)
+        ? Array.from(adminAdicionaisChecklist.querySelectorAll("input[data-admin-adicional]:checked"))
+          .map((inputExtra) => inputExtra.dataset.adminAdicional)
+          .filter((idExtra) => Boolean(adicionaisCatalogo[idExtra]))
+        : [];
 
       if (!nomeProduto) {
         mostrarErroAdmin("Informe o nome do produto.");
+        return;
+      }
+      if (!categoriaProduto) {
+        mostrarErroAdmin("Selecione uma categoria válida.");
         return;
       }
       if (!Number.isFinite(precoProduto) || precoProduto < 0) {
@@ -2119,27 +2336,97 @@
       adminErro.classList.add("oculto");
       adminErro.textContent = "";
       const idEdicao = Number(adminProdutoId.value);
-      const produtoSalvo = {
-        id: idEdicao || proximoIdProduto(),
+      const payload = {
+        nome: nomeProduto,
+        descricao: descricaoProduto,
+        preco: precoProduto,
+        categoria_slug: categoriaProduto,
+        disponivel: disponivelProduto
+      };
+
+      let produtoSalvo = null;
+      let erroOperacao = null;
+
+      if (idEdicao) {
+        const { data, error } = await supabase
+          .from("produtos")
+          .update(payload)
+          .eq("id", idEdicao)
+          .select()
+          .single();
+        if (error) {
+          erroOperacao = error;
+        } else {
+          produtoSalvo = data;
+        }
+      } else {
+        const { data, error } = await supabase
+          .from("produtos")
+          .insert([payload])
+          .select()
+          .single();
+        if (error) {
+          erroOperacao = error;
+        } else {
+          produtoSalvo = data;
+        }
+      }
+
+      if (erroOperacao || !produtoSalvo) {
+        mostrarErroAdmin("Não foi possível salvar o produto. Tente novamente.");
+        console.error("Erro ao salvar produto", erroOperacao);
+        return;
+      }
+
+      const produtoId = Number(produtoSalvo.id);
+      const { error: erroRelacoes } = await supabase
+        .from("produto_adicionais")
+        .delete()
+        .eq("produto_id", produtoId);
+
+      if (erroRelacoes) {
+        mostrarErroAdmin("Produto salvo, mas houve erro ao atualizar adicionais.");
+        console.error("Erro ao limpar adicionais", erroRelacoes);
+        return;
+      }
+
+      if (idsAdicionais.length > 0) {
+        const relacoes = idsAdicionais.map((idAdicional) => ({
+          produto_id: produtoId,
+          adicional_id: idAdicional
+        }));
+        const { error: erroInsercaoRelacoes } = await supabase
+          .from("produto_adicionais")
+          .insert(relacoes);
+        if (erroInsercaoRelacoes) {
+          mostrarErroAdmin("Produto salvo, mas houve erro ao salvar adicionais.");
+          console.error("Erro ao inserir adicionais", erroInsercaoRelacoes);
+          return;
+        }
+      }
+
+      const produtoAtualizado = {
+        id: produtoId,
         nome: nomeProduto,
         descricao: descricaoProduto,
         preco: precoProduto,
         categoria: categoriaProduto,
         disponivel: disponivelProduto,
-        adicionais: categoriaProduto === "pastel" || categoriaProduto === "hamburguer" ? idsAdicionais : []
+        adicionais: idsAdicionais
       };
 
-      const indice = produtos.findIndex((produto) => produto.id === produtoSalvo.id);
+      const indice = produtos.findIndex((produto) => produto.id === produtoAtualizado.id);
       if (indice >= 0) {
-        produtos[indice] = produtoSalvo;
+        produtos[indice] = produtoAtualizado;
       } else {
-        produtos.push(produtoSalvo);
+        produtos.push(produtoAtualizado);
       }
 
       limparFormularioProdutoAdmin();
       adminProdutoMsg.textContent = "Produto salvo com sucesso.";
       adminProdutoMsg.classList.remove("oculto");
       aplicarAtualizacoesCardapio();
+      finalizarEdicaoAdmin();
     }
 
     function carregarProdutoParaEdicao(idProduto) {
@@ -2160,16 +2447,35 @@
       adminProdutoMsg.classList.remove("oculto");
     }
 
-    function alternarDisponibilidadeProduto(idProduto) {
+    async function alternarDisponibilidadeProduto(idProduto) {
+      if (!adminAutenticado) {
+        mostrarErroAdmin("Faça login para alterar produtos.");
+        return;
+      }
       const produto = obterProdutoPorId(idProduto);
       if (!produto) {
         return;
       }
-      produto.disponivel = !produto.disponivel;
+      const novoStatus = !produto.disponivel;
+      const { error } = await supabase
+        .from("produtos")
+        .update({ disponivel: novoStatus })
+        .eq("id", produto.id);
+      if (error) {
+        mostrarErroAdmin("Não foi possível atualizar a disponibilidade.");
+        console.error("Erro ao atualizar disponibilidade", error);
+        return;
+      }
+      produto.disponivel = novoStatus;
       aplicarAtualizacoesCardapio();
+      finalizarEdicaoAdmin();
     }
 
-    function removerProdutoAdmin(idProduto) {
+    async function removerProdutoAdmin(idProduto) {
+      if (!adminAutenticado) {
+        mostrarErroAdmin("Faça login para remover produtos.");
+        return;
+      }
       const id = Number(idProduto);
       const produto = obterProdutoPorId(id);
       if (!produto) {
@@ -2178,6 +2484,16 @@
 
       const confirmou = window.confirm(`Excluir o produto "${produto.nome}"?`);
       if (!confirmou) {
+        return;
+      }
+
+      const { error } = await supabase
+        .from("produtos")
+        .delete()
+        .eq("id", id);
+      if (error) {
+        mostrarErroAdmin("Não foi possível excluir o produto.");
+        console.error("Erro ao excluir produto", error);
         return;
       }
 
@@ -2193,9 +2509,14 @@
         indice: indiceProduto,
         carrinhoAntes
       }, `Produto "${produto.nome}" excluído.`);
+      finalizarEdicaoAdmin();
     }
 
-    function atualizarAdicionalAdmin(idAdicional) {
+    async function atualizarAdicionalAdmin(idAdicional) {
+      if (!adminAutenticado) {
+        mostrarErroAdmin("Faça login para atualizar adicionais.");
+        return;
+      }
       const campoNome = adminListaAdicionais.querySelector(`input[data-admin-adicional-nome="${idAdicional}"]`);
       const campoPreco = adminListaAdicionais.querySelector(`input[data-admin-adicional-preco="${idAdicional}"]`);
       if (!campoNome || !campoPreco) {
@@ -2210,6 +2531,16 @@
         return;
       }
 
+      const { error } = await supabase
+        .from("adicionais")
+        .update({ nome: nomeAdicional, preco: precoAdicional })
+        .eq("id", idAdicional);
+      if (error) {
+        mostrarErroAdmin("Não foi possível atualizar o adicional.");
+        console.error("Erro ao atualizar adicional", error);
+        return;
+      }
+
       adicionaisCatalogo[idAdicional] = {
         id: idAdicional,
         nome: nomeAdicional,
@@ -2218,9 +2549,14 @@
       adminErro.textContent = "";
       adminErro.classList.add("oculto");
       aplicarAtualizacoesCardapio();
+      finalizarEdicaoAdmin();
     }
 
-    function removerAdicionalAdmin(idAdicional) {
+    async function removerAdicionalAdmin(idAdicional) {
+      if (!adminAutenticado) {
+        mostrarErroAdmin("Faça login para remover adicionais.");
+        return;
+      }
       const adicional = adicionaisCatalogo[idAdicional];
       if (!adicional) {
         return;
@@ -2238,6 +2574,16 @@
           adicionais: clonar(produto.adicionais || [])
         }));
 
+      const { error } = await supabase
+        .from("adicionais")
+        .delete()
+        .eq("id", idAdicional);
+      if (error) {
+        mostrarErroAdmin("Não foi possível excluir o adicional.");
+        console.error("Erro ao excluir adicional", error);
+        return;
+      }
+
       delete adicionaisCatalogo[idAdicional];
       produtos = produtos.map((produto) => ({
         ...produto,
@@ -2249,9 +2595,14 @@
         adicional: clonar(adicional),
         produtosAfetados
       }, `Adicional "${adicional.nome}" excluído.`);
+      finalizarEdicaoAdmin();
     }
 
-    function adicionarAdicionalAdmin() {
+    async function adicionarAdicionalAdmin() {
+      if (!adminAutenticado) {
+        mostrarErroAdmin("Faça login para adicionar adicionais.");
+        return;
+      }
       const nome = adminNovoAdicionalNome.value.trim();
       const preco = Number(String(adminNovoAdicionalPreco.value).replace(",", "."));
       if (!nome || !Number.isFinite(preco) || preco < 0) {
@@ -2269,15 +2620,29 @@
         sufixo += 1;
       }
 
+      const { error } = await supabase
+        .from("adicionais")
+        .insert([{ id, nome, preco }]);
+      if (error) {
+        mostrarErroAdmin("Não foi possível adicionar o adicional.");
+        console.error("Erro ao adicionar adicional", error);
+        return;
+      }
+
       adicionaisCatalogo[id] = { id, nome, preco };
       adminErro.textContent = "";
       adminErro.classList.add("oculto");
       adminNovoAdicionalNome.value = "";
       adminNovoAdicionalPreco.value = "";
       aplicarAtualizacoesCardapio();
+      finalizarEdicaoAdmin();
     }
 
-    function salvarConfigCombosAdmin() {
+    async function salvarConfigCombosAdmin() {
+      if (!adminAutenticado) {
+        mostrarErroAdmin("Faça login para salvar combos.");
+        return;
+      }
       const categoriasBase = [];
       if (comboBasePastel.checked) {
         categoriasBase.push("pastel");
@@ -2289,13 +2654,31 @@
         categoriasBase.push("pastel");
       }
 
-      configuracaoCombos = {
-        ...configuracaoCombos,
+      const novoConfig = {
         ativo: comboAtivo.checked,
         desconto: Math.max(0, Number(String(comboDesconto.value).replace(",", ".")) || 0),
+        categorias_base: categoriasBase,
+        categoria_bebida_slug: configuracaoCombos.categoriaBebida || "refrigerante"
+      };
+
+      const { error } = await supabase
+        .from("combos_config")
+        .update(novoConfig)
+        .eq("id", 1);
+      if (error) {
+        mostrarErroAdmin("Não foi possível salvar a configuração de combos.");
+        console.error("Erro ao salvar combos", error);
+        return;
+      }
+
+      configuracaoCombos = {
+        ...configuracaoCombos,
+        ativo: novoConfig.ativo,
+        desconto: novoConfig.desconto,
         categoriasBase
       };
       aplicarAtualizacoesCardapio();
+      finalizarEdicaoAdmin();
     }
 
     function atualizarVisibilidadeFeedbackAdmin() {
@@ -2331,14 +2714,50 @@
       }, JANELA_DESFAZER_MS);
     }
 
-    function desfazerUltimaExclusaoAdmin() {
+    async function desfazerUltimaExclusaoAdmin() {
       if (!ultimaExclusaoAdmin) {
+        return;
+      }
+      if (!adminAutenticado) {
+        mostrarErroAdmin("Faça login para desfazer.");
         return;
       }
       const operacao = ultimaExclusaoAdmin;
       limparDesfazerAdmin();
 
       if (operacao.tipo === "produto" && operacao.produto) {
+        const produto = operacao.produto;
+        const payload = {
+          id: produto.id,
+          nome: produto.nome,
+          descricao: produto.descricao || "",
+          preco: produto.preco,
+          categoria_slug: produto.categoria,
+          disponivel: produto.disponivel !== false
+        };
+        const { error } = await supabase
+          .from("produtos")
+          .insert([payload]);
+        if (error) {
+          mostrarErroAdmin("Não foi possível desfazer a exclusão do produto.");
+          console.error("Erro ao desfazer produto", error);
+          return;
+        }
+
+        if (Array.isArray(produto.adicionais) && produto.adicionais.length > 0) {
+          const relacoes = produto.adicionais.map((idAdicional) => ({
+            produto_id: produto.id,
+            adicional_id: idAdicional
+          }));
+          const { error: erroRelacoes } = await supabase
+            .from("produto_adicionais")
+            .insert(relacoes);
+          if (erroRelacoes) {
+            mostrarErroAdmin("Produto restaurado, mas houve erro ao recuperar adicionais.");
+            console.error("Erro ao restaurar adicionais", erroRelacoes);
+          }
+        }
+
         const jaExiste = produtos.some((produto) => produto.id === operacao.produto.id);
         if (!jaExiste) {
           const indice = Math.max(0, Math.min(Number(operacao.indice) || 0, produtos.length));
@@ -2351,11 +2770,37 @@
         aplicarAtualizacoesCardapio();
         adminProdutoMsg.textContent = `Exclusão desfeita: ${operacao.produto.nome}.`;
         adminProdutoMsg.classList.remove("oculto");
+        finalizarEdicaoAdmin();
         return;
       }
 
       if (operacao.tipo === "adicional" && operacao.adicional) {
-        adicionaisCatalogo[operacao.adicional.id] = operacao.adicional;
+        const adicional = operacao.adicional;
+        const { error } = await supabase
+          .from("adicionais")
+          .insert([{ id: adicional.id, nome: adicional.nome, preco: adicional.preco }]);
+        if (error) {
+          mostrarErroAdmin("Não foi possível desfazer a exclusão do adicional.");
+          console.error("Erro ao desfazer adicional", error);
+          return;
+        }
+
+        const relacoes = Array.isArray(operacao.produtosAfetados)
+          ? operacao.produtosAfetados
+            .filter((registro) => Array.isArray(registro.adicionais) && registro.adicionais.includes(adicional.id))
+            .map((registro) => ({ produto_id: registro.id, adicional_id: adicional.id }))
+          : [];
+        if (relacoes.length > 0) {
+          const { error: erroRelacoes } = await supabase
+            .from("produto_adicionais")
+            .insert(relacoes);
+          if (erroRelacoes) {
+            mostrarErroAdmin("Adicional restaurado, mas houve erro ao recuperar vínculos.");
+            console.error("Erro ao restaurar vínculos", erroRelacoes);
+          }
+        }
+
+        adicionaisCatalogo[adicional.id] = adicional;
         if (Array.isArray(operacao.produtosAfetados)) {
           operacao.produtosAfetados.forEach((registro) => {
             const produto = obterProdutoPorId(registro.id);
@@ -2367,6 +2812,7 @@
         aplicarAtualizacoesCardapio();
         adminProdutoMsg.textContent = `Exclusão desfeita: adicional ${operacao.adicional.nome}.`;
         adminProdutoMsg.classList.remove("oculto");
+        finalizarEdicaoAdmin();
       }
     }
 
@@ -2375,16 +2821,17 @@
       adminErro.classList.remove("oculto");
     }
 
-    function segundosRestantesBloqueioAdmin() {
-      return Math.max(0, Math.ceil((adminBloqueadoAte - Date.now()) / 1000));
-    }
-
     function abrirAdmin() {
-      adminPin.value = "";
+      if (adminEmail) {
+        adminEmail.value = "";
+      }
+      if (adminSenha) {
+        adminSenha.value = "";
+      }
       botaoAbrirAdmin.setAttribute("aria-expanded", "true");
       const focoInicial = adminAutenticado
         ? document.querySelector(".admin-tab.ativo") || botaoFecharAdmin
-        : adminPin;
+        : adminEmail;
       abrirModal(painelAdmin, focoInicial);
     }
 
@@ -2394,6 +2841,7 @@
       adminErro.textContent = "";
       adminErro.classList.add("oculto");
       limparDesfazerAdmin();
+      finalizarEdicaoAdmin();
     }
 
     function aplicarEstadoAdmin() {
@@ -2411,40 +2859,43 @@
         preencherConfigCombosAdmin();
         atualizarResumoAdmin();
         ativarAbaAdmin(adminAbaAtual);
+        if (!adminEdicaoAtiva && !adminTemFocoEmEdicao()) {
+          finalizarEdicaoAdmin();
+        }
       }
     }
 
-    function entrarAdmin() {
-      if (Date.now() < adminBloqueadoAte) {
-        mostrarErroAdmin(`Acesso bloqueado. Tente novamente em ${segundosRestantesBloqueioAdmin()}s.`);
+    async function entrarAdmin() {
+      const email = adminEmail?.value.trim();
+      const senha = adminSenha?.value.trim();
+
+      if (!email || !senha) {
+        mostrarErroAdmin("Informe e-mail e senha para entrar.");
         return;
       }
 
-      const pinInformado = adminPin.value.trim();
-      if (pinInformado !== obterPinAdmin()) {
-        tentativasAdminFalhas += 1;
-        const tentativasRestantes = LIMITE_TENTATIVAS_ADMIN - tentativasAdminFalhas;
-        if (tentativasRestantes <= 0) {
-          adminBloqueadoAte = Date.now() + BLOQUEIO_ADMIN_MS;
-          tentativasAdminFalhas = 0;
-          mostrarErroAdmin(`Muitas tentativas. Acesso bloqueado por ${Math.ceil(BLOQUEIO_ADMIN_MS / 1000)}s.`);
-          return;
-        }
-        mostrarErroAdmin(`PIN incorreto. Restam ${tentativasRestantes} tentativa(s).`);
+      const { error } = await supabase.auth.signInWithPassword({ email, password: senha });
+      if (error) {
+        mostrarErroAdmin("Credenciais inválidas. Verifique e tente novamente.");
+        console.error("Erro ao autenticar", error);
         return;
       }
-      tentativasAdminFalhas = 0;
-      adminBloqueadoAte = 0;
+
       adminAutenticado = true;
+      if (adminSenha) {
+        adminSenha.value = "";
+      }
       adminErro.classList.add("oculto");
       aplicarEstadoAdmin();
     }
 
-    function sairAdmin() {
+    async function sairAdmin() {
+      await supabase.auth.signOut();
       adminAutenticado = false;
       aplicarEstadoAdmin();
       limparFormularioProdutoAdmin();
       limparDesfazerAdmin();
+      finalizarEdicaoAdmin();
     }
 
     function atualizarBotoesBloqueio() {
@@ -2632,11 +3083,31 @@
       });
     });
 
-    adminPin.addEventListener("keydown", (evento) => {
-      if (evento.key === "Enter") {
-        entrarAdmin();
+    function marcarEdicaoAdmin(evento) {
+      if (!adminAutenticado) {
+        return;
       }
-    });
+      const alvo = evento.target;
+      if (!alvo || !painelAdmin.contains(alvo)) {
+        return;
+      }
+      if (alvo === adminBuscaProduto || alvo === adminFiltroCategoria || alvo === adminFiltroDisponibilidade) {
+        return;
+      }
+      adminEdicaoAtiva = true;
+    }
+
+    if (adminConteudo) {
+      adminConteudo.addEventListener("input", marcarEdicaoAdmin);
+      adminConteudo.addEventListener("change", marcarEdicaoAdmin);
+    }
+
+    if (adminLoginForm) {
+      adminLoginForm.addEventListener("submit", (evento) => {
+        evento.preventDefault();
+        entrarAdmin();
+      });
+    }
 
     adminCategoriaProduto.addEventListener("change", () => {
       renderizarChecklistAdicionaisAdmin();
@@ -2793,7 +3264,7 @@
 
     painelAdmin.addEventListener("click", (evento) => {
       if (evento.target === painelAdmin) {
-        // Evita fechamento acidental durante interação com o PIN.
+        // Evita fechamento acidental durante interação com o login.
         return;
       }
     });
@@ -2825,26 +3296,37 @@
       }
     });
 
-    chavePixTexto.textContent = configuracaoLoja.chavePix;
-    pixTitularTexto.textContent = configuracaoLoja.pixTitular;
-    pixBancoTexto.textContent = configuracaoLoja.pixBanco;
+    async function inicializarAplicacao() {
+      await carregarDadosSupabase();
+      const { data } = await supabase.auth.getSession();
+      adminAutenticado = Boolean(data?.session);
+      aplicarEstadoAdmin();
+      limparFormularioProdutoAdmin();
 
-    carregarEstadoCardapio();
-    restaurarCarrinhoLocal();
-    restaurarFormularioLocal();
-    renderizarCategorias();
-    aplicarEstadoAdmin();
-    limparFormularioProdutoAdmin();
+      restaurarCarrinhoLocal();
+      restaurarFormularioLocal();
+      atualizarBairrosEntregaUI();
+      renderizarCategorias();
+      mostrarProdutos();
+      atualizarFluxoAtendimento();
+      atualizarBlocosPagamento();
+      atualizarCarrinho();
+      atualizarStatusLoja();
+      atualizarBotoesBloqueio();
 
-    mostrarProdutos();
-    atualizarFluxoAtendimento();
-    atualizarBlocosPagamento();
-    atualizarCarrinho();
-    atualizarStatusLoja();
-    atualizarBotoesBloqueio();
+      iniciarRealtime();
+    }
+
+    supabase.auth.onAuthStateChange((_evento, sessao) => {
+      adminAutenticado = Boolean(sessao);
+      aplicarEstadoAdmin();
+    });
+
+    inicializarAplicacao();
 
     setInterval(atualizarStatusLoja, 60000);
     window.addEventListener("focus", atualizarStatusLoja);
+    })();
   </script>
 </body>
 
