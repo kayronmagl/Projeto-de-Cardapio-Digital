@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="Img/H._Do_Tobias.png">
+  <link rel="icon" type="image/png" href="Img/Logo_do_T.lanches.png">
   <title>Tobia's Lanches</title>
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -15,7 +15,7 @@
 
   <header class="topo layout-shell" id="topo">
     <div class="caixa-logo">
-      <img src="Img/H._Do_Tobias.png" alt="Logo do Tobia's Lanches" class="logo-site">
+      <img src="Img/Logo_do_T.lanches.png" alt="Logo do Tobia's Lanches" class="logo-site">
       <div class="marca-topo">
         <h1 class="titulo-site">Tobia's Lanches</h1>
         <p class="subtitulo-topo">Quiosque 03 | Iracema-CE</p>
