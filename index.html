@@ -516,6 +516,7 @@
       pixTitular: "",
       pixBanco: "",
       taxaEntrega: 0,
+      taxasPorLocalidade: {},
       enderecoRetirada: "",
       bairrosComEntrega: [],
       bairrosSemEntrega: [],
@@ -539,6 +540,20 @@
 
     function clonar(objeto) {
       return JSON.parse(JSON.stringify(objeto));
+    }
+
+    function normalizarTaxasPorLocalidade(taxas) {
+      if (!taxas || typeof taxas !== "object" || Array.isArray(taxas)) {
+        return {};
+      }
+      return Object.entries(taxas).reduce((mapa, [bairro, taxa]) => {
+        const nomeBairro = String(bairro || "").trim();
+        const valorTaxa = Number(taxa);
+        if (nomeBairro && Number.isFinite(valorTaxa) && valorTaxa >= 0) {
+          mapa[nomeBairro] = valorTaxa;
+        }
+        return mapa;
+      }, {});
     }
 
     const CHAVE_STORAGE_CARRINHO = "tobias_lanches_carrinho_v3";
@@ -872,6 +887,35 @@
       }
     }
 
+    function obterTaxaEntregaPorBairro(bairro) {
+      const nomeBairro = String(bairro || "").trim();
+      if (!nomeBairro || !configuracaoLoja.bairrosComEntrega.includes(nomeBairro)) {
+        return 0;
+      }
+      if (Object.prototype.hasOwnProperty.call(configuracaoLoja.taxasPorLocalidade, nomeBairro)) {
+        return configuracaoLoja.taxasPorLocalidade[nomeBairro];
+      }
+      return configuracaoLoja.taxaEntrega;
+    }
+
+    function taxasEntregaVariamPorLocalidade() {
+      const taxas = configuracaoLoja.bairrosComEntrega
+        .map((bairro) => obterTaxaEntregaPorBairro(bairro))
+        .filter((taxa) => Number.isFinite(taxa));
+      if (taxas.length <= 1) {
+        return false;
+      }
+      return new Set(taxas.map((taxa) => taxa.toFixed(2))).size > 1;
+    }
+
+    function obterTaxaEntregaPadrao() {
+      const primeiroBairroAtendido = configuracaoLoja.bairrosComEntrega[0];
+      if (primeiroBairroAtendido) {
+        return obterTaxaEntregaPorBairro(primeiroBairroAtendido);
+      }
+      return configuracaoLoja.taxaEntrega;
+    }
+
     function atualizarAgendaHorarioUI() {
       if (!agendaHorario) {
         return;
@@ -1051,6 +1095,7 @@
             pixTitular: String(lojaResp.data.pix_titular || ""),
             pixBanco: String(lojaResp.data.pix_banco || ""),
             taxaEntrega: Number(lojaResp.data.taxa_entrega) || 0,
+            taxasPorLocalidade: normalizarTaxasPorLocalidade(lojaResp.data.taxas_por_localidade),
             enderecoRetirada: String(lojaResp.data.endereco_retirada || ""),
             bairrosComEntrega: Array.isArray(lojaResp.data.bairros_com_entrega)
               ? lojaResp.data.bairros_com_entrega.map((bairro) => String(bairro))
@@ -1331,7 +1376,7 @@
       if (atendimentoAtual() !== "delivery" || tipoEntrega.value !== "entrega") {
         return 0;
       }
-      return configuracaoLoja.bairrosComEntrega.includes(bairroEntrega.value) ? configuracaoLoja.taxaEntrega : 0;
+      return obterTaxaEntregaPorBairro(bairroEntrega.value);
     }
 
     function calcularTotaisPedido() {
@@ -1830,16 +1875,20 @@
       const bairro = bairroEntrega.value;
 
       if (!bairro) {
-        const bairrosTexto = configuracaoLoja.bairrosComEntrega.length > 0
-          ? configuracaoLoja.bairrosComEntrega.join(", ")
-          : "localidades disponíveis";
-        taxaEntregaInfo.textContent = `Taxa para ${bairrosTexto}: ${formatarMoeda(configuracaoLoja.taxaEntrega)}.`;
+        if (taxasEntregaVariamPorLocalidade()) {
+          taxaEntregaInfo.textContent = "As taxas de entrega variam por localidade. Selecione a sua para consultar.";
+        } else {
+          const bairrosTexto = configuracaoLoja.bairrosComEntrega.length > 0
+            ? configuracaoLoja.bairrosComEntrega.join(", ")
+            : "localidades disponíveis";
+          taxaEntregaInfo.textContent = `Taxa para ${bairrosTexto}: ${formatarMoeda(obterTaxaEntregaPadrao())}.`;
+        }
         bloqueioEntregaInfo.classList.add("oculto");
         return;
       }
 
       if (configuracaoLoja.bairrosComEntrega.includes(bairro)) {
-        taxaEntregaInfo.textContent = `Localidade atendida: ${bairro}. Taxa de entrega: ${formatarMoeda(configuracaoLoja.taxaEntrega)}.`;
+        taxaEntregaInfo.textContent = `Localidade atendida: ${bairro}. Taxa de entrega: ${formatarMoeda(obterTaxaEntregaPorBairro(bairro))}.`;
         bloqueioEntregaInfo.classList.add("oculto");
         return;
       }
