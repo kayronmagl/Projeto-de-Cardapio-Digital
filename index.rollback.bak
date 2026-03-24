@@ -180,11 +180,13 @@
             <p id="ajudaNome" class="ajuda-texto">Informe o nome usado para identificação do pedido.</p>
             <p id="erroNome" class="erro erro-campo oculto"></p>
 
-            <label for="telefone">Telefone ou WhatsApp:</label>
-            <input type="tel" id="telefone" inputmode="tel" autocomplete="tel" data-erro-id="erroTelefone"
-              aria-describedby="ajudaTelefone erroTelefone" placeholder="(88) 98888-7777" required>
-            <p id="ajudaTelefone" class="ajuda-texto">Use DDD + número. Exemplo: (88) 98888-7777.</p>
-            <p id="erroTelefone" class="erro erro-campo oculto"></p>
+            <div id="blocoTelefone">
+              <label for="telefone">Telefone ou WhatsApp:</label>
+              <input type="tel" id="telefone" inputmode="tel" autocomplete="tel" data-erro-id="erroTelefone"
+                aria-describedby="ajudaTelefone erroTelefone" placeholder="(88) 98888-7777" required>
+              <p id="ajudaTelefone" class="ajuda-texto">Use DDD + número.</p>
+              <p id="erroTelefone" class="erro erro-campo oculto"></p>
+            </div>
           </fieldset>
 
           <fieldset class="bloco-form">
@@ -592,6 +594,7 @@
     const bloqueioEntregaInfo = document.getElementById("bloqueioEntregaInfo");
 
     const nome = document.getElementById("nome");
+    const blocoTelefone = document.getElementById("blocoTelefone");
     const telefone = document.getElementById("telefone");
     const referencia = document.getElementById("referencia");
     const pagamento = document.getElementById("pagamento");
@@ -1798,9 +1801,11 @@
 
       blocoDelivery.classList.toggle("oculto", !isDelivery);
       blocoNoLocal.classList.toggle("oculto", isDelivery);
+      blocoTelefone.classList.toggle("oculto", !isDelivery);
 
       tipoEntrega.required = isDelivery;
       numeroMesa.required = !isDelivery;
+      telefone.required = isDelivery;
 
       if (!isDelivery) {
         tipoEntrega.value = "";
@@ -1811,6 +1816,7 @@
         limparErroCampo(tipoEntrega);
         limparErroCampo(bairroEntrega);
         limparErroCampo(enderecoEntrega);
+        limparErroCampo(telefone);
       } else {
         limparErroCampo(numeroMesa);
       }
@@ -2026,14 +2032,10 @@
 
     function validarFormulario() {
       limparErrosCampos();
-      const statusAtual = obterStatusLoja();
       const tipoAtendimento = atendimentoAtual();
       const tipoPedido = tipoEntrega.value;
       const { total } = calcularTotaisPedido();
 
-      if (!statusAtual.aberta) {
-        return { mensagem: `Não é possível finalizar agora. ${statusAtual.detalhe}.`, campo: null };
-      }
       if (carrinho.length === 0) {
         return { mensagem: "Adicione pelo menos um item ao carrinho.", campo: null };
       }
@@ -2041,11 +2043,11 @@
         marcarErroCampo(nome, erroNome, "Informe o nome completo.");
         return { mensagem: "Preencha o nome completo.", campo: nome };
       }
-      if (!telefone.value.trim()) {
+      if (tipoAtendimento !== "no_local" && !telefone.value.trim()) {
         marcarErroCampo(telefone, erroTelefone, "Informe o telefone com DDD.");
         return { mensagem: "Preencha o telefone ou WhatsApp.", campo: telefone };
       }
-      if (!validarTelefone(telefone.value.trim())) {
+      if (telefone.value.trim() && !validarTelefone(telefone.value.trim())) {
         marcarErroCampo(telefone, erroTelefone, "Formato inválido. Use DDD + número.");
         return { mensagem: "Informe um telefone ou WhatsApp válido com DDD.", campo: telefone };
       }
@@ -2121,7 +2123,6 @@
         `Número do pedido: ${numeroPedido}`,
         "",
         `Cliente: ${nome.value.trim()}`,
-        `Telefone: ${telefone.value.trim()}`,
         `Atendimento: ${tipoAtendimento === "no_local" ? "No Local" : "Delivery"}`,
         "Tempo aproximado: 20 a 40 minutos"
       ];
@@ -2129,9 +2130,11 @@
       if (tipoAtendimento === "no_local") {
         linhas.push(`Mesa: ${numeroMesa.value}`);
       } else if (tipoPedido === "retirada") {
+        linhas.splice(4, 0, `Telefone: ${telefone.value.trim() || "Não informado"}`);
         linhas.push("Pedido para: Retirada no local");
         linhas.push(`Endereço de retirada: ${configuracaoLoja.enderecoRetirada}`);
       } else {
+        linhas.splice(4, 0, `Telefone: ${telefone.value.trim() || "Não informado"}`);
         linhas.push("Pedido para: Entrega");
         linhas.push(`Localidade: ${bairroEntrega.value}`);
         linhas.push(`Endereço: ${enderecoEntrega.value.trim()}`);
