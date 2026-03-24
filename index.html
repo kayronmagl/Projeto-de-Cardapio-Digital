@@ -2026,14 +2026,10 @@
 
     function validarFormulario() {
       limparErrosCampos();
-      const statusAtual = obterStatusLoja();
       const tipoAtendimento = atendimentoAtual();
       const tipoPedido = tipoEntrega.value;
       const { total } = calcularTotaisPedido();
 
-      if (!statusAtual.aberta) {
-        return { mensagem: `Não é possível finalizar agora. ${statusAtual.detalhe}.`, campo: null };
-      }
       if (carrinho.length === 0) {
         return { mensagem: "Adicione pelo menos um item ao carrinho.", campo: null };
       }
