@@ -181,7 +181,7 @@ body {
   color: #9cf2be;
 }
 
-.status-fechada {
+.status-fechado {
   color: #ff9e9e;
 }
 
@@ -1610,7 +1610,7 @@ summary:focus-visible {
   background: rgba(68, 211, 156, 0.12);
 }
 
-.painel-horario .status-quiosque.status-fechada {
+.painel-horario .status-quiosque.status-fechado {
   color: #ffacac;
   border-color: rgba(255, 106, 106, 0.52);
   background: rgba(255, 106, 106, 0.12);

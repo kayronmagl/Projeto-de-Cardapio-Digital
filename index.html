@@ -1357,7 +1357,7 @@
         if (!agendaHoje) {
           return {
             aberta: false,
-            mensagem: "Quiosque fechada hoje",
+            mensagem: "Quiosque fechado hoje",
             detalhe: "Sem atendimento hoje"
           };
         }
@@ -1400,7 +1400,7 @@
 
       function atualizarStatusQuiosque() {
         const status = obterStatusQuiosque();
-        statusQuiosque.className = `status-quiosque ${status.aberta ? "status-aberta" : "status-fechada"}`;
+        statusQuiosque.className = `status-quiosque ${status.aberta ? "status-aberta" : "status-fechado"}`;
         statusQuiosque.textContent = status.mensagem;
         detalheHorario.textContent = status.detalhe;
       }
