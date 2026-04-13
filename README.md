@@ -54,3 +54,11 @@ CREATE TABLE produtos (
   preco NUMERIC NOT NULL,
   categoria TEXT NOT NULL
 );
+```
+## Licença e Uso
+Este projeto é de código aberto apenas para visualização e consulta. Não é permitida a distribuição, modificação ou uso comercial do código sem autorização prévia. Todos os direitos são reservados ao autor.
+
+<br>
+<div align="center">
+  <p>Desenvolvido por <b>Kayron Magalhães</b></p>
+</div>
